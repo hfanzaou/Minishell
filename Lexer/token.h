@@ -1,0 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/12 01:00:02 by hfanzaou          #+#    #+#             */
+/*   Updated: 2022/09/12 01:00:03 by hfanzaou         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef TOKEN_H
+# define TOKEN_H
+# include <stdlib.h>
+# include "lexer.h"
+
+typedef struct token_s
+{
+	char *value;
+	struct token_s *next;
+	enum
+	{
+		STRING,
+		SINGLE_Q,
+		DOUBLE_Q,
+		RED_IN,
+		RED_OUT,
+		RED_IN2,
+		RED_OUT2,
+		PIPE,
+		DOLLAR,
+		SPACE,
+		END
+	} type;
+}	token_t;
+
+token_t *tokenizer(t_lexer *lexer, char **env);
+token_t *token_init(char *val, int type);
+# endif  
