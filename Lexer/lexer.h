@@ -19,8 +19,8 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <ctype.h>
-
 # include <string.h>
+# include "parse.h"
 
 typedef struct lexer_s
 {
@@ -30,17 +30,9 @@ typedef struct lexer_s
 	int i;
 } t_lexer;
 
-typedef struct s_cmd
-{
-	char **cmd;
-	int in;
-	int out;
-	int fd;
-	struct s_cmd *next;
-}	t_cmd;
-
-t_lexer *lexer(char *src);
+t_lexer *ft_lexer(char *src);
 void	lexer_step(t_lexer **lexer);
 t_lexer *lexer_ntoken(t_lexer *lexer);
+
 # include "token.h"
 #endif

@@ -92,6 +92,33 @@ int ft_size(t_lexer *lexer)
 	return (i);	
 }
 
+char	*ft_expand(t_lexer *lexer, char **env)
+{
+	char *s;
+	int i;
+	int l;
+
+	i = 0;
+	s = malloc(sizeof(char) * ft_size(lexer) + 1);
+	if (!s)
+		return NULL;
+	while (lexer->src[lexer->i] && lexer->c != '\"' && lexer->c != ' ' && lexer->c != '\t')
+	{
+		s[i] = lexer->c;
+		lexer_step(&lexer);
+		i++;
+	}
+	s[i] = '\0';
+	l = strlen(s);
+	while (env[i])
+	{
+		if (!ft_memcmp(env[i], s, l))
+			return (&env[i][l + 1]);
+		i++;
+	}
+	return (NULL);
+}
+
 void	token_sq(token_t **token, t_lexer *lexer)
 {	
 	token_t *oneuse;
@@ -117,44 +144,6 @@ void	token_sq(token_t **token, t_lexer *lexer)
 	ft_lstadd_back(token, oneuse);
 }
 
-/*char *ft_expand(t_lexer **lexer, char *s)
-{
-	int i;
-	int l;
-
-	i = 0;
-	while (s[i] != '=')
-		i++;
-	l = strlen(&s[i])
-	lexer->
-}*/
-
-/*void	ft_env(t_lexer **lexer, char **env)
-{
-	char *s;
-	int i;
-	int l;
-
-	i = 0;
-	s = malloc(sizeof(char) * ft_size(lexer) + 1);
-	if (!s)
-		return ;
-	while ((*lexer)->src[(*lexer)->i + i] && (*lexer)->src[(*lexer)->i + i] != '\"')
-	{
-		s[i] = (*lexer)->src[(*lexer)->i + i];
-		i++;
-	}
-	s[i] = '\0';
-	l = strlen(s);
-	while (env[i])
-	{
-		if (!ft_memcmp(env[i], s, l)
-			ft_expand(&lexer, env[i]);
-		i++;
-	}
-
-}*/
-
 void	token_dq(token_t **token, t_lexer *lexer, char **env)
 {	
 	token_t *oneuse;
@@ -164,6 +153,7 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env)
 	lexer_step(&lexer);
 	if (!lexer->c)
 	 	return ;
+	(void)env;	
 	size = 0;
 	type = DOUBLE_Q;
 	val = malloc(sizeof(char) * ft_size(lexer) + 1);
@@ -172,14 +162,20 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env)
 	while (lexer->c != '\"')
 	{
 		if (lexer->c == '$')
-			ft_env(&lexer, env);
+		{
+			size = -1;
+			lexer_step(&lexer);
+			val = ft_expand(lexer, env);
+			break;
+		}
 		val[size] = lexer->c;
 		size++;
 		lexer_step(&lexer);
 		if (!lexer->c)
 			return ;
 	}
-	val[size] = '\0';	
+	if (size != -1)
+		val[size] = '\0';	
 	oneuse = token_init(val, type);
 	ft_lstadd_back(token, oneuse);
 }
@@ -236,6 +232,40 @@ void	token_redin(token_t **token, int i)
 	ft_lstadd_back(token, oneuse);
 }
 
+void	token_dollar(token_t **token, t_lexer *lexer, char **env)
+{
+	char *val;
+	token_t *oneuse;
+
+	lexer_step(&lexer);
+	val = ft_expand(lexer, env);
+	oneuse = token_init(val, DOLLAR);
+	ft_lstadd_back(token, oneuse);
+}
+
+void	token_string(token_t **token, t_lexer *lexer)
+{
+	char *val;
+	token_t *oneuse;
+	int size;
+
+	size = 0;
+	while (isalnum(lexer->src[lexer->i + size]))
+		size++;
+	val = malloc(sizeof(char) * size + 1);
+	if (!val)
+		return ;
+	size = 0;		
+	while (isalnum(lexer->c))
+	{
+		val[size] = lexer->c;
+		lexer_step(&lexer);
+		size++;
+	}
+	val[size] = '\0';
+	oneuse = token_init(val, STRING);
+	ft_lstadd_back(token, oneuse);
+}
 token_t *tokenizer(t_lexer *lexer, char **env)
 {
 	token_t *token;
@@ -245,6 +275,7 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 	token = NULL;
 	while (lexer->c)
 	{
+		//printf("%c\n", lexer->c);
 		if (lexer->c == ' ' || lexer->c == '\t')
 			lexer_step(&lexer);
 		if (lexer->c == '\'')
@@ -256,14 +287,17 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 		else if (lexer->c == '>' && lexer->src[lexer->i + 1] == '>')
 			token_redout(&token, 1);
 		else if (lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
-			token_redin(&token, 1);		
+			token_redin(&token, 1);
 		else if (lexer->c == '>')
 			token_redout(&token, 0);
 		else if (lexer->c == '<')
-			token_redin(&token, 0);	
+			token_redin(&token, 0);
+		else if (lexer->c == '$')
+			token_dollar(&token, lexer, env);	
+		else
+			token_string(&token, lexer);	
 		lexer_step(&lexer);
 	}
-	//printf("---\n");
+	return (token);
 	printf_token(token);
-	return (NULL);
 }

@@ -41,17 +41,18 @@ int main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	char *line;
-	t_lexer *tlexer;
-	token_t *ttoken;
-	t_cmd *tcmd;
+	t_lexer *lexer;
+	token_t *token;
+	t_cmd *cmd;
 	signal(SIGINT, handler);
 	while ((line = readline("MINISHELL>")))
 	{
 		//printf("%s\n", line); 
 		add_history(line);
-		tcmd = init_cmd();
-		tlexer = lexer(line);
-		ttoken = tokenizer(tlexer, env);	
+		cmd = init_cmd();
+		lexer = ft_lexer(line);
+		token = tokenizer(lexer, env);
+		cmd = ft_parse(token);	
 	}
 }
 

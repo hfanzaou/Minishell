@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 #include "lexer.h"
 
-t_lexer *lexer(char *src)
+t_lexer *ft_lexer(char *src)
 {
 	t_lexer *lexer;
 	lexer = (t_lexer *)malloc(sizeof(t_lexer));
