@@ -14,6 +14,7 @@
 # define PARSE_H
 # include "lexer.h"
 # include "token.h"
+
 typedef struct s_cmd
 {
 	char **cmd;

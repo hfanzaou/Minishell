@@ -29,10 +29,10 @@ t_cmd *init_cmd()
 {
 	t_cmd *cmd;
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	cmd->cmd = (char **)malloc(sizeof(char *));
+	cmd->cmd = NULL;
 	cmd->fd = -1;
-	cmd->in = -1;
-	cmd->out = -1;
+	cmd->in = 0;
+	cmd->out = 1;
 	return (cmd);
 }
 
@@ -52,7 +52,7 @@ int main(int ac, char **av, char **env)
 		cmd = init_cmd();
 		lexer = ft_lexer(line);
 		token = tokenizer(lexer, env);
-		cmd = ft_parse(token);	
+		cmd = ft_parse(token, cmd);	
 	}
 }
 

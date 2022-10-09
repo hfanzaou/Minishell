@@ -37,4 +37,5 @@ typedef struct token_s
 
 token_t *tokenizer(t_lexer *lexer, char **env);
 token_t *token_init(char *val, int type);
+t_cmd *ft_parse(token_t *token, t_cmd *cmd);
 # endif  
