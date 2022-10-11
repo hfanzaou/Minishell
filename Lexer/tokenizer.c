@@ -53,6 +53,7 @@ char	*ft_strdup(const char *s)
 
 void printf_token(token_t *token)
 {
+	printf("In token\n");
 	while (token)
 	{
 		printf("type  = %d\n", token->type);
@@ -249,14 +250,12 @@ int	ft_strrchr(char *str, char c)
 {
 	int	i;
 
-	i = 0;
+	i = 0;	
 	while (str[i])
-		i++;
-	while (i >= 0)
 	{
 		if (str[i] == c)
 			return (0);
-		i--;
+		i++;
 	}
 	return (1);
 }
@@ -269,18 +268,20 @@ void	token_string(token_t **token, t_lexer *lexer)
 	int size;
 	char *str;
 
-	str = lexer->src;
+	str = &(lexer->src[lexer->i]);
 	size = 0;
-	while (ft_strrchr(" \t\'\"|><$", str[size]))
+	
+	while (str[size] && ft_strrchr(" \t\'\"|><$", str[size]))
 		size++;
 	val = malloc(sizeof(char) * size + 1);
+	
 	if (!val)
 		return ;
-	size = 0;		
-	while (ft_strrchr(" \t\'\"|><$", lexer->c))
+	size = 0;	
+	while (lexer->c && ft_strrchr(" \t\'\"|><$", lexer->c))
 	{
 		val[size] = lexer->c;
-		lexer_step(&lexer);
+		lexer_step(&lexer);	
 		size++;
 	}
 	val[size] = '\0';
@@ -316,9 +317,8 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 		else if (lexer->c == '$')
 			token_dollar(&token, lexer, env);	
 		else
-			token_string(&token, lexer);	
+			token_string(&token, lexer);
 		lexer_step(&lexer);
 	}
-	printf_token(token);
 	return (token);
 }

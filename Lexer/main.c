@@ -25,14 +25,14 @@ void	handler(int i)
 	}
 }
 
-t_cmd *init_cmd()
+t_cmd *init_cmd(char **cargs, int in, int out)
 {
 	t_cmd *cmd;
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	cmd->cmd = NULL;
-	cmd->fd = -1;
-	cmd->in = 0;
-	cmd->out = 1;
+	cmd->cmd =cargs;
+	cmd->fd = 0;
+	cmd->in = in;
+	cmd->out = out;
 	return (cmd);
 }
 
@@ -47,9 +47,10 @@ int main(int ac, char **av, char **env)
 	signal(SIGINT, handler);
 	while ((line = readline("MINISHELL>")))
 	{
+		cmd = NULL;
 		//printf("%s\n", line); 
 		add_history(line);
-		cmd = init_cmd();
+		//cmd = init_cmd();
 		lexer = ft_lexer(line);
 		token = tokenizer(lexer, env);
 		cmd = ft_parse(token, cmd);	
