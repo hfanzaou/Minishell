@@ -12,7 +12,7 @@
 
 SRC = tokenizer.c lexer.c main.c token.c parse.c
 NAME = Minishell
-FLAGS = -Wall -Werror -Wextra -lReadline -fsanitize=address
+FLAGS = -Wall -Werror -Wextra -lReadline -fsanitize=address -g
 CC = gcc
 
 all : $(NAME)

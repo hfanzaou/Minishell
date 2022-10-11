@@ -29,7 +29,7 @@ t_cmd *init_cmd(char **cargs, int in, int out)
 {
 	t_cmd *cmd;
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
-	cmd->cmd =cargs;
+	cmd->cmd = cargs;
 	cmd->fd = 0;
 	cmd->in = in;
 	cmd->out = out;
@@ -44,6 +44,7 @@ int main(int ac, char **av, char **env)
 	t_lexer *lexer;
 	token_t *token;
 	t_cmd *cmd;
+	cmd = NULL;
 	signal(SIGINT, handler);
 	while ((line = readline("MINISHELL>")))
 	{

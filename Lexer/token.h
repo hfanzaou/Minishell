@@ -35,6 +35,7 @@ typedef struct token_s
 	} type;
 }	token_t;
 
+t_cmd *init_cmd(char **cargs, int in, int out);
 void printf_token(token_t *token);
 token_t *tokenizer(t_lexer *lexer, char **env);
 token_t *token_init(char *val, int type);
