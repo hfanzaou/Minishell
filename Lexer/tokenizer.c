@@ -299,7 +299,7 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 	while (lexer->c)
 	{
 		if (lexer->c == ' ' || lexer->c == '\t')
-			lexer_step(&lexer);
+			lexer_advance(&lexer);
 		if (lexer->c == '\'')
 			token_sq(&token, lexer);
 		else if (lexer->c == '\"')

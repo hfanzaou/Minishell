@@ -33,6 +33,7 @@ t_cmd *init_cmd(char **cargs, int in, int out)
 	cmd->fd = 0;
 	cmd->in = in;
 	cmd->out = out;
+	cmd->next = NULL;
 	return (cmd);
 }
 
@@ -44,17 +45,15 @@ int main(int ac, char **av, char **env)
 	t_lexer *lexer;
 	token_t *token;
 	t_cmd *cmd;
-	cmd = NULL;
 	signal(SIGINT, handler);
 	while ((line = readline("MINISHELL>")))
 	{
-		cmd = NULL;
 		//printf("%s\n", line); 
 		add_history(line);
 		//cmd = init_cmd();
 		lexer = ft_lexer(line);
 		token = tokenizer(lexer, env);
-		cmd = ft_parse(token, cmd);	
+		cmd = ft_parse(token, cmd);
 	}
 }
 

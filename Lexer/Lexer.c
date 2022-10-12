@@ -11,6 +11,20 @@
 /* ************************************************************************** */
 #include "lexer.h"
 
+int	ft_strrchr(char *str, char c)
+{
+	int	i;
+
+	i = 0;	
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 t_lexer *ft_lexer(char *src)
 {
 	t_lexer *lexer;
@@ -24,21 +38,11 @@ t_lexer *ft_lexer(char *src)
 	return (lexer);
 }
 
-void	lexer_step(t_lexer **lexer)
+void	lexer_advance(t_lexer **lexer)
 {
 	if ((*lexer)->i < (*lexer)->size)
 	{
 		(*lexer)->i += 1;
 		(*lexer)->c = (*lexer)->src[(*lexer)->i];
 	}
-}
-
-t_lexer *lexer_ntoken(t_lexer *lexer)
-{
-	while (lexer->c)
-	{
-		if (isalpha(lexer->c))
-			lexer_step(&lexer);	
-	}
-	return (NULL);
 }

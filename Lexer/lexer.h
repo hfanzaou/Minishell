@@ -39,7 +39,7 @@ typedef struct s_cmd
 	struct s_cmd *next;
 }	t_cmd;
 t_lexer *ft_lexer(char *src);
-void	lexer_step(t_lexer **lexer);
+void	lexer_advance(t_lexer **lexer);
 t_lexer *lexer_ntoken(t_lexer *lexer);
 # include "token.h"
 #endif
