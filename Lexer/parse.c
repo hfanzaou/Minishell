@@ -25,6 +25,7 @@ void	printcmd(t_cmd *cmd)
 			printf("%s\n", cmd->cmd[i]);
 			i++;
 		}
+		printf("in = %d\nout = %d\n", cmd->in, cmd->out);
 		cmd = cmd->next;
 	}
 }
@@ -83,15 +84,15 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		}
 		else if (token->next && token->type == RED_IN)
 		{
-			//printf("here 2\n");
 			token = token->next;
-			out = open(token->value, O_CREAT, O_RDWR);
+			out = open(token->value, O_CREAT | O_WRONLY, 0600);
+			printf("..%d\n", out);
+			close(out);
 		}
 		else if (token->next && token->type == RED_OUT)
 		{
-			//printf("here 3\n");
 			token = token->next;
-			in = open(token->value, O_CREAT, O_RDWR);
+			in = open(token->value, O_RDWR);
 		}
 		else if (token->type == PIPE)
 		{
@@ -100,9 +101,8 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		}
 		if (!token)
 			break;
-		token = token->next;	
+		token = token->next;
 	}
-	//printf("here 4\n");
 	oneuse = init_cmd(cargs, in, out);
 	ft_lstadd_backc(&cmd, oneuse);
 	printcmd(cmd);

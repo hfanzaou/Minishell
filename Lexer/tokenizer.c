@@ -106,7 +106,7 @@ char	*ft_expand(t_lexer *lexer, char **env)
 	while (lexer->src[lexer->i] && lexer->c != '\"' && lexer->c != ' ' && lexer->c != '\t')
 	{
 		s[i] = lexer->c;
-		lexer_step(&lexer);
+		lexer_advance(&lexer);
 		i++;
 	}
 	s[i] = '\0';
@@ -127,7 +127,7 @@ void	token_sq(token_t **token, t_lexer *lexer)
 	int type;
 	int size;
 	
-	lexer_step(&lexer);
+	lexer_advance(&lexer);
 	if (!lexer->c)
 		return ;
 	size = 0;
@@ -137,7 +137,7 @@ void	token_sq(token_t **token, t_lexer *lexer)
 	{
 		val[size] = lexer->c;
 		size++;
-		lexer_step(&lexer);
+		lexer_advance(&lexer);
 		if (!lexer->c)
 			return ;
 	}
@@ -153,7 +153,7 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env)
 	int type;
 	int size;
 
-	lexer_step(&lexer);
+	lexer_advance(&lexer);
 	if (!lexer->c)
 	 	return ;
 	(void)env;	
@@ -162,20 +162,18 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env)
 	val = malloc(sizeof(char) * ft_size(lexer) + 1);
 	if (!val)
 		return ;
-	while (lexer->c != '\"')
+	while (lexer->c && lexer->c != '\"')
 	{
 		if (lexer->c == '$')
 		{
 			size = -1;
-			lexer_step(&lexer);
+			lexer_advance(&lexer);
 			val = ft_expand(lexer, env);
 			break;
 		}
 		val[size] = lexer->c;
 		size++;
-		lexer_step(&lexer);
-		if (!lexer->c)
-			return ;
+		lexer_advance(&lexer);
 	}
 	if (size != -1)
 		val[size] = '\0';	
@@ -240,7 +238,7 @@ void	token_dollar(token_t **token, t_lexer *lexer, char **env)
 	char *val;
 	token_t *oneuse;
 
-	lexer_step(&lexer);
+	lexer_advance(&lexer);
 	val = ft_expand(lexer, env);
 	oneuse = token_init(val, DOLLAR);
 	ft_lstadd_back(token, oneuse);
@@ -281,7 +279,7 @@ void	token_string(token_t **token, t_lexer *lexer)
 	while (lexer->c && ft_strrchr(" \t\'\"|><$", lexer->c))
 	{
 		val[size] = lexer->c;
-		lexer_step(&lexer);	
+		lexer_advance(&lexer);	
 		size++;
 	}
 	val[size] = '\0';
@@ -318,7 +316,7 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 			token_dollar(&token, lexer, env);	
 		else
 			token_string(&token, lexer);
-		lexer_step(&lexer);
+		lexer_advance(&lexer);
 	}
 	return (token);
 }
