@@ -70,7 +70,9 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	char **cargs;
 	int in;
 	int out;
+	int i;
 
+	i = 0;
 	in = 0;
 	out = 1;
 	oneuse = malloc(sizeof(t_cmd));
@@ -78,21 +80,27 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	{
 		if (token->type == STRING)
 		{
-			cargs = (char **)malloc(sizeof(char *) * 3);
+			cargs = (char **)malloc(sizeof(char *) * 2);
 			*cargs = token->value;
 			*(cargs + 1) = NULL;
-		}
-		else if (token->next && token->type == RED_IN)
-		{
-			token = token->next;
-			out = open(token->value, O_CREAT | O_WRONLY, 0600);
-			printf("..%d\n", out);
-			close(out);
+			i++;
 		}
 		else if (token->next && token->type == RED_OUT)
 		{
 			token = token->next;
-			in = open(token->value, O_RDWR);
+			out = open(token->value, O_CREAT | O_WRONLY, 0600);
+			close(out);
+		}
+		else if (token->next && token->type == RED_IN)
+		{
+			token = token->next;
+			if (*cargs)
+			{
+				in = open(*cargs, O_RDONLY, 0400);
+				*cargs = token->value;
+			}
+			else 
+				in = open(token->value, O_RDONLY, 0400);	
 		}
 		else if (token->type == PIPE)
 		{

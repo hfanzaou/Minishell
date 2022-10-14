@@ -201,12 +201,12 @@ void	token_redout(token_t **token, int i)
 	char *val;
 	int type;
 
-	type = RED_IN;
+	type = RED_OUT;
 	oneuse = NULL;
 	if (i == 1)
 	{
 		val = ft_strdup(">>");
-		type = RED_IN2;
+		type = RED_OUT2;
 	}
 	else
 		val = ft_strdup(">");

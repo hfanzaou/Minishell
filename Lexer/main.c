@@ -48,12 +48,20 @@ int main(int ac, char **av, char **env)
 	signal(SIGINT, handler);
 	while ((line = readline("MINISHELL>")))
 	{
-		//printf("%s\n", line); 
-		add_history(line);
-		//cmd = init_cmd();
-		lexer = ft_lexer(line);
-		token = tokenizer(lexer, env);
-		cmd = ft_parse(token, cmd);
+		if (line[0])
+		{ 
+			add_history(line);
+			//cmd = init_cmd();
+			lexer = ft_lexer(line);
+			token = tokenizer(lexer, env);
+			cmd = ft_parse(token, cmd);
+			free(cmd);
+			free(lexer);
+			free(token);
+			cmd = NULL;
+			lexer = NULL;
+			token = NULL;
+		}
 	}
 }
 
