@@ -64,43 +64,66 @@ void	ft_lstadd_backc(t_cmd **lst, t_cmd *new)
 		ft_lstlastc(*lst)->next = new;
 }
 
+char **fillcargs(char **cargs, char *val)
+{
+	char **tmp;
+	int i;
+	i = 0;
+	while (cargs[i])
+		i++;		
+	tmp = (char **)malloc(sizeof(char *) * (i + 2));
+	i = 0;
+	while (cargs[i])
+	{
+		tmp[i] = cargs[i];
+		i++;
+	}
+	tmp[i] = val;
+	tmp[i + 1] = NULL;
+	return (tmp);
+}
+
 t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 {
 	t_cmd *oneuse;
 	char **cargs;
 	int in;
 	int out;
-	int i;
 
-	i = 0;
 	in = 0;
 	out = 1;
+	cargs = NULL;
 	oneuse = malloc(sizeof(t_cmd));
 	while (token)
 	{
 		if (token->type == STRING)
 		{
-			cargs = (char **)malloc(sizeof(char *) * 2);
-			*cargs = token->value;
-			*(cargs + 1) = NULL;
-			i++;
+			if (!cargs)
+			{
+				cargs = (char **)malloc(sizeof(char *) * 2);
+				*cargs = token->value;
+				*(cargs + 1) = NULL;
+			}
+			else
+				cargs = fillcargs(cargs, token->value);
 		}
 		else if (token->next && token->type == RED_OUT)
 		{
 			token = token->next;
 			out = open(token->value, O_CREAT | O_WRONLY, 0600);
-			close(out);
 		}
 		else if (token->next && token->type == RED_IN)
 		{
 			token = token->next;
-			if (*cargs)
+			if (cargs)
 			{
 				in = open(*cargs, O_RDONLY, 0400);
 				*cargs = token->value;
 			}
 			else 
-				in = open(token->value, O_RDONLY, 0400);	
+				in = open(token->value, O_RDONLY, 0400);
+			if (in < 0)
+				return NULL;		
 		}
 		else if (token->type == PIPE)
 		{

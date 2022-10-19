@@ -10,9 +10,9 @@
 #                                                                              #
 # **************************************************************************** #
 
-SRC = tokenizer.c lexer.c main.c token.c parse.c
+SRC = tokenizer.c Lexer.c main.c token.c parse.c
 NAME = Minishell
-FLAGS = -Wall -Werror -Wextra -lReadline -fsanitize=address -g
+FLAGS = -Wall -Werror -Wextra -L/usr/include -lreadline -fsanitize=address
 CC = gcc
 
 all : $(NAME)

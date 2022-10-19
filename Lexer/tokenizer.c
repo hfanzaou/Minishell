@@ -290,9 +290,7 @@ void	token_string(token_t **token, t_lexer *lexer)
 token_t *tokenizer(t_lexer *lexer, char **env)
 {
 	token_t *token;
-	int i;
 
-	i = 0;
 	token = NULL;
 	while (lexer->c)
 	{

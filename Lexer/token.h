@@ -30,7 +30,7 @@ typedef struct token_s
 		RED_OUT2,
 		PIPE,
 		DOLLAR,
-		SPACE,
+		//SPACE,
 		END
 	} type;
 }	token_t;
