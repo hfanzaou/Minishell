@@ -125,6 +125,13 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 			if (in < 0)
 				return NULL;		
 		}
+		else if (token->next && token->type == RED_OUT2)
+		{
+			token = token->next;
+			in = open(token->value, O_WRONLY | O_APPEND | O_CREAT);
+			write(in, "hi", 2);
+			close(in);
+		}
 		else if (token->type == PIPE)
 		{
 			oneuse = init_cmd(cargs, in, out);

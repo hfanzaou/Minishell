@@ -303,7 +303,10 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 		else if (lexer->c == '|')
 			token_pipe(&token);
 		else if (lexer->c == '>' && lexer->src[lexer->i + 1] == '>')
+		{
+			lexer_advance(&lexer);
 			token_redout(&token, 1);
+		}
 		else if (lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
 			token_redin(&token, 1);
 		else if (lexer->c == '>')
