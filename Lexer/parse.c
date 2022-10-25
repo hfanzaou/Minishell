@@ -96,18 +96,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	oneuse = malloc(sizeof(t_cmd));
 	while (token)
 	{
-		if (token->type == STRING)
-		{
-			if (!cargs)
-			{
-				cargs = (char **)malloc(sizeof(char *) * 2);
-				*cargs = token->value;
-				*(cargs + 1) = NULL;
-			}
-			else
-				cargs = fillcargs(cargs, token->value);
-		}
-		else if (token->next && token->type == RED_OUT)
+		if (token->next && token->type == RED_OUT)
 		{
 			token = token->next;
 			out = open(token->value, O_CREAT | O_WRONLY, 0600);
@@ -136,6 +125,19 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		{
 			oneuse = init_cmd(cargs, in, out);
 			ft_lstadd_backc(&cmd, oneuse);
+			cargs = NULL;
+		}
+		else
+		{
+			//printf("%s\n", token->value);
+			if (!cargs)
+			{
+				cargs = (char **)malloc(sizeof(char *) * 2);
+				*cargs = token->value;
+				*(cargs + 1) = NULL;
+			}
+			else
+				cargs = fillcargs(cargs, token->value);
 		}
 		if (!token)
 			break;

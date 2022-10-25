@@ -100,7 +100,7 @@ char	*ft_expand(t_lexer *lexer, char **env)
 	int l;
 
 	i = 0;
-	s = malloc(sizeof(char) * ft_size(lexer) + 1);
+	s = malloc(sizeof(char) * ft_size(lexer) + 2);
 	if (!s)
 		return NULL;
 	while (lexer->src[lexer->i] && lexer->c != '\"' && lexer->c != ' ' && lexer->c != '\t')
@@ -109,12 +109,13 @@ char	*ft_expand(t_lexer *lexer, char **env)
 		lexer_advance(&lexer);
 		i++;
 	}
-	s[i] = '\0';
-	l = strlen(s);
+	s[i] = '=';
+	s[i + 1] = '\0';
+	l = strlen(s) + 1;
 	while (env[i])
 	{
 		if (!ft_memcmp(env[i], s, l))
-			return (&env[i][l + 1]);
+			return (&env[i][l]);
 		i++;
 	}
 	return (NULL);
@@ -299,7 +300,10 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 		if (lexer->c == '\'')
 			token_sq(&token, lexer);
 		else if (lexer->c == '\"')
+		{	
 			token_dq(&token, lexer, env);
+			//printf("%s\n", token->value);
+		}
 		else if (lexer->c == '|')
 			token_pipe(&token);
 		else if (lexer->c == '>' && lexer->src[lexer->i + 1] == '>')
@@ -314,7 +318,10 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 		else if (lexer->c == '<')
 			token_redin(&token, 0);
 		else if (lexer->c == '$')
-			token_dollar(&token, lexer, env);	
+		{
+			token_dollar(&token, lexer, env);
+			//printf("%s\n", token->value);
+		}	
 		else
 			token_string(&token, lexer);
 		lexer_advance(&lexer);

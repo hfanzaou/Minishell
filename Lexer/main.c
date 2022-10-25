@@ -37,15 +37,60 @@ t_cmd *init_cmd(char **cargs, int in, int out)
 	return (cmd);
 }
 
+int envlen(char **env)
+{
+	int i;
+	i = 0;
+	while (env[i])
+		i++;
+	return (i);	
+}
+
+int ft_strlen(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);	
+}
+
+char **put_env(char **env)
+{
+	char **myenv;
+	int l;
+	int i;
+	l = envlen(env);
+	myenv = (char **)malloc(sizeof(char *) * (l + 1));
+	l = 0;
+	while (env[l])
+	{
+		myenv[l] = (char *)malloc(sizeof(char) * ft_strlen(env[l]) + 1);
+		i = 0;
+		while (env[l][i])
+		{
+			myenv[l][i] = env[l][i];
+			i++;
+		}
+		myenv[l][i] = '\0';
+		l++;
+	}
+	myenv[l] = NULL;
+	return (myenv);
+}
+
 int main(int ac, char **av, char **env)
 {
 	(void)ac;
 	(void)av;
 	char *line;
+	//char **myenv;
 	t_lexer *lexer;
 	token_t *token;
 	t_cmd *cmd;
 	signal(SIGINT, handler);
+	//myenv = put_env(env);
 	while ((line = readline("MINISHELL>")))
 	{
 		if (line[0])
@@ -55,6 +100,7 @@ int main(int ac, char **av, char **env)
 			lexer = ft_lexer(line);
 			token = tokenizer(lexer, env);
 			cmd = ft_parse(token, cmd);
+			close(cmd->out);
 			free(cmd);
 			free(lexer);
 			free(token);
