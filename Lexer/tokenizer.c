@@ -12,6 +12,8 @@
 
 #include "lexer.h"
 
+
+
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
 	size_t			i;
@@ -112,10 +114,14 @@ char	*ft_expand(t_lexer *lexer, char **env)
 	s[i] = '=';
 	s[i + 1] = '\0';
 	l = strlen(s) + 1;
+	i = 0;
 	while (env[i])
 	{
 		if (!ft_memcmp(env[i], s, l))
+		{
+			//printf("%s\n", )
 			return (&env[i][l]);
+		}
 		i++;
 	}
 	return (NULL);
@@ -312,7 +318,10 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 			token_redout(&token, 1);
 		}
 		else if (lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
+		{
+			lexer_advance(&lexer);
 			token_redin(&token, 1);
+		}
 		else if (lexer->c == '>')
 			token_redout(&token, 0);
 		else if (lexer->c == '<')
@@ -320,11 +329,12 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 		else if (lexer->c == '$')
 		{
 			token_dollar(&token, lexer, env);
-			//printf("%s\n", token->value);
+			printf("%s\n", token->value);
 		}	
 		else
 			token_string(&token, lexer);
 		lexer_advance(&lexer);
 	}
+	printf_token(token);
 	return (token);
 }

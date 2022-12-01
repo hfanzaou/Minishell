@@ -83,6 +83,31 @@ char **fillcargs(char **cargs, char *val)
 	return (tmp);
 }
 
+char	**ft_herdoc(char *eof)
+{
+	char *line;
+	char **args;
+	args = NULL;
+
+	while ((line = readline(">")))
+	{
+		if (memcmp(line, eof, strlen(eof)))
+		{
+			if (!args)
+			{
+				args = (char **)malloc(sizeof(char *) * 2);
+				*args = line;
+				*(args + 1) = NULL;
+			}
+			else
+				args = fillcargs(args, line);
+		}
+		else if (!memcmp(line, eof, strlen(eof)))
+			return (args);
+	}
+	return (args);
+}
+
 t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 {
 	t_cmd *oneuse;
@@ -118,8 +143,12 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		{
 			token = token->next;
 			in = open(token->value, O_WRONLY | O_APPEND | O_CREAT);
-			write(in, "hi", 2);
 			close(in);
+		}
+		else if (token->next && token->type == RED_IN2)
+		{
+			cargs = ft_herdoc(token->next->value);
+			token = token->next;
 		}
 		else if (token->type == PIPE)
 		{
@@ -129,7 +158,6 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		}
 		else
 		{
-			//printf("%s\n", token->value);
 			if (!cargs)
 			{
 				cargs = (char **)malloc(sizeof(char *) * 2);
@@ -148,4 +176,3 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	printcmd(cmd);
 	return (cmd);
 }
-
