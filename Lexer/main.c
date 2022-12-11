@@ -100,13 +100,13 @@ int main(int ac, char **av, char **env)
 			lexer = ft_lexer(line);
 			token = tokenizer(lexer, env);
 			cmd = ft_parse(token, cmd);
-			close(cmd->out);
-			free(cmd);
-			free(lexer);
-			free(token);
-			cmd = NULL;
-			lexer = NULL;
-			token = NULL;
+			// close(cmd->out);
+			// free(cmd);
+			// free(lexer);
+			// free(token);
+			// cmd = NULL;
+			// lexer = NULL;
+			// token = NULL;
 		}
 	}
 }

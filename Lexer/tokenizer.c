@@ -113,7 +113,7 @@ char	*ft_expand(t_lexer *lexer, char **env)
 	}
 	s[i] = '=';
 	s[i + 1] = '\0';
-	l = strlen(s) + 1;
+	l = strlen(s);
 	i = 0;
 	while (env[i])
 	{
@@ -277,7 +277,11 @@ void	token_string(token_t **token, t_lexer *lexer)
 	size = 0;
 	
 	while (str[size] && ft_strrchr(" \t\'\"|><$", str[size]))
-		size++;
+	{
+		if (str[size] == '=' && str[size + 1] == '\"')
+			size++;
+		size++;	
+	}
 	val = malloc(sizeof(char) * size + 1);
 	
 	if (!val)
@@ -285,6 +289,12 @@ void	token_string(token_t **token, t_lexer *lexer)
 	size = 0;	
 	while (lexer->c && ft_strrchr(" \t\'\"|><$", lexer->c))
 	{
+		if (str[size] == '=' && str[size + 1] == '\"')
+		{
+			val[size] = lexer->c;
+			lexer_advance(&lexer);	
+			size++;
+		}
 		val[size] = lexer->c;
 		lexer_advance(&lexer);	
 		size++;
@@ -329,7 +339,7 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 		else if (lexer->c == '$')
 		{
 			token_dollar(&token, lexer, env);
-			printf("%s\n", token->value);
+			//printf("%s\n", token->value);
 		}	
 		else
 			token_string(&token, lexer);

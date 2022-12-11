@@ -147,7 +147,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		}
 		else if (token->next && token->type == RED_IN2)
 		{
-			cargs = ft_herdoc(token->next->value);
+			//cargs = ft_herdoc(token->next->value);
 			token = token->next;
 		}
 		else if (token->type == PIPE)
@@ -173,6 +173,6 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	}
 	oneuse = init_cmd(cargs, in, out);
 	ft_lstadd_backc(&cmd, oneuse);
-	printcmd(cmd);
+	//printcmd(cmd);
 	return (cmd);
 }
