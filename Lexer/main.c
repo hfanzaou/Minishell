@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/09/09 15:51:35 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/13 13:48:48 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,9 @@ int main(int ac, char **av, char **env)
 	t_lexer *lexer;
 	token_t *token;
 	t_cmd *cmd;
-	signal(SIGINT, handler);
+
+	// signal(SIGINT, handler);
+	envlist_init(env);
 	//myenv = put_env(env);
 	while ((line = readline("MINISHELL>")))
 	{
@@ -100,6 +102,7 @@ int main(int ac, char **av, char **env)
 			lexer = ft_lexer(line);
 			token = tokenizer(lexer, env);
 			cmd = ft_parse(token, cmd);
+			excute(cmd);
 			// close(cmd->out);
 			// free(cmd);
 			// free(lexer);

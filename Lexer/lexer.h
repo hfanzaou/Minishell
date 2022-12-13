@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:55:56 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/09/09 15:55:58 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/13 13:46:24 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,8 @@ typedef struct s_cmd
 t_lexer *ft_lexer(char *src);
 void	lexer_advance(t_lexer **lexer);
 t_lexer *lexer_ntoken(t_lexer *lexer);
+void	excute(t_cmd *cmd_lst);
+void	envlist_init(char **envp);
+
 # include "token.h"
 #endif

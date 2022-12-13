@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 02:17:24 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/09/18 02:17:26 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/13 13:50:30 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer.h"
-
-
 
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
@@ -345,6 +343,6 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 			token_string(&token, lexer);
 		lexer_advance(&lexer);
 	}
-	printf_token(token);
+	// printf_token(token);
 	return (token);
 }
