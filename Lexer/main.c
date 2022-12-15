@@ -104,13 +104,12 @@ int main(int ac, char **av, char **env)
 			cmd = ft_parse(token, cmd);
 			excute(cmd);
 			// close(cmd->out);
-			// free(cmd);
-			// free(lexer);
-			// free(token);
-			// cmd = NULL;
-			// lexer = NULL;
-			// token = NULL;
+			free(cmd);
+			free(lexer);
+			free(token);
+			cmd = NULL;
+			lexer = NULL;
+			token = NULL;
 		}
 	}
 }
-

@@ -65,7 +65,7 @@ int	str_search(char **haystack, char *needle)
 	i = 0;
 	while (haystack[i])
 	{
-		if (!ft_strncmp(haystack[i], needle, ft_strlen(needle)))
+		if (!ft_strncmp(haystack[i], needle, ft_strlen(needle)) && (ft_strlen(haystack[i] - ft_strlen(needle)) == 0))
 			return (i + 1);
 		i++;
 	}

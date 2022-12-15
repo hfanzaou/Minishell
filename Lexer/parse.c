@@ -100,10 +100,13 @@ int	ft_herdoc(char *eof)
 			else if (!memcmp(line, eof, strlen(eof)))
 				exit(0);
 		}
-		close(fd[1]);
 	}
 	else 
+	{
 		wait(&i);
+		close(fd[1]);
+	}
+
 	return (fd[0]);	
 }
 
@@ -123,7 +126,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		if (token->next && token->type == RED_OUT)
 		{
 			token = token->next;
-			out = open(token->value, O_CREAT | O_WRONLY, 0600);
+			out = open(token->value, O_CREAT | O_WRONLY, 0644);
 		}
 		else if (token->next && token->type == RED_IN)
 		{
@@ -141,8 +144,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		else if (token->next && token->type == RED_OUT2)
 		{
 			token = token->next;
-			in = open(token->value, O_WRONLY | O_APPEND | O_CREAT);
-			close(in);
+			out = open(token->value, O_WRONLY | O_APPEND | O_CREAT, 0644);
 		}
 		else if (token->next && token->type == RED_IN2)
 		{
@@ -171,7 +173,10 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		token = token->next;
 	}
 	oneuse = init_cmd(cargs, in, out);
+	//free(cargs);
+	cargs = NULL;
 	ft_lstadd_backc(&cmd, oneuse);
+	//cargs = NULL;
 	//printcmd(cmd);
 	return (cmd);
 }
