@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/13 13:30:30 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/13 17:20:31 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,15 @@ typedef struct	s_cmd
 	struct	s_cmd *next;
 }	t_cmd;
 
-extern t_global	global;
+t_global	global;
 
-void		echo(t_cmd *cmd_lst);
-void		cd(t_cmd *cmd_lst);
+void		echo(char **cmd);
+void		cd(char **cmd);
 void		pwd();
-void		export(t_cmd *cmd_lst);
-void		unset(t_cmd *cmd_lst);
-void		env();
-void		ft_exit(t_cmd *cmd_lst);
+void		export(char **cmd);
+void		unset(char **cmd);
+void		env(char **cmd);
+void		ft_exit(char **cmd);
 t_envlist	*envlist_new(char *str);
 void		envlist_addback(t_envlist **head, t_envlist *new);
 

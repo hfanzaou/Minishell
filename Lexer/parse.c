@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/09/26 17:06:07 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/13 15:22:08 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "lexer.h"
+
 # include "token.h"
 #include <string.h>
 
@@ -133,11 +133,11 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 			token = token->next;
 			if (cargs)
 			{
-				in = open(*cargs, O_RDONLY, 0400);
+				in = open(*cargs, O_RDONLY);
 				*cargs = token->value;
 			}
 			else 
-				in = open(token->value, O_RDONLY, 0400);
+				in = open(token->value, O_RDONLY);
 			if (in < 0)
 				return NULL;		
 		}
@@ -145,6 +145,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		{
 			token = token->next;
 			out = open(token->value, O_WRONLY | O_APPEND | O_CREAT, 0644);
+			// close(in);
 		}
 		else if (token->next && token->type == RED_IN2)
 		{

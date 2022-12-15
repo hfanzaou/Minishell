@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/13 13:35:20 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/13 20:47:07 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,20 @@ void	ft_free(char **str)
 	{
 		free(*str);
 		*str = NULL;
+	}
+}
+
+void	ft_dup(t_cmd *cmd_lst)
+{
+	if (cmd_lst->in != 0)
+	{
+		dup2(cmd_lst->in, 0);
+		close(cmd_lst->in);
+	}
+	if (cmd_lst->out != 1)
+	{
+		dup2(cmd_lst->out, 1);
+		close(cmd_lst->out);
 	}
 }
 
@@ -63,6 +77,8 @@ int	str_search(char **haystack, char *needle)
 	int	i;
 
 	i = 0;
+	if (!needle || !(*needle))
+		return (0);
 	while (haystack[i])
 	{
 		if (!ft_strncmp(haystack[i], needle, ft_strlen(needle)) && (ft_strlen(haystack[i] - ft_strlen(needle)) == 0))
@@ -86,17 +102,17 @@ int	is_builtin(char *cmd)
 void	excute_builtin(t_cmd *cmd_lst, int ind)
 {
 	if (ind == e_echo)
-		echo(cmd_lst);
+		echo(cmd_lst->cmd);
 	else if (ind == e_cd)
-		cd(cmd_lst);
+		cd(cmd_lst->cmd);
 	else if (ind == e_pwd)
-		pwd(cmd_lst);
+		pwd(cmd_lst->cmd);
 	else if (ind == e_export)
-		export(cmd_lst);
+		export(cmd_lst->cmd);
 	else if (ind == e_unset)
-		unset(cmd_lst);
+		unset(cmd_lst->cmd);
 	else if (ind == e_env)
-		env(cmd_lst);
+		env(cmd_lst->cmd);
 	// else if (ind == e_exit)
 	// 	ft_exit(cmd_lst);
 }
@@ -125,10 +141,16 @@ char	*check_access(char *cmd)
 
 void	simple_cmd(t_cmd *cmd_lst)
 {
-	int		ind, pid;
+	int		ind;
+	int		pid;
+	int		tmpin;
+	int		tmpout;
 	char	*path;
 
-	if ((ind = is_builtin(*cmd_lst->cmd)))
+	tmpin = dup(0);
+	tmpout = dup(1);
+	ft_dup(cmd_lst);
+	if ((ind = is_builtin(*(cmd_lst->cmd))))
 		excute_builtin(cmd_lst, ind);
 	else
 	{
@@ -141,20 +163,10 @@ void	simple_cmd(t_cmd *cmd_lst)
 		else
 			waitpid(pid, NULL, 0);
 	}
-}
-
-void	ft_dup(t_cmd *cmd_lst)
-{
-	if (cmd_lst->in != 0)
-	{
-		dup2(cmd_lst->in, 0);
-		close(cmd_lst->in);
-	}
-	if (cmd_lst->out != 1)
-	{
-		dup2(cmd_lst->out, 1);
-		close(cmd_lst->out);
-	}
+	dup2(tmpin, 0);
+	dup2(tmpout, 1);
+	close(tmpin);
+	close(tmpout);
 }
 
 int	child(t_cmd *cmd_lst)
@@ -226,15 +238,13 @@ void	envlist_addback(t_envlist **head, t_envlist *new)
 
 t_envlist	*envlist_new(char *str)
 {
-	char		**temp;
+	char		*temp;
 	t_envlist	*new;
 
 	new = malloc(sizeof(t_envlist));
-	if (ft_strchr(str, '='))
+	if ((temp = ft_strchr(str, '=')))
 	{
-		temp = ft_split(str, '=');
-		new->key = *temp++;
-		new->value = *temp;
+		new->value = temp + 1;
 		new->sep = '=';
 	}
 	else
@@ -256,18 +266,3 @@ void	envlist_init(char **envp)
 		envlist_addback(&global.envlist, envlist_new(envp[i++]));
 	global.envp = envp;
 }
-
-// int	main(int ac, char **av, char **envp)
-// {
-// 	char	*line = NULL;
-// 	t_cmd	cmd_lst;
-
-// 	(void)ac;
-// 	(void)av;
-// 	envlist_init(envp);
-// 	while ((line = readline("minishell>>")))
-// 	{
-// 		cmd_lst.cmd = ft_split(line, ' ');
-// 		excute(&cmd_lst);
-// 	}
-// }

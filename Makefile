@@ -6,7 +6,7 @@
 #    By: ajana <ajana@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/15 17:03:01 by ajana             #+#    #+#              #
-#    Updated: 2022/12/12 23:00:38 by ajana            ###   ########.fr        #
+#    Updated: 2022/12/13 20:49:45 by ajana            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = minishell
 FLAGS = -Wall -Wextra -Werror
 
 
-SRCS = execution/minishell.c execution/builtins.c Lexer/tokenizer.c \
+SRCS = execution/minishell.c execution/export.c execution/builtins.c Lexer/tokenizer.c \
 	Lexer/main.c Lexer/Lexer.c Lexer/token.c Lexer/parse.c
 
 LIBFT = libft/libft.a
@@ -37,6 +37,7 @@ $(NAME) : $(OBJS)
 
 clean :
 	$(RM) $(OBJS)
+	make -C libft clean
 
 fclean : clean
 	$(RM) $(NAME)
