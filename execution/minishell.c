@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/13 20:47:07 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/15 19:51:41 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,8 @@ void	simple_cmd(t_cmd *cmd_lst)
 		else
 			waitpid(pid, NULL, 0);
 	}
+	close(0);
+	close(1);
 	dup2(tmpin, 0);
 	dup2(tmpout, 1);
 	close(tmpin);
@@ -217,7 +219,6 @@ void	excute(t_cmd *cmd_lst)
 		cmd_lst = cmd_lst->next;
 	}
 	close(fds[0]);
-	close(fds[1]);
 	waitpid(pid, NULL, 0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/13 15:22:08 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/15 20:17:43 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,9 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		if (token->next && token->type == RED_OUT)
 		{
 			token = token->next;
-			out = open(token->value, O_CREAT | O_WRONLY, 0644);
+			out = open(token->value, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+			printf ("%d\n", out);
+			write(out, NULL, 1);
 		}
 		else if (token->next && token->type == RED_IN)
 		{
