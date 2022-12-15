@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:24:39 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/13 17:25:40 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/15 21:41:38 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,14 @@ int	search_nd_replace(t_envlist *needle)
 	temp = global.envlist;
 	while (temp)
 	{
-		if (!ft_strncmp(needle->key, temp->key, ft_strlen(needle->key)))
+		if (!ft_strncmp(needle->key, temp->key, ft_strlen(temp->key)))
 		{
-			if (needle->sep)
+			if ((needle->key)[ft_strlen(needle->key) - 1] == '+')
+			{
+				temp->value = ft_strjoin(temp->value, needle->value);
+				temp->sep = '=';
+			}
+			else if (needle->sep)
 			{
 				temp->value = needle->value;
 				temp->sep = '=';

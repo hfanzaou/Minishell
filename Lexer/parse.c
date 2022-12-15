@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/15 20:22:09 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/15 20:37:15 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,6 +177,6 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	cargs = NULL;
 	ft_lstadd_backc(&cmd, oneuse);
 	//cargs = NULL;
-	//printcmd(cmd);
+	// printcmd(cmd);
 	return (cmd);
 }

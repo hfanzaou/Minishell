@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 02:17:24 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/13 13:50:30 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/15 21:10:17 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,8 +289,8 @@ void	token_string(token_t **token, t_lexer *lexer)
 	{
 		if (str[size] == '=' && str[size + 1] == '\"')
 		{
+			lexer_advance(&lexer);
 			val[size] = lexer->c;
-			lexer_advance(&lexer);	
 			size++;
 		}
 		val[size] = lexer->c;
@@ -343,6 +343,6 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 			token_string(&token, lexer);
 		lexer_advance(&lexer);
 	}
-	//printf_token(token);
+	// printf_token(token);
 	return (token);
 }

@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/15 19:51:41 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/15 21:22:53 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,17 +152,16 @@ void	simple_cmd(t_cmd *cmd_lst)
 	ft_dup(cmd_lst);
 	if ((ind = is_builtin(*(cmd_lst->cmd))))
 		excute_builtin(cmd_lst, ind);
-	else
+	else if ((path = check_access(*cmd_lst->cmd)))
 	{
 		pid = fork();
 		if (!pid)
-		{
-			if ((path = check_access(*cmd_lst->cmd)))
-				execve(path, cmd_lst->cmd, global.envp);
-		}
+			execve(path, cmd_lst->cmd, global.envp);
 		else
 			waitpid(pid, NULL, 0);
 	}
+	else
+		printf ("MINISHELL: %s: command not found\n", *cmd_lst->cmd);
 	close(0);
 	close(1);
 	dup2(tmpin, 0);
@@ -191,6 +190,8 @@ int	child(t_cmd *cmd_lst)
 			execve(path, cmd_lst->cmd, global.envp);
 			exit(1);
 		}
+		else
+			printf ("MINISHELL: %s: command not found\n", *cmd_lst->cmd);
 	}
 	return (pid);
 }
@@ -239,13 +240,15 @@ void	envlist_addback(t_envlist **head, t_envlist *new)
 
 t_envlist	*envlist_new(char *str)
 {
-	char		*temp;
+	char		**temp;
 	t_envlist	*new;
 
 	new = malloc(sizeof(t_envlist));
-	if ((temp = ft_strchr(str, '=')))
+	if (ft_strchr(str, '='))
 	{
-		new->value = temp + 1;
+		temp = ft_split(str, '=');
+		new->value = *(temp + 1);
+		new->key = *temp;
 		new->sep = '=';
 	}
 	else
@@ -260,7 +263,7 @@ t_envlist	*envlist_new(char *str)
 
 void	envlist_init(char **envp)
 {
-	int			i;
+	int	i;
 
 	i = 0;
 	while (envp[i])
