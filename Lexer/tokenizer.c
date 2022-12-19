@@ -343,6 +343,6 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 			token_string(&token, lexer);
 		lexer_advance(&lexer);
 	}
-	// printf_token(token);
+	//printf_token(token);
 	return (token);
 }
