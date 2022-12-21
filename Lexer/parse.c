@@ -177,9 +177,9 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	}
 	oneuse = init_cmd(cargs, in, out);
 	//free(cargs);
-	cargs = NULL;
+	//cargs = NULL;
 	ft_lstadd_backc(&cmd, oneuse);
 	//cargs = NULL;
-	// printcmd(cmd);
+	//printcmd(cmd);
 	return (cmd);
 }

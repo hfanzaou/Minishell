@@ -262,36 +262,81 @@ int	ft_strrchr(char *str, char c)
 	return (1);
 }
 
+char	*remove_quotes(char c, t_lexer *lexer, char *str)
+{
+	int i;
+	int f;
+	int e;
+	char *val;
 
+	i = 0;
+	f = 0;
+	e = 0;
+	while (lexer->c && lexer->c != c)
+	{
+		i++;
+		lexer_advance(&lexer);
+	}
+	while (lexer->c && lexer->c == c)
+	{
+		f++;
+		lexer_advance(&lexer);
+	}
+	while (lexer->c && lexer->c != c)
+	{
+		i++;
+		lexer_advance(&lexer);
+	}
+	while (lexer->c && lexer->c == c)
+	{
+		e++;
+		lexer_advance(&lexer);
+	}
+	if (f - e != 0)
+		return (NULL);
+	val = malloc(sizeof(char) * i + 1);
+	i = 0;
+	f = 0;
+	while (str[i])
+	{
+		if (str[i] != c)
+		{
+			val[f] = str[i];
+			f++;
+		}
+		i++;		
+	}
+	val[f] = '\0';
+	return (val);	
+
+
+}
 void	token_string(token_t **token, t_lexer *lexer)
 {
 	char *val;
 	token_t *oneuse;
 	int size;
 	char *str;
+	//int i;
 
 	str = &(lexer->src[lexer->i]);
 	size = 0;
 	
 	while (str[size] && ft_strrchr(" \t\'\"|><$", str[size]))
-	{
-		if (str[size] == '=' && str[size + 1] == '\"')
-			size++;
 		size++;	
+	if (str[size] == '\"' || str[size] =='\'')
+	{
+		val = remove_quotes(str[size], lexer, str);
+		oneuse = token_init(val, STRING);
+		ft_lstadd_back(token, oneuse);
+		return ;
 	}
 	val = malloc(sizeof(char) * size + 1);
-	
 	if (!val)
 		return ;
 	size = 0;	
 	while (lexer->c && ft_strrchr(" \t\'\"|><$", lexer->c))
 	{
-		if (str[size] == '=' && str[size + 1] == '\"')
-		{
-			lexer_advance(&lexer);
-			val[size] = lexer->c;
-			size++;
-		}
 		val[size] = lexer->c;
 		lexer_advance(&lexer);	
 		size++;
@@ -342,6 +387,6 @@ token_t *tokenizer(t_lexer *lexer)
 			token_string(&token, lexer);
 		lexer_advance(&lexer);
 	}
-	// printf_token(token);
+	//printf_token(token);
 	return (token);
 }
