@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/15 20:37:15 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/16 15:03:16 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,10 @@ int	ft_herdoc(char *eof)
 		while ((line = readline(">")))
 		{
 			if (memcmp(line, eof, strlen(eof)))
+			{
 				write(fd[1], line, strlen(line));
+				write(fd[1], "\n", 1);
+			}
 			else if (!memcmp(line, eof, strlen(eof)))
 				exit(0);
 		}

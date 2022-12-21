@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 02:17:24 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/15 21:10:17 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/16 19:40:26 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int ft_size(t_lexer *lexer)
 	return (i);	
 }
 
-char	*ft_expand(t_lexer *lexer, char **env)
+char	*ft_expand(t_lexer *lexer)
 {
 	char *s;
 	int i;
@@ -113,12 +113,12 @@ char	*ft_expand(t_lexer *lexer, char **env)
 	s[i + 1] = '\0';
 	l = strlen(s);
 	i = 0;
-	while (env[i])
+	while ((global.envp)[i])
 	{
-		if (!ft_memcmp(env[i], s, l))
+		if (!ft_memcmp((global.envp)[i], s, l))
 		{
 			//printf("%s\n", )
-			return (&env[i][l]);
+			return (&(global.envp)[i][l]);
 		}
 		i++;
 	}
@@ -151,7 +151,7 @@ void	token_sq(token_t **token, t_lexer *lexer)
 	ft_lstadd_back(token, oneuse);
 }
 
-void	token_dq(token_t **token, t_lexer *lexer, char **env)
+void	token_dq(token_t **token, t_lexer *lexer)
 {	
 	token_t *oneuse;
 	char *val;
@@ -161,7 +161,6 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env)
 	lexer_advance(&lexer);
 	if (!lexer->c)
 	 	return ;
-	(void)env;	
 	size = 0;
 	type = DOUBLE_Q;
 	val = malloc(sizeof(char) * ft_size(lexer) + 1);
@@ -173,7 +172,7 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env)
 		{
 			size = -1;
 			lexer_advance(&lexer);
-			val = ft_expand(lexer, env);
+			val = ft_expand(lexer);
 			break;
 		}
 		val[size] = lexer->c;
@@ -238,13 +237,13 @@ void	token_redin(token_t **token, int i)
 	ft_lstadd_back(token, oneuse);
 }
 
-void	token_dollar(token_t **token, t_lexer *lexer, char **env)
+void	token_dollar(token_t **token, t_lexer *lexer)
 {
 	char *val;
 	token_t *oneuse;
 
 	lexer_advance(&lexer);
-	val = ft_expand(lexer, env);
+	val = ft_expand(lexer);
 	oneuse = token_init(val, DOLLAR);
 	ft_lstadd_back(token, oneuse);
 }
@@ -302,7 +301,7 @@ void	token_string(token_t **token, t_lexer *lexer)
 	ft_lstadd_back(token, oneuse);
 }
 
-token_t *tokenizer(t_lexer *lexer, char **env)
+token_t *tokenizer(t_lexer *lexer)
 {
 	token_t *token;
 
@@ -315,7 +314,7 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 			token_sq(&token, lexer);
 		else if (lexer->c == '\"')
 		{	
-			token_dq(&token, lexer, env);
+			token_dq(&token, lexer);
 			//printf("%s\n", token->value);
 		}
 		else if (lexer->c == '|')
@@ -336,7 +335,7 @@ token_t *tokenizer(t_lexer *lexer, char **env)
 			token_redin(&token, 0);
 		else if (lexer->c == '$')
 		{
-			token_dollar(&token, lexer, env);
+			token_dollar(&token, lexer);
 			//printf("%s\n", token->value);
 		}	
 		else

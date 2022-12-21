@@ -6,7 +6,7 @@
 #    By: ajana <ajana@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/15 17:03:01 by ajana             #+#    #+#              #
-#    Updated: 2022/12/13 20:49:45 by ajana            ###   ########.fr        #
+#    Updated: 2022/12/21 00:49:58 by ajana            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,7 @@ $(LIBFT) :
 	make -C libft/
 
 $(NAME) : $(OBJS)
-	$(CC) $(FLAGS) -fsanitize=address $(OBJS) $(LIBS) -o $@
+	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o $@
 
 %.o : %.c
 	$(CC) $(FLAGS) -c $< -o $@

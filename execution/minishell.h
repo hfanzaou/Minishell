@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/13 17:20:31 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/20 22:50:22 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef	struct envlist
 {
 	char			*key;
 	char			*value;
-	char			sep;
+	char			*sep;
 	struct	envlist	*next;
 }	t_envlist;
 
@@ -44,6 +44,7 @@ typedef	struct global
 {
 	t_envlist	*envlist;
 	char		**envp;
+	int			env_size;
 } t_global;
 
 typedef struct	s_cmd
@@ -63,8 +64,10 @@ void		pwd();
 void		export(char **cmd);
 void		unset(char **cmd);
 void		env(char **cmd);
-void		ft_exit(char **cmd);
 t_envlist	*envlist_new(char *str);
 void		envlist_addback(t_envlist **head, t_envlist *new);
+int			ft_strcmp(char *s1, char *s2);
+void		ft_free(char **str);
+void		envlist_to_tab();
 
 #endif

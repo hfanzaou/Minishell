@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/15 21:10:08 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/21 00:37:00 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,28 +56,28 @@ int ft_strlen(char *str)
 	return (i);	
 }
 
-char **put_env(char **env)
+void	put_env(char **env)
 {
-	char **myenv;
 	int l;
 	int i;
-	l = envlen(env);
-	myenv = (char **)malloc(sizeof(char *) * (l + 1));
+
 	l = 0;
+	global.env_size = envlen(env);
+	(global.envp) = (char **)malloc(sizeof(char *) * (global.env_size + 1));
 	while (env[l])
 	{
-		myenv[l] = (char *)malloc(sizeof(char) * ft_strlen(env[l]) + 1);
 		i = 0;
+		(global.envp)[l] = (char *)malloc(sizeof(char) * ft_strlen(env[l]) + 1);
 		while (env[l][i])
 		{
-			myenv[l][i] = env[l][i];
+			(global.envp)[l][i] = env[l][i];
 			i++;
 		}
-		myenv[l][i] = '\0';
+		(global.envp)[l][i] = '\0';
 		l++;
 	}
-	myenv[l] = NULL;
-	return (myenv);
+	(global.envp)[l] = NULL;
+	return ;
 }
 
 int main(int ac, char **av, char **env)
@@ -85,14 +85,13 @@ int main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	char *line;
-	//char **myenv;
 	t_lexer *lexer;
 	token_t *token;
 	t_cmd *cmd;
 
 	// signal(SIGINT, handler);
-	envlist_init(env);
-	//myenv = put_env(env);
+	put_env(env);
+	envlist_init();
 	while ((line = readline("MINISHELL>")))
 	{
 		if (line[0])
@@ -100,7 +99,7 @@ int main(int ac, char **av, char **env)
 			add_history(line);
 			//cmd = init_cmd();
 			lexer = ft_lexer(line);
-			token = tokenizer(lexer, env);
+			token = tokenizer(lexer);
 			cmd = ft_parse(token, cmd);
 			excute(cmd);
 			// close(cmd->out);

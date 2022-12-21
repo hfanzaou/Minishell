@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/15 20:00:01 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/21 00:46:31 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,19 @@
 
 void	env(char **cmd)
 {
-	t_envlist	*temp;
+	int	i;
 
+	i = 0;
 	if (cmd[1])
 	{
 		ft_putstr_fd("env: No arguments or options are allowed\n", 2);
 		return ;
 	}
-	temp = global.envlist;
-	while (temp)
+	while ((global.envp)[i])
 	{
-		if (temp->sep)
-		{
-			ft_putstr_fd(temp->key, 1);
-			ft_putchar_fd(temp->sep, 1);
-			ft_putstr_fd(temp->value, 1);
-			ft_putchar_fd('\n', 1);
-		}
-		temp = temp->next;
+		ft_putstr_fd((global.envp)[i], 1);
+		ft_putchar_fd('\n', 1);
+		i++;
 	}
 }
 
@@ -47,7 +42,6 @@ void	echo(char **cmd)
 		i++;
 	}
 	ft_putchar_fd('\n', 1);
-	printf ("%zd\n", write(1, "", 1));
 }
 
 void	pwd()
@@ -77,7 +71,7 @@ void	envlist_delete(char *key)
 	t_envlist	*prev;
 
 	curr = global.envlist;
-	while (curr && ft_strncmp(key, curr->key, ft_strlen(curr->key)))
+	while (curr && ft_strcmp(key, curr->key))
 	{
 		prev = curr;
 		curr = curr->next;
@@ -85,6 +79,7 @@ void	envlist_delete(char *key)
 	if (!curr)
 		return ;
 	prev->next = curr->next;
+	(global.env_size)--;
 	free(curr);
 	curr = NULL;
 }
@@ -93,4 +88,5 @@ void	unset(char **cmd)
 {
 	while (*(++cmd))
 		envlist_delete(*cmd);
+	envlist_to_tab();
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 01:00:02 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/09/12 01:00:03 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/16 19:40:46 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ typedef struct token_s
 
 t_cmd *init_cmd(char **cargs, int in, int out);
 void printf_token(token_t *token);
-token_t *tokenizer(t_lexer *lexer, char **env);
+token_t *tokenizer(t_lexer *lexer);
 token_t *token_init(char *val, int type);
 t_cmd *ft_parse(token_t *token, t_cmd *cmd);
 # endif  
