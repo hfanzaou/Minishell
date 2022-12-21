@@ -33,3 +33,16 @@ void	lexer_advance(t_lexer **lexer)
 		(*lexer)->c = (*lexer)->src[(*lexer)->i];
 	}
 }
+
+void 	lexer_advance_i(t_lexer **lexer, int n)
+{
+	int i;
+
+	i = 0;
+	while ((*lexer)->i && i < n)
+	{
+		(*lexer)->i += 1;
+		(*lexer)->c = (*lexer)->src[(*lexer)->i];
+		i++;
+	}
+}
