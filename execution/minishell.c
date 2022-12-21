@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/21 01:45:01 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/21 19:07:19 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,11 +191,10 @@ int	child(t_cmd *cmd_lst)
 
 void	excute(t_cmd *cmd_lst)
 {
-	int		fds[2], pid;
-	int		cmd_num;
+	int	fds[2];
+	int	pid;
 
-	cmd_num = cmd_count(cmd_lst);
-	if (cmd_num == 1)
+	if (!(cmd_lst->next))
 	{
 		simple_cmd(cmd_lst);
 		return ;

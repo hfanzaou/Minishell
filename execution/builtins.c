@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/21 00:46:31 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/21 18:59:50 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ void	cd(char **cmd)
 	else
 		ret = chdir(cmd[1]);
 	if (ret)
-		perror("cd");
+	{
+		ft_putstr_fd("bash: cd: ", 2);
+		perror(cmd[1]);
+	}
 }
 
 void	envlist_delete(char *key)
