@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/21 00:37:16 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/21 01:45:01 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,8 +205,10 @@ void	excute(t_cmd *cmd_lst)
 		if (cmd_lst->next)
 		{
 			pipe(fds);
-			cmd_lst->out = fds[1];
-			cmd_lst->next->in = fds[0];
+			if (cmd_lst->out == 1)
+				cmd_lst->out = fds[1];
+			if (cmd_lst->next->in == 0)
+				cmd_lst->next->in = fds[0];
 		}
 		pid = child(cmd_lst);
 		close(fds[1]);

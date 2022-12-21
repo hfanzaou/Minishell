@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:24:39 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/21 00:48:32 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/21 01:39:15 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void	*add_to_env(char **args)
 		}
 		if (search_nd_replace(temp))
 		{
+			temp->sep = "=";
 			if (temp->value)
 				(global.env_size)++;
 			envlist_addback(&(global.envlist), temp);
