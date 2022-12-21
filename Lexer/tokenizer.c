@@ -156,6 +156,8 @@ char	*remove_quotes(char c, t_lexer *lexer, char *str)
 		f++;
 		lexer_advance(&lexer);
 	}
+	if (!lexer->c)
+		e = f;
 	while (lexer->c && lexer->c != c)
 	{
 		i++;
@@ -431,6 +433,6 @@ token_t *tokenizer(t_lexer *lexer)
 			token_string(&token, lexer, global.envp);
 		lexer_advance(&lexer);
 	}
-	// printf_token(token);
+	printf_token(token);
 	return (token);
 }
