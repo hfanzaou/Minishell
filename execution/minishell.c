@@ -6,85 +6,11 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/21 19:07:19 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/22 23:39:53 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	ft_free(char **str)
-{
-	while (*str)
-	{
-		free(*str);
-		*str = NULL;
-	}
-}
-
-void	ft_dup(t_cmd *cmd_lst)
-{
-	if (cmd_lst->in != 0)
-	{
-		dup2(cmd_lst->in, 0);
-		close(cmd_lst->in);
-	}
-	if (cmd_lst->out != 1)
-	{
-		dup2(cmd_lst->out, 1);
-		close(cmd_lst->out);
-	}
-}
-
-void	print_cmdlst(t_cmd *cmd_lst)
-{
-	int	i = 0;
-
-	while (cmd_lst)
-	{
-		while (cmd_lst->cmd[i])
-			printf("%s\n", (cmd_lst->cmd)[i++]);
-		cmd_lst = cmd_lst->next;
-	}
-}
-
-int	cmd_count(t_cmd *cmd_lst)
-{
-	int count;
-
-	count = 0;
-	while (cmd_lst)
-	{
-		cmd_lst = cmd_lst->next;
-		count++;
-	}
-	return (count);
-}
-
-int ft_strlen_2(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-int	str_search(char **haystack, char *needle)
-{
-	int	i;
-
-	i = 0;
-	if (!needle || !(*needle))
-		return (0);
-	while (haystack[i])
-	{
-		if (!ft_strcmp(haystack[i], needle))
-			return (i + 1);
-		i++;
-	}
-	return (0);
-}
 
 int	is_builtin(char *cmd)
 {
@@ -97,22 +23,23 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
-void	excute_builtin(t_cmd *cmd_lst, int ind)
+int	excute_builtin(t_cmd *cmd_lst, int ind)
 {
 	if (ind == e_echo)
-		echo(cmd_lst->cmd);
+		return (echo(cmd_lst->cmd));
 	else if (ind == e_cd)
-		cd(cmd_lst->cmd);
+		return (cd(cmd_lst->cmd));
 	else if (ind == e_pwd)
-		pwd(cmd_lst->cmd);
+		return (pwd());
 	else if (ind == e_export)
-		export(cmd_lst->cmd);
+		return (export(cmd_lst->cmd));
 	else if (ind == e_unset)
-		unset(cmd_lst->cmd);
+		return (unset(cmd_lst->cmd));
 	else if (ind == e_env)
-		env(cmd_lst->cmd);
+		return (env(cmd_lst->cmd));
 	// else if (ind == e_exit)
 	// 	ft_exit(cmd_lst);
+	return (127);
 }
 
 char	*check_access(char *cmd)
@@ -149,17 +76,20 @@ void	simple_cmd(t_cmd *cmd_lst)
 	tmpout = dup(1);
 	ft_dup(cmd_lst);
 	if ((ind = is_builtin(*(cmd_lst->cmd))))
-		excute_builtin(cmd_lst, ind);
+		global.exit_status = excute_builtin(cmd_lst, ind);
 	else if ((path = check_access(*cmd_lst->cmd)))
 	{
 		pid = fork();
 		if (!pid)
 			execve(path, cmd_lst->cmd, global.envp);
 		else
-			waitpid(pid, NULL, 0);
+			waitpid(pid, &(global.exit_status), 0);
 	}
 	else
+	{
 		printf ("MINISHELL: %s: command not found\n", *cmd_lst->cmd);
+		global.exit_status = 127;
+	}
 	dup2(tmpin, 0);
 	dup2(tmpout, 1);
 	close(tmpin);
@@ -178,13 +108,19 @@ int	child(t_cmd *cmd_lst)
 		ft_dup(cmd_lst);
 		if ((ind = is_builtin(*cmd_lst->cmd)))
 		{
-			excute_builtin(cmd_lst, ind);
+			global.exit_status = excute_builtin(cmd_lst, ind);
 			exit(0);
 		}
 		else if ((path = check_access(*cmd_lst->cmd)))
-			execve(path, cmd_lst->cmd, global.envp);
+		{
+			if(execve(path, cmd_lst->cmd, global.envp))
+				exit(1);
+		}
 		else
+		{
 			printf ("MINISHELL: %s: command not found\n", *cmd_lst->cmd);
+			exit(127);
+		}
 	}
 	return (pid);
 }
@@ -214,73 +150,5 @@ void	excute(t_cmd *cmd_lst)
 		cmd_lst = cmd_lst->next;
 	}
 	close(fds[0]);
-	while (waitpid(-1, NULL, 0) != -1);
-}
-
-void	envlist_addback(t_envlist **head, t_envlist *new)
-{
-	t_envlist	*temp;
-
-	if (*head)
-	{
-		temp = *head;
-		while (temp->next)
-			temp = temp->next;
-		temp->next = new;
-	}
-	else
-		*head = new;
-}
-
-char	*keycheck(char *key)
-{
-	int	i;
-	
-	i = 0;
-	while (key[i])
-	{
-		if (!ft_isalnum(key[i]) &&( key[i] != '_'))
-		{
-			if ((key[i] == '+') && (!key[i + 1]))
-				return (ft_strdup("+="));
-			return (NULL);
-		}
-		else if (ft_isdigit(key[i]) && i == 0)
-				return (NULL);
-		i++;
-	}
-	return (ft_strdup("="));
-}
-
-t_envlist	*envlist_new(char *str)
-{
-	char		**temp;
-	t_envlist	*new;
-
-	temp = ft_split(str, '=');
-	new = malloc(sizeof(t_envlist));
-	if (!(new->sep = keycheck(*temp)))
-	{
-		free(new);
-		free(temp);
-		return (NULL);
-	}
-	else if (*new->sep == '+')
-		(*temp)[ft_strlen(*temp) - 1] = '\0';
-	new->key = *temp;
-	if ((*temp = ft_strchr(str, '=')))
-		new->value = *(temp) + 1;
-	else
-		new->value = NULL;
-	new->next = NULL;
-	return (new);
-}
-
-void	envlist_init()
-{
-	int	i;
-
-	i = 0;
-	while ((global.envp)[i])
-		envlist_addback(&global.envlist, envlist_new((global.envp)[i++]));
+	while (waitpid(-1, &(global.exit_status), 0) != -1);
 }

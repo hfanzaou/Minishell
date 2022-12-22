@@ -6,13 +6,13 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/21 18:59:50 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/22 23:26:14 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	env(char **cmd)
+int	env(char **cmd)
 {
 	int	i;
 
@@ -20,7 +20,7 @@ void	env(char **cmd)
 	if (cmd[1])
 	{
 		ft_putstr_fd("env: No arguments or options are allowed\n", 2);
-		return ;
+		return (1);
 	}
 	while ((global.envp)[i])
 	{
@@ -28,9 +28,10 @@ void	env(char **cmd)
 		ft_putchar_fd('\n', 1);
 		i++;
 	}
+	return (0);
 }
 
-void	echo(char **cmd)
+int	echo(char **cmd)
 {
 	int	i;
 
@@ -42,18 +43,20 @@ void	echo(char **cmd)
 		i++;
 	}
 	ft_putchar_fd('\n', 1);
+	return (0);
 }
 
-void	pwd()
+int	pwd(void)
 {
 	char	*wd;
 
 	wd = getcwd(NULL, 0);
 	ft_putstr_fd(wd, 1);
 	ft_putstr_fd("\n", 1);
+	return (0);
 }
 
-void	cd(char **cmd)
+int	cd(char **cmd)
 {
 	int	ret;
 
@@ -63,33 +66,17 @@ void	cd(char **cmd)
 		ret = chdir(cmd[1]);
 	if (ret)
 	{
-		ft_putstr_fd("bash: cd: ", 2);
+		ft_putstr_fd("MINISHELL: cd: ", 2);
 		perror(cmd[1]);
+		return (1);
 	}
+	return (0);
 }
 
-void	envlist_delete(char *key)
-{
-	t_envlist	*curr;
-	t_envlist	*prev;
-
-	curr = global.envlist;
-	while (curr && ft_strcmp(key, curr->key))
-	{
-		prev = curr;
-		curr = curr->next;
-	}
-	if (!curr)
-		return ;
-	prev->next = curr->next;
-	(global.env_size)--;
-	free(curr);
-	curr = NULL;
-}
-
-void	unset(char **cmd)
+int	unset(char **cmd)
 {
 	while (*(++cmd))
 		envlist_delete(*cmd);
 	envlist_to_tab();
+	return (0);
 }

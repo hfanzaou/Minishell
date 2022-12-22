@@ -6,7 +6,7 @@
 #    By: ajana <ajana@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/15 17:03:01 by ajana             #+#    #+#              #
-#    Updated: 2022/12/21 00:49:58 by ajana            ###   ########.fr        #
+#    Updated: 2022/12/22 23:41:46 by ajana            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,8 @@ NAME = minishell
 FLAGS = -Wall -Wextra -Werror
 
 
-SRCS = execution/minishell.c execution/export.c execution/builtins.c Lexer/tokenizer.c \
-	Lexer/main.c Lexer/Lexer.c Lexer/token.c Lexer/parse.c
+SRCS = execution/minishell.c execution/export.c execution/builtins.c execution/envlist_tools.c \
+	execution/tools.c Lexer/tokenizer.c Lexer/main.c Lexer/Lexer.c Lexer/token.c Lexer/parse.c
 
 LIBFT = libft/libft.a
 

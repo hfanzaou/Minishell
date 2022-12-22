@@ -6,13 +6,13 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:24:39 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/21 01:39:15 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/22 23:33:18 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	envlist_to_tab()
+void	envlist_to_tab(void)
 {
 	t_envlist	*temp;
 	char		*join;
@@ -35,33 +35,14 @@ void	envlist_to_tab()
 	(global.envp)[i] = NULL;
 }
 
-void	*ft_error(char *error, char *arg)
-{
-	ft_putstr_fd(arg, 2);
-	ft_putstr_fd(error, 2);
-	return (NULL);
-}
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	while ((*s1 && *s2) && (*s1 == *s2))
-	{
-		s1++;
-		s2++;
-	}
-	if (*s1 || *s2)
-		return(1);
-	return (0);
-}
-
-void	print_envlist()
+void	print_envlist(void)
 {
 	t_envlist	*temp;
 
 	temp = global.envlist;
 	while (temp)
 	{
-		ft_putstr_fd("declare -x " ,1);
+		ft_putstr_fd("declare -x ", 1);
 		ft_putstr_fd(temp->key, 1);
 		if (temp->value)
 		{
@@ -97,16 +78,19 @@ int	search_nd_replace(t_envlist *needle)
 	return (1);
 }
 
-void	*add_to_env(char **args)
+int	add_to_env(char **args)
 {
 	t_envlist	*temp;
 
 	while (*args)
 	{
-		if (!(temp = envlist_new(*args)))
+		temp = envlist_new(*args);
+		if (!(temp))
 		{
 			ft_putstr_fd("MINISHELL: export: ", 2);
-			return (ft_error(": not a valid identifier\n", *args));
+			ft_putstr_fd(*args, 2);
+			ft_putstr_fd(": not a valid identifier\n", 2);
+			return (1);
 		}
 		if (search_nd_replace(temp))
 		{
@@ -120,14 +104,15 @@ void	*add_to_env(char **args)
 			free(temp);
 		args++;
 	}
-	return (NULL);
+	return (0);
 }
 
-void	export(char **cmd)
+int	export(char **cmd)
 {
 	printf("%d\n", global.env_size);
 	if (cmd[1])
-		add_to_env(cmd + 1);
+		return (add_to_env(cmd + 1));
 	else
 		print_envlist();
+	return (0);
 }

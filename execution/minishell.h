@@ -6,12 +6,12 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/20 22:50:22 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/22 23:40:17 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
+# define MINISHELL_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -21,7 +21,7 @@
 # include <fcntl.h>
 # include "../libft/libft.h"
 
-typedef enum	builtins
+typedef enum builtins
 {
 	e_echo = 1,
 	e_cd,
@@ -32,42 +32,46 @@ typedef enum	builtins
 	e_exit
 }	t_builtins;
 
-typedef	struct envlist
+typedef struct envlist
 {
 	char			*key;
 	char			*value;
 	char			*sep;
-	struct	envlist	*next;
+	struct envlist	*next;
 }	t_envlist;
 
-typedef	struct global
+typedef struct global
 {
 	t_envlist	*envlist;
 	char		**envp;
 	int			env_size;
-} t_global;
+	int			exit_status;
+}	t_global;
 
-typedef struct	s_cmd
+typedef struct s_cmd
 {
-	char	**cmd;
-	int		in;
-	int		out;
-	int		fd;
-	struct	s_cmd *next;
+	char			**cmd;
+	int				in;
+	int				out;
+	int				fd;
+	struct s_cmd	*next;
 }	t_cmd;
 
 t_global	global;
 
-void		echo(char **cmd);
-void		cd(char **cmd);
-void		pwd();
-void		export(char **cmd);
-void		unset(char **cmd);
-void		env(char **cmd);
+int			echo(char **cmd);
+int			cd(char **cmd);
+int			pwd(void);
+int			export(char **cmd);
+int			unset(char **cmd);
+int			env(char **cmd);
 t_envlist	*envlist_new(char *str);
 void		envlist_addback(t_envlist **head, t_envlist *new);
+void		envlist_delete(char *key);
+void		envlist_to_tab(void);
 int			ft_strcmp(char *s1, char *s2);
 void		ft_free(char **str);
-void		envlist_to_tab();
+void		ft_dup(t_cmd *cmd_lst);
+int			str_search(char **haystack, char *needle);
 
 #endif
