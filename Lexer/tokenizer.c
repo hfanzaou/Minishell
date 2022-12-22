@@ -173,7 +173,7 @@ char	*remove_quotes(char c, t_lexer *lexer, char *str)
 	val = malloc(sizeof(char) * i + 1);
 	i = 0;
 	f = 0;
-	while (str[i] && ft_strrchr(" \t$", str[i]))
+	while (str[i])
 	{
 		if (str[i] != c)
 		{
@@ -224,7 +224,7 @@ void	token_sq(token_t **token, t_lexer *lexer)
 	size = 0;
 	type = SINGLE_Q;
 	val = malloc(sizeof(char) * ft_size(lexer) + 1);
-	while (lexer->c != '\'')
+	while (lexer->c && lexer->c != '\'')
 	{
 		val[size] = lexer->c;
 		size++;
@@ -251,8 +251,7 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env)
 	(void)env;	
 	type = DOUBLE_Q;
 	i = 0;
-	printf("VAL = %s\n", val);
-	while (val[i] && ft_strrchr(" \t\'\"|><", val[i]))
+	while (val[i])
 	{
 		if (val[i] == '$')
 		{
@@ -338,8 +337,9 @@ void	token_dollar(token_t **token, t_lexer *lexer)
 		val[i] = lexer->src[lexer->i + i];
 		i++;
 	}
-	val[i] = '\0';			
-	val = ft_expand(val, global.envp);
+	val[i] = '\0';
+	if (isalpha(val[1]) || val[1] == '_')			
+		val = ft_expand(val, global.envp);
 	lexer_advance_i(&lexer, i);
 	oneuse = token_init(val, DOLLAR);
 	ft_lstadd_back(token, oneuse);
@@ -360,6 +360,13 @@ void	token_string(token_t **token, t_lexer *lexer, char **env)
 	if (str[size] == '\"' || str[size] == '\'')
 	{
 		val = remove_quotes(str[size], lexer, str);
+		while (val[size] && val[size] != '$')
+			size++;
+		if (val[size] && val[size] == '$')	
+		{
+			val = ft_expand(&val[size], global.envp);
+			val = ft_strjoin(str, val, size);
+		}	
 		oneuse = token_init(val, STRING);
 		ft_lstadd_back(token, oneuse);
 		return ;
@@ -433,6 +440,6 @@ token_t *tokenizer(t_lexer *lexer)
 			token_string(&token, lexer, global.envp);
 		lexer_advance(&lexer);
 	}
-	printf_token(token);
+	//printf_token(token);
 	return (token);
 }
