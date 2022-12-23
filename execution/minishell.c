@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/22 23:39:53 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/23 01:43:10 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,8 @@ void	excute(t_cmd *cmd_lst)
 	int	fds[2];
 	int	pid;
 
+	if (!cmd_lst)
+		return ;
 	if (!(cmd_lst->next))
 	{
 		simple_cmd(cmd_lst);

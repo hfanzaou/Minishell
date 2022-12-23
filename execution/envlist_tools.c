@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:37:10 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/22 23:34:00 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/23 02:25:13 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	envlist_delete(char *key)
 	t_envlist	*prev;
 
 	curr = global.envlist;
+	prev = curr; 
 	while (curr && ft_strcmp(key, curr->key))
 	{
 		prev = curr;
@@ -25,6 +26,12 @@ void	envlist_delete(char *key)
 	}
 	if (!curr)
 		return ;
+	if (prev == curr)
+	{
+		global.envlist = global.envlist->next;
+		// curr = curr->next;
+		return ;
+	}
 	prev->next = curr->next;
 	(global.env_size)--;
 	free(curr);

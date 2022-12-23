@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/22 23:26:14 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/23 02:10:08 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,25 @@
 int	env(char **cmd)
 {
 	int	i;
+	t_envlist	*temp;
 
+	temp = global.envlist;
 	i = 0;
 	if (cmd[1])
 	{
 		ft_putstr_fd("env: No arguments or options are allowed\n", 2);
 		return (1);
 	}
-	while ((global.envp)[i])
+	while ((temp))
 	{
-		ft_putstr_fd((global.envp)[i], 1);
+		if ((temp)->value)
+		{	
+			ft_putstr_fd((temp)->key, 1);
+			ft_putstr_fd((temp)->sep, 1);
+			ft_putstr_fd((temp)->value, 1);
+		}		
 		ft_putchar_fd('\n', 1);
+		temp = temp->next;
 		i++;
 	}
 	return (0);
@@ -80,3 +88,8 @@ int	unset(char **cmd)
 	envlist_to_tab();
 	return (0);
 }
+
+// int	ft_exit(char **cmd) 
+// {
+	
+// }

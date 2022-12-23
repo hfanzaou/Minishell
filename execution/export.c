@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:24:39 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/22 23:33:18 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/23 02:27:39 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,8 @@ int	add_to_env(char **args)
 			ft_putstr_fd("MINISHELL: export: ", 2);
 			ft_putstr_fd(*args, 2);
 			ft_putstr_fd(": not a valid identifier\n", 2);
-			return (1);
+			args++;
+			continue ;
 		}
 		if (search_nd_replace(temp))
 		{
@@ -109,7 +110,6 @@ int	add_to_env(char **args)
 
 int	export(char **cmd)
 {
-	printf("%d\n", global.env_size);
 	if (cmd[1])
 		return (add_to_env(cmd + 1));
 	else

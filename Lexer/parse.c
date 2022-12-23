@@ -6,12 +6,26 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/16 15:03:16 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/23 03:47:13 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "token.h"
 #include <string.h>
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	int	i;
+
+	if (!s)
+		return ;
+	i = 0;
+	while (s[i])
+	{
+		write (fd, &s[i], sizeof(char));
+		i++;
+	}
+}
 
 void	printcmd(t_cmd *cmd)
 {
@@ -130,6 +144,12 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		{
 			token = token->next;
 			out = open(token->value, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+			if (access(token->value, W_OK) != 0)
+			{
+				ft_putstr_fd("MINISHELL: ", 2);
+				perror(token->value);
+				return (NULL);
+			}
 		}
 		else if (token->next && token->type == RED_IN)
 		{
