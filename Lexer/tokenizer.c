@@ -406,7 +406,7 @@ void	token_redout(token_t **token, int i)
 		type = RED_OUT2;
 	}
 	else
-		val = ft_strdup(">");
+		val = ft_strdup(">");	
 	oneuse = token_init(val, type);
 	ft_lstadd_back(token, oneuse);
 }
@@ -628,7 +628,10 @@ token_t *tokenizer(t_lexer *lexer)
 			//printf("%s\n", token->value);
 		}
 		else if (lexer->c == '|')
+		{
+			lexer_advance(&lexer);
 			token_pipe(&token);
+		}
 		else if (lexer->c == '>' && lexer->src[lexer->i + 1] == '>')
 		{
 			lexer_advance(&lexer);
@@ -640,9 +643,15 @@ token_t *tokenizer(t_lexer *lexer)
 			token_redin(&token, 1);
 		}
 		else if (lexer->c == '>')
+		{
+			lexer_advance(&lexer);
 			token_redout(&token, 0);
+		}
 		else if (lexer->c == '<')
+		{
+			lexer_advance(&lexer);
 			token_redin(&token, 0);
+		}
 		else if (lexer->c == '$' && nextcval(lexer, 1) == '?')
 			token_exit_status(&token, lexer);
 		else if (lexer->c == '$')
