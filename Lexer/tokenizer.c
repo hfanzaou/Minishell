@@ -567,11 +567,12 @@ void	token_string(token_t **token, t_lexer *lexer, char **env)
 				c[1] = '\0';
 				if (str[i] == '$' && (isalpha(str[i + 1]) || !ft_strrchr("?_", str[i + 1])))
 				{
-					val = ft_strjoin(val, ft_expand(&str[i], env, &lexer, 0), i);
+					val = ft_strjoin(val, ft_expand(&str[i], env, &lexer, 0), strlen(val));
 					i += ft_skip(&str[i + 1]);
 				}	
 				else if (str[i] != '\"')
 					val = ft_strjoin(val, c, strlen(val));
+				printf("%s\n", val);	
 				i++;
 			}			
 		}
