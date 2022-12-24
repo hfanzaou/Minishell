@@ -433,22 +433,22 @@ void	token_redin(token_t **token, int i)
 char 	*string(t_lexer *lexer)
 {
 	char *val;
+	char *c;
 	int i;
 
+	c = malloc(sizeof(char) * 2);
 	i = 0;
 	while (lexer->c && ft_strrchr(" \t|><$\"\'", lexer->c))
 	{
+		c[0] = lexer->c;
+		c[1] = '\0';
 		if (i == 0)
-			val = ft_strdup(&lexer->c);
+			val = ft_strdup(c);
 		else
-		{
-			val = ft_realloc(val, i + 1);
-			val[i] = lexer->c;
-		}
+			val = ft_strjoin(val, c, strlen(val));
 		i++;
 		lexer_advance(&lexer);
 	}
-	val[i] = '\0';
 	return (val);
 }
 
@@ -572,7 +572,6 @@ void	token_string(token_t **token, t_lexer *lexer, char **env)
 				}	
 				else if (str[i] != '\"')
 					val = ft_strjoin(val, c, strlen(val));
-				printf("%s\n", val);	
 				i++;
 			}			
 		}
@@ -652,7 +651,7 @@ token_t *tokenizer(t_lexer *lexer)
 			token_string(&token, lexer, global.envp);
 		if (lexer->i == lexer->size)
 			break ;	
-		//lexer_advance(&lexer);
+		lexer_advance(&lexer);
 	}
 	//printf_token(token);
 	return (token);
