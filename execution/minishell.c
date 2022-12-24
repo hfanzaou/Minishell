@@ -108,8 +108,6 @@ void	simple_cmd(t_cmd *cmd_lst)
 		pid = fork();
 		if (!pid)
 		{
-			ft_putstr_fd(path, 1);
-			ft_putchar_fd('\n', 1);
 			execve(path, cmd_lst->cmd, global.envp);
 		}
 		else
