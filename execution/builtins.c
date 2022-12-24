@@ -6,11 +6,21 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/23 02:10:08 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/24 05:18:05 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_error(char *cmd, char *arg, char *err)
+{
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(arg ,2);
+	if (arg)
+		ft_putstr_fd(": ", 2);
+	ft_putstr_fd(err, 2);
+	return (1);
+}
 
 int	env(char **cmd)
 {
@@ -39,18 +49,41 @@ int	env(char **cmd)
 	return (0);
 }
 
-int	echo(char **cmd)
+int	check_option(char *arg)
 {
 	int	i;
 
 	i = 1;
-	while (cmd[i])
+	while (arg[i])
 	{
-		ft_putstr_fd(cmd[i], 1);
-		ft_putchar_fd(' ', 1);
+		if (arg[i] != 'n')
+			return (0);
 		i++;
 	}
-	ft_putchar_fd('\n', 1);
+	return (1);
+}
+
+int	echo(char **cmd)
+{
+	int	i;
+	int	option;
+
+	i = 1;
+	option = 0;
+	while (cmd[i])
+	{
+		if (!check_option(cmd[i]))
+		{
+			ft_putstr_fd(cmd[i], 1);
+			if (cmd[i + 1])
+				ft_putchar_fd(' ', 1);
+		}
+		else
+			option = 1;
+		i++;
+	}
+	if (!option)
+		ft_putchar_fd('\n', 1);
 	return (0);
 }
 
@@ -89,7 +122,30 @@ int	unset(char **cmd)
 	return (0);
 }
 
-// int	ft_exit(char **cmd) 
-// {
-	
-// }
+int	ft_exit(char **cmd)
+{
+	int	i;
+	int	ex_status;
+
+	i = 0;
+	ft_putstr_fd("exit\n", 2);
+	if (!(cmd[i + 1]))
+		exit (global.exit_status);
+	cmd++;
+	while ((*cmd)[i])
+	{
+		if (((*cmd)[i] == '+' || (*cmd)[i] == '-' ) && (!i));
+		else if (!ft_isdigit((*cmd)[i]))
+		{
+			ft_error("MINISHELL: exit: ", *cmd,  "numeric argument required\n");
+			exit (255);
+		}
+		i++;
+	}
+	if (*(cmd + 1))
+		return (ft_error("MINISHELL: exit: ", NULL, "too many arguments\n"));
+	ex_status = ft_atoi(*cmd);
+	if (ex_status > 255 || ex_status < 0)
+		exit (ex_status % 256);
+	exit(ex_status);
+}

@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/22 23:40:17 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/24 05:20:03 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ int			pwd(void);
 int			export(char **cmd);
 int			unset(char **cmd);
 int			env(char **cmd);
+int			ft_exit(char **cmd);
 t_envlist	*envlist_new(char *str);
 void		envlist_addback(t_envlist **head, t_envlist *new);
 void		envlist_delete(char *key);
