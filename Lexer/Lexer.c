@@ -39,10 +39,14 @@ void 	lexer_advance_i(t_lexer **lexer, int n)
 	int i;
 
 	i = 0;
-	while ((*lexer)->i && i < n)
+	while ((*lexer)->src[(*lexer)->i + i] && i < n)
 	{
-		(*lexer)->i += 1;
-		(*lexer)->c = (*lexer)->src[(*lexer)->i];
+		lexer_advance(lexer);
 		i++;
 	}
+}
+
+char 	nextcval(t_lexer *lexer, int i)
+{
+		return(lexer->src[lexer->i + i]);	
 }

@@ -23,3 +23,32 @@ token_t *token_init(char *va, int type)
 	token->next = NULL;		
 	return (token);	
 }
+
+char	*ft_realloc(char *str, int j)
+{
+	char	*t;
+	int		i;
+
+	i = 0;
+	t = malloc(sizeof(char) * j);
+	if (!t)
+		return (NULL);
+	while (str[i])
+	{
+		t[i] = str[i];
+		i++;
+	}
+	t[i] = str[i];
+	free(str);
+	str = malloc(sizeof(char) * j + 1);
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (t[i])
+	{
+		str[i] = t[i];
+		i++;
+	}
+	free(t);
+	return (str);
+}

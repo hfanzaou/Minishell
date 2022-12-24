@@ -192,7 +192,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 				cargs = fillcargs(cargs, token->value);
 		}
 		if (!token)
-			break;
+			break;	
 		token = token->next;
 	}
 	oneuse = init_cmd(cargs, in, out);

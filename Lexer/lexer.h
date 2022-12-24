@@ -36,6 +36,7 @@ typedef	struct global
 	t_envlist	*envlist;
 	char		**envp;
 	int			env_size;
+	int			exit_status;
 } t_global;
 
 typedef struct lexer_s
@@ -61,8 +62,10 @@ t_lexer *ft_lexer(char *src);
 void	lexer_advance(t_lexer **lexer);
 t_lexer *lexer_ntoken(t_lexer *lexer);
 void 	lexer_advance_i(t_lexer **lexer, int n);
+char 	nextcval(t_lexer *lexer, int i);
 void	excute(t_cmd *cmd_lst);
 void	envlist_init();
+void	ft_free(char **str);
 
 # include "token.h"
 #endif

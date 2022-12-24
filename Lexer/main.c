@@ -79,7 +79,6 @@ void	put_env(char **env)
 	(global.envp)[l] = NULL;
 	return ;
 }
-
 int main(int ac, char **av, char **env)
 {
 	(void)ac;
@@ -102,6 +101,7 @@ int main(int ac, char **av, char **env)
 			token = tokenizer(lexer);
 			cmd = ft_parse(token, cmd);
 			excute(cmd);
+			//ft_free(cmd->cmd);
 			// close(cmd->out);
 			free(cmd);
 			free(lexer);

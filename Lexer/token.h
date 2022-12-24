@@ -30,6 +30,7 @@ typedef struct token_s
 		RED_OUT2,
 		PIPE,
 		DOLLAR,
+		EXIT,
 		//SPACE,
 		END
 	} type;
@@ -40,4 +41,5 @@ void printf_token(token_t *token);
 token_t *tokenizer(t_lexer *lexer);
 token_t *token_init(char *val, int type);
 t_cmd *ft_parse(token_t *token, t_cmd *cmd);
+char	*ft_realloc(char *str, int j);
 # endif  
