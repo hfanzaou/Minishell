@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 18:08:58 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/24 18:28:55 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	ft_exit(char **cmd)
 		else if (!ft_isdigit((*cmd)[i]))
 		{
 			ft_error("MINISHELL: exit: ", *cmd,  "numeric argument required\n");
-			exit (255);
+			exit(255);
 		}
 		i++;
 	}

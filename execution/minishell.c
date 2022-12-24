@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 17:49:32 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/24 19:03:23 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,18 @@ void	cmd_count(t_cmd *cmd_lst)
 
 int	is_builtin(char *cmd)
 {
-	char	*builtins;
-	int		i;
+	char	**builtins;
+	char	*temp;
+	int		ind;
 
-	builtins = "echo cd pwd export unset env exit";
-	if ((i = str_search(ft_split(builtins, ' '), cmd)))
-		return (i);
-	return (0);
+	temp = "echo cd pwd export unset env exit";
+	builtins = ft_split(temp, ' ');
+	ind = str_search(builtins, cmd);
+	free(builtins);
+	return (ind);
 }
 
-int	excute_builtin(t_cmd *cmd_lst, int ind)
+int	execute_builtin(t_cmd *cmd_lst, int ind)
 {
 	if (ind == e_echo)
 		return (echo(cmd_lst->cmd));
@@ -65,19 +67,19 @@ char	*check_access(char *cmd)
 	char	**temp;
 	char	*path;
 
-	// if (ft_strchr(cmd, '/'))
-	// {
-	// 	if (!access(cmd, F_OK | R_OK | X_OK))
-	// 		return (cmd);
-	// 	ft_error("MINISHELL: ", cmd, "No such file or directory\n");
-	// 	return (NULL);
-		
-	// }
+	if (ft_strchr(cmd, '/'))
+	{
+		if (!access(cmd, F_OK | R_OK | X_OK))
+			return (cmd);
+		ft_error("MINISHELL: ", cmd, "No such file or directory\n");
+		exit (127);
+	}
 	temp = ft_split(getenv("PATH"), ':');
 	cmd = ft_strjoin("/", cmd);
 	while (*temp)
 	{
 		path = ft_strjoin(*temp, cmd);
+		// free(cmd);
 		if (!access(ft_strjoin(*temp, cmd), F_OK | R_OK | X_OK))
 		{
 			ft_free(temp);
@@ -86,8 +88,33 @@ char	*check_access(char *cmd)
 		temp++;
 	}
 	ft_free(temp);
+	// free(cmd);
 	free(path);
 	return (NULL);
+}
+
+int	child(t_cmd *cmd_lst)
+{
+	char	*path;
+	int		pid;
+	int		ind;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		ft_dup(cmd_lst);
+		ind = is_builtin(*(cmd_lst->cmd));
+		if (ind)
+			exit(execute_builtin(cmd_lst, ind));
+		path = check_access(*(cmd_lst->cmd));
+		if (path)
+		{
+			execve(path, cmd_lst->cmd, global.envp);
+			perror("execve");
+			exit(1);
+		}
+	}
+	return (pid);
 }
 
 void	simple_cmd(t_cmd *cmd_lst)
@@ -96,62 +123,24 @@ void	simple_cmd(t_cmd *cmd_lst)
 	int		pid;
 	int		tmpin;
 	int		tmpout;
-	char	*path;
 
-	tmpin = dup(0);
-	tmpout = dup(1);
-	ft_dup(cmd_lst);
-	if ((ind = is_builtin(*(cmd_lst->cmd))))
-		global.exit_status = excute_builtin(cmd_lst, ind);
-	else if ((path = check_access(*cmd_lst->cmd)))
+	ind = is_builtin(*(cmd_lst->cmd));
+	if (ind)
 	{
-		pid = fork();
-		if (!pid)
-		{
-			execve(path, cmd_lst->cmd, global.envp);
-		}
-		else
-			waitpid(pid, &(global.exit_status), 0);
+		tmpin = dup(0);
+		tmpout = dup(1);
+		ft_dup(cmd_lst);
+		global.exit_status = execute_builtin(cmd_lst, ind);
+		dup2(tmpin, 0);
+		dup2(tmpout, 1);
+		close(tmpin);
+		close(tmpout);
 	}
 	else
 	{
-		printf ("MINISHELL: %s: command not found\n", *cmd_lst->cmd);
-		global.exit_status = 127;
+		pid = child(cmd_lst);
+		waitpid(pid, &(global.exit_status), 0);
 	}
-	dup2(tmpin, 0);
-	dup2(tmpout, 1);
-	close(tmpin);
-	close(tmpout);
-}
-
-int	child(t_cmd *cmd_lst)
-{
-	int		pid;
-	int		ind;
-	char	*path;
-
-	pid = fork();
-	if (!pid)
-	{
-		ft_dup(cmd_lst);
-		if ((ind = is_builtin(*cmd_lst->cmd)))
-		{
-			global.exit_status = excute_builtin(cmd_lst, ind);
-			exit(0);
-		}
-		else if ((path = check_access(*cmd_lst->cmd)))
-		{
-			execve(path, cmd_lst->cmd, global.envp);
-			perror("execve");
-			exit(1);
-		}
-		else
-		{
-			printf ("MINISHELL: %s: command not found\n", *cmd_lst->cmd);
-			exit(127);
-		}
-	}
-	return (pid);
 }
 
 void	excute(t_cmd *cmd_lst)
