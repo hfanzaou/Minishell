@@ -218,7 +218,7 @@ char	*remove_quotes(char c, t_lexer *lexer, char *str)
 		i++;
 		lexer_advance(&lexer);
 	}
-	while (lexer->c && lexer->c == c)
+	while (lexer->c && lexer->c == c && e < f)
 	{
 		e++;
 		lexer_advance(&lexer);
@@ -251,7 +251,10 @@ char	*ft_expand(char *val, char **env, t_lexer **lexer, int j)
 	if (!s)
 		return NULL;
 	if (s[1] == '?')
-		return (ft_strjoin(ft_itoa(global.exit_status), &s[2], strlen(ft_itoa(global.exit_status))));
+	{
+		lexer_advance(lexer);
+		return (ft_strdup(ft_itoa(global.exit_status)));
+	}
 	while (s[l] && (isalpha(s[l]) || s[l] == '_'))
 	{
 		if (j == 1)
@@ -341,7 +344,14 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env)
 	char *str;
 	char *c;
 
-	str = remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]);
+	str = ft_strdup("");
+	while (lexer->c && ft_strrchr(" \t", lexer->c))
+	{
+		if (lexer->c == '\"')
+			str = ft_strjoin(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
+		else 
+			break;		
+	}
 	if (!str)
 	 	return ;
 	c = malloc(sizeof(char) * 2);
@@ -365,7 +375,7 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env)
 		c[1] = '\0';
 		if (str[i] == '$' && (isalpha(str[i + 1]) || !ft_strrchr("?_", str[i + 1])))
 		{
-			val = ft_strjoin(val, ft_expand(&str[i], env, &lexer, 0), i);
+			val = ft_strjoin(val, ft_expand(&str[i], env, &lexer, 0), strlen(val));
 			i += ft_skip(&str[i + 1]);
 		}
 		else if (str[i] != '\"')
@@ -652,8 +662,6 @@ token_t *tokenizer(t_lexer *lexer)
 			lexer_advance(&lexer);
 			token_redin(&token, 0);
 		}
-		else if (lexer->c == '$' && nextcval(lexer, 1) == '?')
-			token_exit_status(&token, lexer);
 		else if (lexer->c == '$')
 			token_dollar(&token, lexer);
 		else
