@@ -651,7 +651,8 @@ token_t *tokenizer(t_lexer *lexer)
 			token_string(&token, lexer, global.envp);
 		if (lexer->i == lexer->size)
 			break ;	
-		lexer_advance(&lexer);
+		if (lexer->c == ' ' && lexer->c == '\t')
+			lexer_advance(&lexer);
 	}
 	//printf_token(token);
 	return (token);
