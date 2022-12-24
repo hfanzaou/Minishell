@@ -620,7 +620,7 @@ token_t *tokenizer(t_lexer *lexer)
 	{
 		if (lexer->c == ' ' || lexer->c == '\t')
 			lexer_advance(&lexer);
-		if (lexer->c == '\'')
+		else if (lexer->c == '\'')
 			token_sq(&token, lexer);
 		else if (lexer->c == '\"')
 		{	
