@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 18:28:55 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/24 19:26:59 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	cd(char **cmd)
 		ret = chdir(cmd[1]);
 	if (ret)
 	{
-		ft_putstr_fd("MINISHELL: cd: ", 2);
+		ft_putstr_fd("minishell: cd: ", 2);
 		perror(cmd[1]);
 		return (1);
 	}
@@ -139,13 +139,13 @@ int	ft_exit(char **cmd)
 		if (((*cmd)[i] == '+' || (*cmd)[i] == '-' ) && (!i));
 		else if (!ft_isdigit((*cmd)[i]))
 		{
-			ft_error("MINISHELL: exit: ", *cmd,  "numeric argument required\n");
+			ft_error("minishell: exit: ", *cmd,  "numeric argument required\n");
 			exit(255);
 		}
 		i++;
 	}
 	if (*(cmd + 1))
-		return (ft_error("MINISHELL: exit: ", NULL, "too many arguments\n"));
+		return (ft_error("minishell: exit: ", NULL, "too many arguments\n"));
 	ex_status = ft_atoi(*cmd);
 	if (ex_status > 255 || ex_status < 0)
 		exit (ex_status % 256);

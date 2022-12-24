@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 19:03:23 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/24 19:26:20 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,11 @@ int	child(t_cmd *cmd_lst)
 			execve(path, cmd_lst->cmd, global.envp);
 			perror("execve");
 			exit(1);
+		}
+		else
+		{
+			ft_error("minishell: ", *(cmd_lst->cmd), "command not found\n");
+			exit(127);
 		}
 	}
 	return (pid);
