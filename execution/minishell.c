@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 17:36:29 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/24 17:49:32 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,6 @@ void	excute(t_cmd *cmd_lst)
 
 	if (!cmd_lst)
 		return ;
-	// cmd_count(cmd_lst);
 	if (!(cmd_lst->next))
 	{
 		simple_cmd(cmd_lst);
