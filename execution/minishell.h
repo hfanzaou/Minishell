@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 05:20:03 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/24 15:34:52 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,6 @@ int			ft_strcmp(char *s1, char *s2);
 void		ft_free(char **str);
 void		ft_dup(t_cmd *cmd_lst);
 int			str_search(char **haystack, char *needle);
+int			ft_error(char *cmd, char *arg, char *err);
 
 #endif

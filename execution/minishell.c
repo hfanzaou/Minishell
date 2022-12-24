@@ -6,11 +6,29 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 05:20:16 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/24 17:36:29 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	cmd_count(t_cmd *cmd_lst)
+{
+	t_cmd *temp;
+	int		i = 0;
+
+	temp = cmd_lst;
+	while (temp) 
+	{
+		while (temp->cmd[i])
+		{
+			ft_putstr_fd(temp->cmd[i], 1);
+			i++;
+			ft_putchar_fd('\n', 1);
+		}
+		temp = temp->next;
+	}
+}
 
 int	is_builtin(char *cmd)
 {
@@ -47,6 +65,14 @@ char	*check_access(char *cmd)
 	char	**temp;
 	char	*path;
 
+	// if (ft_strchr(cmd, '/'))
+	// {
+	// 	if (!access(cmd, F_OK | R_OK | X_OK))
+	// 		return (cmd);
+	// 	ft_error("MINISHELL: ", cmd, "No such file or directory\n");
+	// 	return (NULL);
+		
+	// }
 	temp = ft_split(getenv("PATH"), ':');
 	cmd = ft_strjoin("/", cmd);
 	while (*temp)
@@ -81,7 +107,11 @@ void	simple_cmd(t_cmd *cmd_lst)
 	{
 		pid = fork();
 		if (!pid)
+		{
+			ft_putstr_fd(path, 1);
+			ft_putchar_fd('\n', 1);
 			execve(path, cmd_lst->cmd, global.envp);
+		}
 		else
 			waitpid(pid, &(global.exit_status), 0);
 	}
@@ -113,8 +143,9 @@ int	child(t_cmd *cmd_lst)
 		}
 		else if ((path = check_access(*cmd_lst->cmd)))
 		{
-			if(execve(path, cmd_lst->cmd, global.envp))
-				exit(1);
+			execve(path, cmd_lst->cmd, global.envp);
+			perror("execve");
+			exit(1);
 		}
 		else
 		{
@@ -132,6 +163,7 @@ void	excute(t_cmd *cmd_lst)
 
 	if (!cmd_lst)
 		return ;
+	// cmd_count(cmd_lst);
 	if (!(cmd_lst->next))
 	{
 		simple_cmd(cmd_lst);
