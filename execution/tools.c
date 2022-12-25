@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:43:06 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/22 23:35:03 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/25 05:57:04 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	ft_free(char **str)
 
 int	ft_strcmp(char *s1, char *s2)
 {
+	if (!s1 || !s2)
+		return (1);
 	while ((*s1 && *s2) && (*s1 == *s2))
 	{
 		s1++;
@@ -35,12 +37,14 @@ int	ft_strcmp(char *s1, char *s2)
 
 void	ft_dup(t_cmd *cmd_lst)
 {
+	if (!cmd_lst->cmd)
+		return ;
 	if (cmd_lst->in != 0)
 	{
 		dup2(cmd_lst->in, 0);
 		close(cmd_lst->in);
 	}
-	if (cmd_lst->out != 1)
+	if (cmd_lst->out != 1 )
 	{
 		dup2(cmd_lst->out, 1);
 		close(cmd_lst->out);

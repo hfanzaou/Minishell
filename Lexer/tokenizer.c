@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 02:17:24 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/21 17:02:44 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/25 01:57:09 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,7 +253,7 @@ char	*ft_expand(char *val, char **env, t_lexer **lexer, int j)
 	if (s[1] == '?')
 	{
 		lexer_advance(lexer);
-		return (ft_strdup(ft_itoa(global.exit_status)));
+		return (ft_strdup(ft_itoa(WEXITSTATUS(global.exit_status))));
 	}
 	while (s[l] && (isalpha(s[l]) || s[l] == '_'))
 	{
@@ -645,10 +645,12 @@ token_t *tokenizer(t_lexer *lexer)
 		else if (lexer->c == '>' && lexer->src[lexer->i + 1] == '>')
 		{
 			lexer_advance(&lexer);
+			lexer_advance(&lexer);
 			token_redout(&token, 1);
 		}
 		else if (lexer->c == '<' && lexer->src[lexer->i + 1] == '<')
 		{
+			lexer_advance(&lexer);
 			lexer_advance(&lexer);
 			token_redin(&token, 1);
 		}

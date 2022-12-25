@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 19:26:20 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/25 20:27:47 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char	*check_access(char *cmd)
 	return (NULL);
 }
 
-int	child(t_cmd *cmd_lst)
+int	child(t_cmd *cmd_lst, int *fds)
 {
 	char	*path;
 	int		pid;
@@ -103,6 +103,11 @@ int	child(t_cmd *cmd_lst)
 	if (pid == 0)
 	{
 		ft_dup(cmd_lst);
+		if (fds)
+		{
+			close(fds[0]);
+			close(fds[1]);
+		}
 		ind = is_builtin(*(cmd_lst->cmd));
 		if (ind)
 			exit(execute_builtin(cmd_lst, ind));
@@ -143,7 +148,7 @@ void	simple_cmd(t_cmd *cmd_lst)
 	}
 	else
 	{
-		pid = child(cmd_lst);
+		pid = child(cmd_lst, NULL);
 		waitpid(pid, &(global.exit_status), 0);
 	}
 }
@@ -155,7 +160,7 @@ void	excute(t_cmd *cmd_lst)
 
 	if (!cmd_lst)
 		return ;
-	if (!(cmd_lst->next))
+	if (!(cmd_lst->next) && (cmd_lst->cmd))
 	{
 		simple_cmd(cmd_lst);
 		return ;
@@ -167,13 +172,17 @@ void	excute(t_cmd *cmd_lst)
 			pipe(fds);
 			if (cmd_lst->out == 1)
 				cmd_lst->out = fds[1];
+			else
+				close(fds[1]);
 			if (cmd_lst->next->in == 0)
 				cmd_lst->next->in = fds[0];
+			else
+				close(fds[0]);
 		}
-		pid = child(cmd_lst);
+		pid = child(cmd_lst, fds);
 		close(fds[1]);
 		cmd_lst = cmd_lst->next;
 	}
 	close(fds[0]);
-	while (waitpid(-1, &(global.exit_status), 0) != -1);
+	while(wait(&(global.exit_status)) != -1);
 }
