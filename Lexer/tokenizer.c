@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 02:17:24 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/25 01:57:09 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/25 20:48:53 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*ft_itoa(int n)
 	return (assign(res, nu, sign));
 }
 
-char	*ft_strjoin(char const *s1, char const *s2, int n)
+char	*ft_strjoin2(char const *s1, char const *s2, int n)
 {
 	int		i;
 	int		j;
@@ -254,7 +254,7 @@ char	*ft_expand(char *val, char **env, t_lexer **lexer, int j)
 	{
 		if (!ft_memcmp(env[i], &s[1], l - 1))
 			return (ft_strdup(&env[i][l]));
-			//return (ft_strjoin(&env[i][l], &s[l], strlen(&env[i][l])));
+			//return (ft_strjoin2(&env[i][l], &s[l], strlen(&env[i][l])));
 		i++;
 	}
 	return (ft_strdup("\0"));
@@ -289,23 +289,23 @@ void	token_sq(token_t **token, t_lexer *lexer)
 		c[1] = '\0';
 		if (lexer->c == '\"' && lexer->src[lexer->i + 1] == '$')
 		{
-			str = ft_strjoin(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
-			val = ft_strjoin(val, ft_expand(str, global.envp, &lexer, 0), strlen(val));
+			str = ft_strjoin2(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
+			val = ft_strjoin2(val, ft_expand(str, global.envp, &lexer, 0), strlen(val));
 		}
 		else if (lexer->c == '\"')
 		{
-			str = ft_strjoin(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
-			val = ft_strjoin(val, str, strlen(val));
+			str = ft_strjoin2(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
+			val = ft_strjoin2(val, str, strlen(val));
 			printf("%s\n", val);
 		}
 		else if (lexer->c == '\'')
 		{
-			str = ft_strjoin(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
-			val = ft_strjoin(val, str, strlen(val));
+			str = ft_strjoin2(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
+			val = ft_strjoin2(val, str, strlen(val));
 		}		
 		else
 		{
-			val = ft_strjoin(val, c, strlen(val));
+			val = ft_strjoin2(val, c, strlen(val));
 			lexer_advance(&lexer);	
 		}
 		free(str);
@@ -336,12 +336,12 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env, int type)
 		c[1] = '\0';
 		if (lexer->c == '$' && (isalpha(nextcval(lexer, 1)) || !ft_strrchr("?_", nextcval(lexer, 1))))
 		{
-			val = ft_strjoin(val, ft_expand(&lexer->src[lexer->i], env, &lexer, 1), strlen(val));
+			val = ft_strjoin2(val, ft_expand(&lexer->src[lexer->i], env, &lexer, 1), strlen(val));
 			lexer_advance(&lexer);
 		}
 		else if (lexer->c == '$' && (ft_strrchr(" \t", nextcval(lexer, 1)) || lexer->src[lexer->i + 1]))
 		{
-			val = ft_strjoin(val, "$", strlen(val));
+			val = ft_strjoin2(val, "$", strlen(val));
 			lexer_advance(&lexer);
 		}
 		else if (lexer->c == '$')
@@ -349,31 +349,31 @@ void	token_dq(token_t **token, t_lexer *lexer, char **env, int type)
 		else if (lexer->c == '\"')
 		{
 			i = 0;
-			str = ft_strjoin(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
+			str = ft_strjoin2(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
 			while (str[i])
 			{
 				if (str[i] == '$' && (isalpha(str[i + 1]) || !ft_strrchr("?_", str[i + 1])))
 				{
-					val = ft_strjoin(val, ft_expand(&str[i], env, &lexer, 0), strlen(val));
+					val = ft_strjoin2(val, ft_expand(&str[i], env, &lexer, 0), strlen(val));
 					i += ft_skip(&str[i + 1]);
 				}
 				else 
 				{
 					c[0] = str[i];
 					c[1] = '\0';
-					val = ft_strjoin(val, c, strlen(val));
+					val = ft_strjoin2(val, c, strlen(val));
 				}
 				i++;
 			}
 		}
 		else if (lexer->c == '\'')
 		{
-			str = ft_strjoin(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
-			val = ft_strjoin(val, str, strlen(val));
+			str = ft_strjoin2(str, remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]), strlen(str));
+			val = ft_strjoin2(val, str, strlen(val));
 		}		
 		else
 		{
-			val = ft_strjoin(val, c, strlen(val));
+			val = ft_strjoin2(val, c, strlen(val));
 			lexer_advance(&lexer);	
 		}
 		free(str);
@@ -453,7 +453,7 @@ char 	*string(t_lexer *lexer)
 		if (i == 0)
 			val = ft_strdup(c);
 		else
-			val = ft_strjoin(val, c, strlen(val));
+			val = ft_strjoin2(val, c, strlen(val));
 		i++;
 		lexer_advance(&lexer);
 	}
@@ -474,7 +474,7 @@ void	token_dollar(token_t **token, t_lexer *lexer)
 		if (lexer->c == '$' && (isalpha(nextcval(lexer, 1)) || !ft_strrchr("?_", nextcval(lexer, 1))))
 		{
 			str = ft_expand(&lexer->src[lexer->i], global.envp, &lexer, 1);
-			val = ft_strjoin(val, str, strlen(val));
+			val = ft_strjoin2(val, str, strlen(val));
 			lexer_advance(&lexer);
 		}
 		else if (lexer->c == '\"')
@@ -485,12 +485,12 @@ void	token_dollar(token_t **token, t_lexer *lexer)
 			c = malloc(sizeof(char) * 2);
 			c[0] = '\"';
 			c[1] = '\0';
-			str = ft_strjoin(str, c, strlen(str));
+			str = ft_strjoin2(str, c, strlen(str));
 			while (lexer->c && ft_strrchr(" \t|><", lexer->c))
 			{
 				c[0] = lexer->c;
 				c[1] = '\0';
-				str = ft_strjoin(str, c, strlen(str));
+				str = ft_strjoin2(str, c, strlen(str));
 				lexer_advance(&lexer);
 			}
 			i = 0;
@@ -500,22 +500,22 @@ void	token_dollar(token_t **token, t_lexer *lexer)
 				c[1] = '\0';
 				if (str[i] == '$' && (isalpha(str[i + 1]) || !ft_strrchr("?_", str[i + 1])))
 				{
-					val = ft_strjoin(val, ft_expand(&str[i], global.envp, &lexer, 0), i);
+					val = ft_strjoin2(val, ft_expand(&str[i], global.envp, &lexer, 0), i);
 					i += ft_skip(&str[i + 1]);
 				}	
 				else if (str[i] != '\"')
-					val = ft_strjoin(val, c, strlen(val));
+					val = ft_strjoin2(val, c, strlen(val));
 				i++;
 			}
 		}
 		else if (lexer->c == '\'')
 		{
 			str = remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]);
-			val = ft_strjoin(val, str, strlen(val));
+			val = ft_strjoin2(val, str, strlen(val));
 		}
 		else if (lexer->c == '$' && (ft_strrchr(" \t", lexer->c) || !lexer->src[lexer->i + 1]))
 		{
-			val = ft_strjoin(val, "$", strlen(val));
+			val = ft_strjoin2(val, "$", strlen(val));
 			lexer_advance(&lexer);
 		}
 		else if (lexer->c == '$')
@@ -524,9 +524,9 @@ void	token_dollar(token_t **token, t_lexer *lexer)
 		{
 			str = string(lexer);
 			if (!val)
-				val = ft_strjoin("\0", str, 0);
+				val = ft_strjoin2("\0", str, 0);
 			else
-				val = ft_strjoin(val, str, strlen(val));
+				val = ft_strjoin2(val, str, strlen(val));
 		}
 	}	
 	oneuse = token_init(val, DOLLAR);
@@ -548,7 +548,7 @@ void	token_string(token_t **token, t_lexer *lexer, char **env)
 	 	if (lexer->c == '$' && (isalpha(nextcval(lexer, 1)) || !ft_strrchr("?_", nextcval(lexer, 1))))
 		{
 			str = ft_expand(&lexer->src[lexer->i], env, &lexer, 1);
-			val = ft_strjoin(val, str, strlen(val));
+			val = ft_strjoin2(val, str, strlen(val));
 			printf("%s\n", val);
 			lexer_advance(&lexer);
 			free(str);
@@ -561,12 +561,12 @@ void	token_string(token_t **token, t_lexer *lexer, char **env)
 			c = malloc(sizeof(char) * 2);
 			c[0] = '\"';
 			c[1] = '\0';
-			str = ft_strjoin(str, c, strlen(str));
+			str = ft_strjoin2(str, c, strlen(str));
 			while (lexer->c && ft_strrchr(" \t|><", lexer->c))
 			{
 				c[0] = lexer->c;
 				c[1] = '\0';
-				str = ft_strjoin(str, c, strlen(str));
+				str = ft_strjoin2(str, c, strlen(str));
 				lexer_advance(&lexer);
 			}
 			i = 0;
@@ -576,23 +576,23 @@ void	token_string(token_t **token, t_lexer *lexer, char **env)
 				c[1] = '\0';
 				if (str[i] == '$' && (isalpha(str[i + 1]) || !ft_strrchr("?_", str[i + 1])))
 				{
-					val = ft_strjoin(val, ft_expand(&str[i], env, &lexer, 0), strlen(val));
+					val = ft_strjoin2(val, ft_expand(&str[i], env, &lexer, 0), strlen(val));
 					i += ft_skip(&str[i + 1]);
 				}	
 				else if (str[i] != '\"')
-					val = ft_strjoin(val, c, strlen(val));
+					val = ft_strjoin2(val, c, strlen(val));
 				i++;
 			}			
 		}
 		else if (lexer->c == '\'')
 		{
 			str = remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]);
-			val = ft_strjoin(val, str, strlen(val));
+			val = ft_strjoin2(val, str, strlen(val));
 			free(str);
 		}
 		else if (lexer->c == '$' && (ft_strrchr(" \t", lexer->c) || !lexer->src[lexer->i + i]))
 		{
-			val = ft_strjoin(val, "$", strlen(val));
+			val = ft_strjoin2(val, "$", strlen(val));
 			lexer_advance(&lexer);
 		}
 		else if (lexer->c == '$')
@@ -603,7 +603,7 @@ void	token_string(token_t **token, t_lexer *lexer, char **env)
 			if (!val)
 				val = ft_strdup(str);
 			else
-				val = ft_strjoin(val, str, strlen(val));		
+				val = ft_strjoin2(val, str, strlen(val));		
 		}
 	}
 	oneuse = token_init(val, STRING);

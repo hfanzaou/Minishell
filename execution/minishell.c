@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/25 20:27:47 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/25 20:50:29 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,21 +76,18 @@ char	*check_access(char *cmd)
 	}
 	temp = ft_split(getenv("PATH"), ':');
 	cmd = ft_strjoin("/", cmd);
-	path = ft_strdup("");
 	while (*temp)
 	{
 		path = ft_strjoin(*temp, cmd);
-		printf("%s\n", path);
-		// free(cmd);
 		if (!access(path, F_OK | X_OK))
 		{
 			ft_free(temp);
+			temp = NULL;
 			return (path);
 		}
 		temp++;
 	}
 	ft_free(temp);
-	// free(cmd);
 	free(path);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/25 05:51:50 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/25 20:39:43 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	printcmd(t_cmd *cmd)
 		i = 0;
 		while (cmd->cmd[i])
 		{
-			printf("%s\n", cmd->cmd[i]);
+			printf("%shello\n", cmd->cmd[i]);
 			i++;
 		}
 		printf("in = %d\nout = %d\n", cmd->in, cmd->out);
