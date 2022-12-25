@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 01:00:02 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/23 01:42:27 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/25 05:33:36 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,5 @@ token_t *tokenizer(t_lexer *lexer);
 token_t *token_init(char *val, int type);
 t_cmd *ft_parse(token_t *token, t_cmd *cmd);
 char	*ft_realloc(char *str, int j);
+int	ft_strcmp(char *s1, char *s2);
 # endif  

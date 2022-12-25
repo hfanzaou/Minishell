@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/24 17:35:10 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/25 05:51:50 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	ft_herdoc(char *eof)
 				write(fd[1], line, strlen(line));
 				write(fd[1], "\n", 1);
 			}
-			else if (!memcmp(line, eof, strlen(eof)))
+			else if (!ft_strcmp(line, eof))
 				exit(0);
 		}
 	}
@@ -200,6 +200,6 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	//cargs = NULL;
 	ft_lstadd_backc(&cmd, oneuse);
 	//cargs = NULL;
-	//printcmd(cmd);
+	// printcmd(cmd);
 	return (cmd);
 }

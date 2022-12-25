@@ -6,20 +6,19 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 19:26:59 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/24 19:54:57 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_error(char *cmd, char *arg, char *err)
+void	ft_error(char *cmd, char *arg, char *err)
 {
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(arg ,2);
 	if (arg)
 		ft_putstr_fd(": ", 2);
 	ft_putstr_fd(err, 2);
-	return (1);
 }
 
 int	env(char **cmd)
@@ -145,7 +144,10 @@ int	ft_exit(char **cmd)
 		i++;
 	}
 	if (*(cmd + 1))
-		return (ft_error("minishell: exit: ", NULL, "too many arguments\n"));
+	{
+		ft_error("minishell: exit: ", NULL, "too many arguments\n");
+		return (1);
+	}
 	ex_status = ft_atoi(*cmd);
 	if (ex_status > 255 || ex_status < 0)
 		exit (ex_status % 256);
