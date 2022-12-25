@@ -12,7 +12,7 @@
 
 NAME = minishell
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 
 SRCS = execution/minishell.c execution/export.c execution/builtins.c execution/envlist_tools.c \

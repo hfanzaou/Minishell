@@ -118,7 +118,7 @@ int	ft_herdoc(char *eof)
 				exit(0);
 		}
 	}
-	else 
+	else
 	{
 		wait(&i);
 		close(fd[1]);

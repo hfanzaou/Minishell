@@ -69,18 +69,20 @@ char	*check_access(char *cmd)
 
 	if (ft_strchr(cmd, '/'))
 	{
-		if (!access(cmd, F_OK | R_OK | X_OK))
+		if (!access(cmd, F_OK | X_OK))
 			return (cmd);
 		ft_error("MINISHELL: ", cmd, "No such file or directory\n");
 		exit (127);
 	}
 	temp = ft_split(getenv("PATH"), ':');
 	cmd = ft_strjoin("/", cmd);
+	path = ft_strdup("");
 	while (*temp)
 	{
 		path = ft_strjoin(*temp, cmd);
+		printf("%s\n", path);
 		// free(cmd);
-		if (!access(ft_strjoin(*temp, cmd), F_OK | R_OK | X_OK))
+		if (!access(path, F_OK | X_OK))
 		{
 			ft_free(temp);
 			return (path);
