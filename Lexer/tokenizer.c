@@ -669,6 +669,6 @@ token_t *tokenizer(t_lexer *lexer)
 		if (lexer->c == ' ' || lexer->c == '\t')
 			lexer_advance(&lexer);	
 	}
-	//printf_token(token);
+	printf_token(token);
 	return (token);
 }
