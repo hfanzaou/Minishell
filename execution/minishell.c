@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/25 20:27:47 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/25 20:57:16 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ char	*check_access(char *cmd)
 	while (*temp)
 	{
 		path = ft_strjoin(*temp, cmd);
-		// free(cmd);
 		if (!access(ft_strjoin(*temp, cmd), F_OK | R_OK | X_OK))
 		{
 			ft_free(temp);
@@ -88,7 +87,6 @@ char	*check_access(char *cmd)
 		temp++;
 	}
 	ft_free(temp);
-	// free(cmd);
 	free(path);
 	return (NULL);
 }
