@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 19:54:57 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 04:28:23 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	env(char **cmd)
 	if (cmd[1])
 	{
 		ft_putstr_fd("env: No arguments or options are allowed\n", 2);
-		return (1);
+		return (256);
 	}
 	while ((temp))
 	{
@@ -146,7 +146,7 @@ int	ft_exit(char **cmd)
 	if (*(cmd + 1))
 	{
 		ft_error("minishell: exit: ", NULL, "too many arguments\n");
-		return (1);
+		return (256);
 	}
 	ex_status = ft_atoi(*cmd);
 	if (ex_status > 255 || ex_status < 0)

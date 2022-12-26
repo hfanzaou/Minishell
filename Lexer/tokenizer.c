@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 02:17:24 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/25 20:48:53 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 02:05:59 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -565,6 +565,6 @@ token_t *tokenizer(t_lexer *lexer)
 		if (lexer->c == ' ' || lexer->c == '\t')
 			lexer_advance(&lexer);	
 	}
-	//printf_token(token);
+	// printf_token(token);
 	return (token);
 }

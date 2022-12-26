@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:24:39 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/23 02:27:39 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 05:41:51 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,24 +56,34 @@ void	print_envlist(void)
 	}
 }
 
-int	search_nd_replace(t_envlist *needle)
+t_envlist	*envlist_search(char *key)
 {
 	t_envlist	*temp;
 
 	temp = global.envlist;
 	while (temp)
 	{
-		if (!ft_strcmp(temp->key, needle->key))
-		{
-			if (*needle->sep == '+' && (needle->value))
-				temp->value = ft_strjoin(temp->value, needle->value);
-			else if (needle->value)
-				temp->value = needle->value;
-			temp->sep = "=";
-			envlist_to_tab();
-			return (0);
-		}
+		if (!ft_strcmp(temp->key, key))
+			return(temp);
 		temp = temp->next;
+	}
+	return (NULL);
+}
+
+int	replace_value(t_envlist *needle)
+{
+	t_envlist	*temp;
+
+	temp = envlist_search(needle->key);
+	if (temp)
+	{
+		if (*needle->sep == '+' && (needle->value))
+			temp->value = ft_strjoin(temp->value, needle->value);
+		else if (needle->value)
+			temp->value = needle->value;
+		temp->sep = "=";
+		envlist_to_tab();
+		return (0);
 	}
 	return (1);
 }
@@ -81,7 +91,9 @@ int	search_nd_replace(t_envlist *needle)
 int	add_to_env(char **args)
 {
 	t_envlist	*temp;
+	int			ret;
 
+	ret = 0;
 	while (*args)
 	{
 		temp = envlist_new(*args);
@@ -90,10 +102,11 @@ int	add_to_env(char **args)
 			ft_putstr_fd("MINISHELL: export: ", 2);
 			ft_putstr_fd(*args, 2);
 			ft_putstr_fd(": not a valid identifier\n", 2);
+			ret = 256;
 			args++;
 			continue ;
 		}
-		if (search_nd_replace(temp))
+		if (replace_value(temp))
 		{
 			temp->sep = "=";
 			if (temp->value)
@@ -105,7 +118,7 @@ int	add_to_env(char **args)
 			free(temp);
 		args++;
 	}
-	return (0);
+	return (ret);
 }
 
 int	export(char **cmd)

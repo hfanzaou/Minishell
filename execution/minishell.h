@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/24 19:54:21 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 05:39:22 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ typedef struct s_cmd
 	char			**cmd;
 	int				in;
 	int				out;
-	int				fd;
+	int				err;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -75,5 +75,6 @@ void		ft_free(char **str);
 void		ft_dup(t_cmd *cmd_lst);
 int			str_search(char **haystack, char *needle);
 void		ft_error(char *cmd, char *arg, char *err);
+t_envlist	*envlist_search(char *key);
 
 #endif
