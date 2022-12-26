@@ -25,7 +25,7 @@ void	handler(int i)
 	}
 }
 
-t_cmd *init_cmd(char **cargs, int in, int out)
+t_cmd *init_cmd(char **cargs, int in, int out, int flag)
 {
 	t_cmd *cmd;
 	cmd = (t_cmd *)malloc(sizeof(t_cmd));
@@ -33,6 +33,7 @@ t_cmd *init_cmd(char **cargs, int in, int out)
 	cmd->fd = 0;
 	cmd->in = in;
 	cmd->out = out;
+	cmd->err = flag;
 	cmd->next = NULL;
 	return (cmd);
 }

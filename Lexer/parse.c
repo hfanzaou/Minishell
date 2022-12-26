@@ -36,7 +36,7 @@ void	printcmd(t_cmd *cmd)
 		i = 0;
 		while (cmd->cmd[i])
 		{
-			printf("%shello\n", cmd->cmd[i]);
+			printf("%s\n", cmd->cmd[i]);
 			i++;
 		}
 		printf("in = %d\nout = %d\n", cmd->in, cmd->out);
@@ -133,14 +133,21 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	char **cargs;
 	int in;
 	int out;
+	int flag;
 
 	in = 0;
-	out = 1;
+	out = 0;
 	cargs = NULL;
 	oneuse = malloc(sizeof(t_cmd));
 	while (token)
 	{
-		if (token->next && token->type == RED_OUT)
+		if (token->err)
+		{
+			flag = token->err;
+			while (token && token->type != PIPE)
+				token = token->next;
+		}
+		else if (token->next && token->type == RED_OUT)
 		{
 			token = token->next;
 			out = open(token->value, O_CREAT | O_TRUNC | O_WRONLY, 0644);
@@ -176,9 +183,11 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		}
 		else if (token->type == PIPE)
 		{
-			oneuse = init_cmd(cargs, in, out);
+			oneuse = init_cmd(cargs, in, out, flag);
 			ft_lstadd_backc(&cmd, oneuse);
 			cargs = NULL;
+			in = 0;
+			out = 1;
 		}
 		else
 		{
@@ -195,11 +204,11 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 			break;	
 		token = token->next;
 	}
-	oneuse = init_cmd(cargs, in, out);
+	oneuse = init_cmd(cargs, in, out, flag);
 	//free(cargs);
 	//cargs = NULL;
 	ft_lstadd_backc(&cmd, oneuse);
 	//cargs = NULL;
-	// printcmd(cmd);
+	//printcmd(cmd);
 	return (cmd);
 }

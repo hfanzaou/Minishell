@@ -18,6 +18,7 @@
 typedef struct token_s
 {
 	char *value;
+	int		err;
 	struct token_s *next;
 	enum
 	{
@@ -36,10 +37,10 @@ typedef struct token_s
 	} type;
 }	token_t;
 
-t_cmd *init_cmd(char **cargs, int in, int out);
+t_cmd *init_cmd(char **cargs, int in, int out, int flag);
 void printf_token(token_t *token);
 token_t *tokenizer(t_lexer *lexer);
-token_t *token_init(char *val, int type);
+token_t *token_init(char *val, int type, int flag);
 t_cmd *ft_parse(token_t *token, t_cmd *cmd);
 char	*ft_realloc(char *str, int j);
 int	ft_strcmp(char *s1, char *s2);
