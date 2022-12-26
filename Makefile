@@ -6,13 +6,13 @@
 #    By: ajana <ajana@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/15 17:03:01 by ajana             #+#    #+#              #
-#    Updated: 2022/12/25 05:46:27 by ajana            ###   ########.fr        #
+#    Updated: 2022/12/25 21:01:38 by ajana            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
 
 
 SRCS = execution/minishell.c execution/export.c execution/builtins.c execution/envlist_tools.c \
@@ -30,7 +30,7 @@ $(LIBFT) :
 	make -C libft/
 
 $(NAME) : $(OBJS)
-	$(CC) $(FLAGS) -g3  $(OBJS) $(LIBS) -o $@
+	$(CC) $(FLAGS) $(OBJS) $(LIBS) -o $@
 
 %.o : %.c
 	$(CC) $(FLAGS) -c $< -o $@

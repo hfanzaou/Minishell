@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/25 20:57:16 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 02:17:45 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*check_access(char *cmd)
 
 	if (ft_strchr(cmd, '/'))
 	{
-		if (!access(cmd, F_OK | R_OK | X_OK))
+		if (!access(cmd, F_OK | X_OK))
 			return (cmd);
 		ft_error("MINISHELL: ", cmd, "No such file or directory\n");
 		exit (127);
@@ -82,6 +82,7 @@ char	*check_access(char *cmd)
 		if (!access(ft_strjoin(*temp, cmd), F_OK | R_OK | X_OK))
 		{
 			ft_free(temp);
+			temp = NULL;
 			return (path);
 		}
 		temp++;
@@ -91,7 +92,7 @@ char	*check_access(char *cmd)
 	return (NULL);
 }
 
-int	child(t_cmd *cmd_lst, int *fds)
+int	child(t_cmd *cmd_lst)
 {
 	char	*path;
 	int		pid;
@@ -100,12 +101,9 @@ int	child(t_cmd *cmd_lst, int *fds)
 	pid = fork();
 	if (pid == 0)
 	{
+		if (cmd_lst->next)
+			close(cmd_lst->next->in);
 		ft_dup(cmd_lst);
-		if (fds)
-		{
-			close(fds[0]);
-			close(fds[1]);
-		}
 		ind = is_builtin(*(cmd_lst->cmd));
 		if (ind)
 			exit(execute_builtin(cmd_lst, ind));
@@ -146,7 +144,7 @@ void	simple_cmd(t_cmd *cmd_lst)
 	}
 	else
 	{
-		pid = child(cmd_lst, NULL);
+		pid = child(cmd_lst);
 		waitpid(pid, &(global.exit_status), 0);
 	}
 }
@@ -155,7 +153,9 @@ void	excute(t_cmd *cmd_lst)
 {
 	int	fds[2];
 	int	pid;
+	int	i;
 
+	i = 0;
 	if (!cmd_lst)
 		return ;
 	if (!(cmd_lst->next) && (cmd_lst->cmd))
@@ -165,22 +165,24 @@ void	excute(t_cmd *cmd_lst)
 	}
 	while (cmd_lst)
 	{
+		printf("cmd = %s out = %d\n", *cmd_lst->cmd, cmd_lst->out);
 		if (cmd_lst->next)
 		{
 			pipe(fds);
 			if (cmd_lst->out == 1)
-				cmd_lst->out = fds[1];
-			else
-				close(fds[1]);
+				cmd_lst->out = dup(fds[1]);
 			if (cmd_lst->next->in == 0)
-				cmd_lst->next->in = fds[0];
-			else
-				close(fds[0]);
+				cmd_lst->next->in = dup(fds[0]);
+			close(fds[1]);
+			close(fds[0]);
 		}
-		pid = child(cmd_lst, fds);
-		close(fds[1]);
+		pid = child(cmd_lst);
+		if (cmd_lst->out != 1)
+			close(cmd_lst->out);
+		if (i && (cmd_lst->in != 0))
+			close(cmd_lst->in);
 		cmd_lst = cmd_lst->next;
+		i++;
 	}
-	close(fds[0]);
 	while(wait(&(global.exit_status)) != -1);
 }
