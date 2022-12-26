@@ -32,7 +32,7 @@ typedef struct token_s
 		PIPE,
 		DOLLAR,
 		EXIT,
-		//SPACE,
+		EXDOLLAR,
 		END
 	} type;
 }	token_t;

@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/26 02:59:42 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 06:10:45 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	printcmd(t_cmd *cmd)
 			printf("%s\n", cmd->cmd[i]);
 			i++;
 		}
-		printf("in = %d\nout = %d\n", cmd->in, cmd->out);
+		printf("in = %d\nout = %d\nflag = %d\n", cmd->in, cmd->out, cmd->err);
 		cmd = cmd->next;
 	}
 }
@@ -137,6 +137,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 
 	in = 0;
 	out = 1;
+	flag = 0;
 	cargs = NULL;
 	oneuse = malloc(sizeof(t_cmd));
 	while (token)
@@ -209,6 +210,6 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	//cargs = NULL;
 	ft_lstadd_backc(&cmd, oneuse);
 	//cargs = NULL;
-	// printcmd(cmd);
+	//printcmd(cmd);
 	return (cmd);
 }
