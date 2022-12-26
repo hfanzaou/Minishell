@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 05:39:22 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 12:05:04 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <fcntl.h>
+# include <dirent.h>
 # include "../libft/libft.h"
 
 typedef enum builtins

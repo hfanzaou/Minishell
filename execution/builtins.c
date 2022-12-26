@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 10:42:51 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 12:46:25 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	ft_error(char *cmd, char *arg, char *err)
 {
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(arg ,2);
-	if (arg)
-		ft_putstr_fd(": ", 2);
+	// if (arg)
+	// 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(err, 2);
 }
 
@@ -101,16 +101,25 @@ int	pwd(void)
 int	cd(char **cmd)
 {
 	int	ret;
+	t_envlist	*temp;
 
-	if (!(cmd[1]) || (*(cmd[1])) == '~')
-		ret = chdir(getenv("HOME"));
+	if (!(cmd[1]))
+	{
+		temp = envlist_search("HOME");
+		if (!temp)
+		{
+			ft_error("minishell: cd: ", NULL, "HOME not set\n");
+			return (1);
+		}
+		ret = chdir(temp->value);
+	}
 	else
 		ret = chdir(cmd[1]);
 	if (ret)
 	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		perror(cmd[1]);
-		return (1);
+		ft_error("minishell: cd: ", cmd[1], NULL);
+		perror(NULL);
+		return (256);
 	}
 	return (0);
 }
