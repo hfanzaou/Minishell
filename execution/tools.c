@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:43:06 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 00:29:36 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 05:50:02 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	ft_free(char **str)
 		free(*str);
 		*str = NULL;
 	}
+	str = NULL;
 }
 
 int	ft_strcmp(char *s1, char *s2)

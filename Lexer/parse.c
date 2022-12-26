@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/26 02:17:33 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 02:59:42 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	int flag;
 
 	in = 0;
-	out = 0;
+	out = 1;
 	cargs = NULL;
 	oneuse = malloc(sizeof(t_cmd));
 	while (token)
@@ -209,6 +209,6 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	//cargs = NULL;
 	ft_lstadd_backc(&cmd, oneuse);
 	//cargs = NULL;
-	//printcmd(cmd);
+	// printcmd(cmd);
 	return (cmd);
 }
