@@ -378,12 +378,15 @@ void	token_3(token_t **token, t_lexer *lexer, char **env, int type)
 		val = cond(lexer, val, env);
 		if (!val)
 		{
-			oneuse = token_init(val, type, 1);
-			ft_lstadd_back(token, oneuse);
+			// oneuse = token_init(val, type, 1, 0);
+			// ft_lstadd_back(token, oneuse);
+			lexer->c = '\0';
+			lexer = NULL;
+			token = NULL;
 			return ;
 		}
 	}
-	oneuse = token_init(val, type, 0);
+	oneuse = token_init(val, type, 0, 0);
 	ft_lstadd_back(token, oneuse);
 }
 
@@ -396,7 +399,7 @@ void	token_pipe(token_t **token)
 	type = PIPE;
 	oneuse = NULL;
 	val = ft_strdup("|");
-	oneuse = token_init(val, type, 0);
+	oneuse = token_init(val, type, 0, 0);
 	ft_lstadd_back(token, oneuse);
 
 }
@@ -416,26 +419,35 @@ void	token_redout(token_t **token, int i)
 	}
 	else
 		val = ft_strdup(">");	
-	oneuse = token_init(val, type, 0);
+	oneuse = token_init(val, type, 0, 0);
 	ft_lstadd_back(token, oneuse);
 }
 
-void	token_redin(token_t **token, int i)
+void	token_redin(t_lexer *lexer, token_t **token, int i)
 {
 	token_t *oneuse;
 	char *val;
 	int type;
+	int j;
+	int f;
 
+	f = 0;
+	j = 0;
 	type = RED_IN;
 	oneuse = NULL;
 	if (i == 1)
 	{
 		val = ft_strdup("<<");
+		while (lexer->src[lexer->i + j] && lexer->src[lexer->i + j] != '\'' && lexer->src[lexer->i + j] != '\"')
+			j++;
+		if ((lexer->src[lexer->i + j] && (lexer->src[lexer->i + j] == '\'' || lexer->src[lexer->i + j] == '\"')))
+			f = 1;
+		//printf("%c\n", lexer->src[lexer->i + j]);	
 		type = RED_IN2;
 	}
 	else
 		val = ft_strdup("<");
-	oneuse = token_init(val, type, 0);
+	oneuse = token_init(val, type, 0, f);
 	ft_lstadd_back(token, oneuse);
 }
 
@@ -488,7 +500,7 @@ void	expand_exdollar(token_t **token, t_lexer *lexer, char **env)
 			val = ft_strjoin2(val, c, strlen(val));
 		else if (val[0] && !ft_strrchr(" \t", str[i]) && str[i + 1] && ft_strrchr(" \t", str[i + 1]))
 		{
-			oneuse = token_init(val, EXDOLLAR, 0);
+			oneuse = token_init(val, EXDOLLAR, 0, 0);
 			ft_lstadd_back(token, oneuse);
 			val = ft_strdup("");
 		}
@@ -496,7 +508,7 @@ void	expand_exdollar(token_t **token, t_lexer *lexer, char **env)
 	}
 	if (val[0])
 	{
-		oneuse = token_init(val, EXDOLLAR, 0);
+		oneuse = token_init(val, EXDOLLAR, 0, 0);
 		ft_lstadd_back(token, oneuse);
 	}
 }
@@ -529,7 +541,7 @@ token_t *tokenizer(t_lexer *lexer)
 		{
 			lexer_advance(&lexer);
 			lexer_advance(&lexer);
-			token_redin(&token, 1);
+			token_redin(lexer, &token, 1);
 		}
 		else if (lexer->c == '>')
 		{
@@ -548,6 +560,8 @@ token_t *tokenizer(t_lexer *lexer)
 			token_3(&token, lexer, global.envp, STRING);
 		if (lexer->i == lexer->size)
 			break ;	
+		else if (!lexer->c)
+			return (NULL);	
 		if (lexer->c == ' ' || lexer->c == '\t')
 			lexer_advance(&lexer);	
 	}
