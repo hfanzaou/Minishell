@@ -216,6 +216,6 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	//cargs = NULL;
 	ft_lstadd_backc(&cmd, oneuse);
 	//cargs = NULL;
-	//printcmd(cmd);
+	printcmd(cmd);
 	return (cmd);
 }
