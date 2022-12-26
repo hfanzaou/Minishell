@@ -142,17 +142,19 @@ int is_error(token_t *token)
 	ft_putstr_fd("'\n", 2);
 	return (1);
 }
-int	check_if(int type)
+int	check_if(token_t *next, int pipe)
 {	
-	if (type == PIPE)
+	if (!next)
 		return (0);
-	else if (type == RED_OUT)
+	if (next->type == PIPE)
 		return (0);
-	else if (type == RED_IN)
+	else if (next->type == RED_OUT && pipe == 0)
 		return (0);
-	else if (type == RED_OUT2)
+	else if (next->type == RED_IN && pipe == 0)
 		return (0);
-	else if (type == RED_IN2)
+	else if (next->type == RED_OUT2 && pipe == 0)
+		return (0);
+	else if (next->type == RED_IN2 && pipe == 0)
 		return (0);
 	return (1);					
 }
@@ -163,18 +165,18 @@ int if_error(token_t *token)
 	int i;
 	head = token;
 	i = 0;
-	while (head->next)
+	while (head)
 	{
-		if (head->type == PIPE && !check_if(token->next->type))
+		if (head->type == PIPE && !check_if(head->next, 1))
 			i = 1;
-		else if (head->type == RED_OUT && !check_if(token->next->type))
+		else if (head->type == RED_OUT && !check_if(head->next, 0))
 			i = 1;
-		else if (head->type == RED_IN2 && !check_if(token->next->type))
+		else if (head->type == RED_IN2 && !check_if(head->next, 0))
 			i = 1;
-		else if (head->type == RED_OUT2 && !check_if(token->next->type))
+		else if (head->type == RED_OUT2 && !check_if(head->next, 0))
 			i = 1;
 		if (i == 1)
-			return (is_error(token->next));
+			return (is_error(head->next));
 		head = head->next;					
 	}
 	return (0);
@@ -237,14 +239,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		else if (token->type == RED_IN2)
 		{
 			token = token->next;
-			in = ft_herdoc(token->value, token->here);	
-			if (access(token->value, W_OK) != 0)
-			{
-				ft_putstr_fd("MINISHELL: ", 2);
-				perror(token->value);
-				while (token->next && token->next->type != PIPE)
-					token = token->next;
-			}
+			in = ft_herdoc(token->value, token->here);
 		}
 		else if (token->type == PIPE)
 		{
