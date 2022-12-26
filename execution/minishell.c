@@ -6,29 +6,11 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 06:05:30 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 07:07:27 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	cmd_count(t_cmd *cmd_lst)
-{
-	t_cmd *temp;
-	int		i = 0;
-
-	temp = cmd_lst;
-	while (temp) 
-	{
-		while (temp->cmd[i])
-		{
-			ft_putstr_fd(temp->cmd[i], 1);
-			i++;
-			ft_putchar_fd('\n', 1);
-		}
-		temp = temp->next;
-	}
-}
 
 int	is_builtin(char *cmd)
 {
@@ -106,11 +88,11 @@ int	child(t_cmd *cmd_lst)
 	int		pid;
 	int		ind;
 
+	if (!(cmd_lst->cmd))
+		return(0);
 	pid = fork();
 	if (pid == 0)
 	{
-		if (cmd_lst->next)
-			close(cmd_lst->next->in);
 		ft_dup(cmd_lst);
 		ind = is_builtin(*(cmd_lst->cmd));
 		if (ind)
@@ -138,7 +120,7 @@ void	simple_cmd(t_cmd *cmd_lst)
 	int		tmpin;
 	int		tmpout;
 
-	if (!(cmd_lst->cmd) || cmd_lst->err)
+	if (!(cmd_lst->cmd))
 		return ;
 	ind = is_builtin(*(cmd_lst->cmd));
 	if (ind)
@@ -188,11 +170,6 @@ void	excute(t_cmd *cmd_lst)
 	}
 	while (cmd_lst)
 	{
-		if (!(cmd_lst->cmd) || cmd_lst->err)
-		{
-			cmd_lst = cmd_lst->next;
-			continue ;
-		}
 		if (cmd_lst->next)
 			open_pipe(cmd_lst);
 		pid = child(cmd_lst);

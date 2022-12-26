@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 04:28:23 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 10:42:51 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int	env(char **cmd)
 			ft_putstr_fd((temp)->key, 1);
 			ft_putstr_fd((temp)->sep, 1);
 			ft_putstr_fd((temp)->value, 1);
-		}		
-		ft_putchar_fd('\n', 1);
+			ft_putchar_fd('\n', 1);
+		}
 		temp = temp->next;
 		i++;
 	}

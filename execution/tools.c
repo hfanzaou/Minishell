@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:43:06 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 05:50:02 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 06:57:04 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ int	ft_strcmp(char *s1, char *s2)
 
 void	ft_dup(t_cmd *cmd_lst)
 {
-	if (!cmd_lst->cmd)
-		return ;
+	if (cmd_lst->next)
+		close(cmd_lst->next->in);
 	if (cmd_lst->in != 0)
 	{
 		dup2(cmd_lst->in, 0);

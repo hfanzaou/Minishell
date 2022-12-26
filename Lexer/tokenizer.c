@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/18 02:17:24 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/26 02:05:59 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 06:32:35 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -327,6 +327,8 @@ char 	*dq_case(t_lexer *lexer, char **env)
 	else if (!c[0] && lexer->c == '\"')
 	{
 		str = dq_case(lexer, global.envp);
+		if (!str)
+			return (NULL);
 		str = ft_strjoin2(val, str, strlen(val));
 	}
 	else 

@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/26 06:10:45 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 06:32:11 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		if (token->err)
 		{
 			flag = token->err;
-			while (token && token->type != PIPE)
+			while (token->next && token->next->type != PIPE)
 				token = token->next;
 		}
 		else if (token->next && token->type == RED_OUT)
