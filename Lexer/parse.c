@@ -39,7 +39,7 @@ void	printcmd(t_cmd *cmd)
 			printf("%s\n", cmd->cmd[i]);
 			i++;
 		}
-		printf("in = %d\nout = %d\n", cmd->in, cmd->out);
+		printf("in = %d\nout = %d\nflag = %d\n", cmd->in, cmd->out, cmd->err);
 		cmd = cmd->next;
 	}
 }
@@ -136,7 +136,8 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	int flag;
 
 	in = 0;
-	out = 0;
+	out = 1;
+	flag = 0;
 	cargs = NULL;
 	oneuse = malloc(sizeof(t_cmd));
 	while (token)
@@ -209,6 +210,6 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	//cargs = NULL;
 	ft_lstadd_backc(&cmd, oneuse);
 	//cargs = NULL;
-	//printcmd(cmd);
+	printcmd(cmd);
 	return (cmd);
 }
