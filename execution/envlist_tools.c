@@ -58,6 +58,8 @@ char	*keycheck(char *key)
 	int	i;
 
 	i = 0;
+	if (!key)
+		return (NULL);
 	while (key[i])
 	{
 		if (!ft_isalnum(key[i]) && (key[i] != '_'))

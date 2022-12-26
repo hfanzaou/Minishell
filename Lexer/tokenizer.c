@@ -253,7 +253,7 @@ char	*ft_expand(char *val, char **env, t_lexer **lexer, int j)
 	i = 0;
 	while (env[i])
 	{
-		if (!ft_memcmp(env[i], &s[1], l - 1))
+		if (!ft_memcmp(env[i], &s[1], l - 1) && env[i][l - 1] && env[i][l - 1] == '=')
 			return (ft_strdup(&env[i][l]));
 		i++;
 	}
@@ -269,6 +269,7 @@ int 	ft_skip(char *str)
 		i++;
 	return (i);	
 }
+
 char 	*dq_case(t_lexer *lexer, char **env)
 {
 	char *str;
@@ -369,6 +370,7 @@ char 	*cond(t_lexer *lexer, char *val, char **env)
 		return (NULL);		
 	return (str);
 }
+
 void	token_3(token_t **token, t_lexer *lexer, char **env, int type)
 {	
 	token_t *oneuse;
@@ -440,11 +442,14 @@ void	token_redin(t_lexer *lexer, token_t **token, int i)
 	if (i == 1)
 	{
 		val = ft_strdup("<<");
-		while (lexer->src[lexer->i + j] && lexer->src[lexer->i + j] != '\'' && lexer->src[lexer->i + j] != '\"')
+		while (lexer->src[lexer->i + j] 
+			&& lexer->src[lexer->i + j] != '\'' 
+				&& lexer->src[lexer->i + j] != '\"')
 			j++;
-		if ((lexer->src[lexer->i + j] && (lexer->src[lexer->i + j] == '\'' || lexer->src[lexer->i + j] == '\"')))
+		if ((lexer->src[lexer->i + j] 
+			&& (lexer->src[lexer->i + j] == '\'' 
+				|| lexer->src[lexer->i + j] == '\"')))
 			f = 1;
-		//printf("%c\n", lexer->src[lexer->i + j]);	
 		type = RED_IN2;
 	}
 	else
@@ -550,6 +555,11 @@ token_t *tokenizer(t_lexer *lexer)
 			lexer_advance(&lexer);
 			token_redout(&token, 0);
 		}
+		else if (lexer->c == '<')
+		{
+			lexer_advance(&lexer);
+			token_redin(lexer, &token, 0);
+		}
 		else if (lexer->c == '$')
 		{
 			token_3(&token, lexer, global.envp, DOLLAR);
@@ -567,6 +577,6 @@ token_t *tokenizer(t_lexer *lexer)
 		if (lexer->c == ' ' || lexer->c == '\t')
 			lexer_advance(&lexer);	
 	}
-	// printf_token(token);
+	//printf_token(token);
 	return (token);
 }

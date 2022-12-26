@@ -162,21 +162,21 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 			{
 				ft_putstr_fd("MINISHELL: ", 2);
 				perror(token->value);
-				return (NULL);
+				while (token->next && token->next->type != PIPE)
+					token = token->next;
 			}
 		}
 		else if (token->next && token->type == RED_IN)
 		{
 			token = token->next;
-			if (cargs)
+			in = open(token->value, O_RDONLY);
+			if (access(token->value, W_OK) != 0)
 			{
-				in = open(*cargs, O_RDONLY);
-				*cargs = token->value;
+				ft_putstr_fd("MINISHELL: ", 2);
+				perror(token->value);
+				while (token->next && token->next->type != PIPE)
+					token = token->next;
 			}
-			else 
-				in = open(token->value, O_RDONLY);
-			if (in < 0)
-				return NULL;		
 		}
 		else if (token->next && token->type == RED_OUT2)
 		{
