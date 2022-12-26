@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 07:07:27 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 12:12:30 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,11 +72,21 @@ char	*relative_path(char *cmd)
 
 char	*check_access(char *cmd)
 {
+	DIR	*dir;
+
 	if (ft_strchr(cmd, '/'))
 	{
 		if (!access(cmd, F_OK | X_OK))
+		{
+			dir = opendir(cmd);
+			if (dir)
+			{
+				ft_error("minishell: ", cmd, ": is a directory\n");
+				exit(126);
+			}
 			return (cmd);
-		ft_error("MINISHELL: ", cmd, "No such file or directory\n");
+		}
+		ft_error("minishell: ", cmd, ": No such file or directory\n");
 		exit (127);
 	}
 	return (relative_path(cmd));
