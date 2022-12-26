@@ -132,7 +132,53 @@ int	ft_herdoc(char *eof, int here)
 
 	return (fd[0]);	
 }
+int is_error(token_t *token)
+{
+	ft_putstr_fd("MINISHELL: syntax error near unexpected token `", 2);
+	if (token)
+		ft_putstr_fd(token->value, 2);
+	else 
+		ft_putstr_fd("newline", 2);	
+	ft_putstr_fd("'\n", 2);
+	return (1);
+}
+int	check_if(int type)
+{	
+	if (type == PIPE)
+		return (0);
+	else if (type == RED_OUT)
+		return (0);
+	else if (type == RED_IN)
+		return (0);
+	else if (type == RED_OUT2)
+		return (0);
+	else if (type == RED_IN2)
+		return (0);
+	return (1);					
+}
 
+int if_error(token_t *token)
+{
+	token_t *head;
+	int i;
+	head = token;
+	i = 0;
+	while (head->next)
+	{
+		if (head->type == PIPE && !check_if(token->next->type))
+			i = 1;
+		else if (head->type == RED_OUT && !check_if(token->next->type))
+			i = 1;
+		else if (head->type == RED_IN2 && !check_if(token->next->type))
+			i = 1;
+		else if (head->type == RED_OUT2 && !check_if(token->next->type))
+			i = 1;
+		if (i == 1)
+			return (is_error(token->next));
+		head = head->next;					
+	}
+	return (0);
+}
 t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 {
 	t_cmd *oneuse;
@@ -146,15 +192,13 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	flag = 0;
 	cargs = NULL;
 	oneuse = malloc(sizeof(t_cmd));
+	if (if_error(token))
+		return (NULL);
 	while (token)
 	{
 		if (token->err)
-		{
-			flag = token->err;
-			while (token->next && token->next->type != PIPE)
-				token = token->next;
-		}
-		else if (token->next && token->type == RED_OUT)
+			return (NULL);
+		else if (token->type == RED_OUT)
 		{
 			token = token->next;
 			out = open(token->value, O_CREAT | O_TRUNC | O_WRONLY, 0644);
@@ -166,7 +210,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 					token = token->next;
 			}
 		}
-		else if (token->next && token->type == RED_IN)
+		else if (token->type == RED_IN)
 		{
 			token = token->next;
 			in = open(token->value, O_RDONLY);
@@ -178,15 +222,29 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 					token = token->next;
 			}
 		}
-		else if (token->next && token->type == RED_OUT2)
+		else if (token->type == RED_OUT2)
 		{
 			token = token->next;
 			out = open(token->value, O_WRONLY | O_APPEND | O_CREAT, 0644);
+			if (access(token->value, W_OK) != 0)
+			{
+				ft_putstr_fd("MINISHELL: ", 2);
+				perror(token->value);
+				while (token->next && token->next->type != PIPE)
+					token = token->next;
+			}
 		}
-		else if (token->next && token->type == RED_IN2)
+		else if (token->type == RED_IN2)
 		{
-			in = ft_herdoc(token->next->value, token->here);
 			token = token->next;
+			in = ft_herdoc(token->value, token->here);	
+			if (access(token->value, W_OK) != 0)
+			{
+				ft_putstr_fd("MINISHELL: ", 2);
+				perror(token->value);
+				while (token->next && token->next->type != PIPE)
+					token = token->next;
+			}
 		}
 		else if (token->type == PIPE)
 		{

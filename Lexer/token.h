@@ -47,4 +47,6 @@ char	*ft_realloc(char *str, int j);
 int	ft_strcmp(char *s1, char *s2);
 char	*ft_expand(char *val, char **env, t_lexer **lexer, int j);
 char	*ft_strdup(const char *s);
+int		ft_strrchr(char *str, char c);
+void	ft_putstr_fd(char *s, int fd);
 # endif  
