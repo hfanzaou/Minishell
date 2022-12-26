@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:55:56 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/16 15:48:06 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/27 00:18:20 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <string.h>
 # include <fcntl.h>
 //# include "parse.h"
+# define BGRN "\e[1;32m"
+# define reset "\e[0m"
 
 typedef	struct envlist
 {

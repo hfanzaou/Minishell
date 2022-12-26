@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 23:15:38 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/27 00:19:26 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int	child(t_cmd *cmd_lst)
 		}
 		else
 		{
-			ft_error("minishell: ", *(cmd_lst->cmd), "command not found\n");
+			ft_error("minishell: ", *(cmd_lst->cmd), ": command not found\n");
 			exit(127);
 		}
 	}
@@ -157,7 +157,8 @@ void	open_pipe(t_cmd *cmd_lst)
 
 	if (cmd_lst->next)
 	{
-		pipe(fds);
+		if (pipe(fds))
+			return (perror("minishell: pipe"));
 		if (cmd_lst->out == 1)
 			cmd_lst->out = dup(fds[1]);
 		if (cmd_lst->next->in == 0)

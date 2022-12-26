@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/26 06:51:57 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/27 00:19:56 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int main(int ac, char **av, char **env)
 	// signal(SIGINT, handler);
 	put_env(env);
 	envlist_init();
-	while ((line = readline("MINISHELL>")))
+	while ((line = readline(BGRN "minishell>>" reset)))
 	{
 		if (line[0])
 		{ 
