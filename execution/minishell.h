@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 12:05:04 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 23:35:42 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,6 @@ void		ft_dup(t_cmd *cmd_lst);
 int			str_search(char **haystack, char *needle);
 void		ft_error(char *cmd, char *arg, char *err);
 t_envlist	*envlist_search(char *key);
+char		*keycheck(char *key);
 
 #endif

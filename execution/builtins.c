@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 12:46:25 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 23:37:30 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,29 @@ int	check_option(char *arg)
 	int	i;
 
 	if (*arg != '-')
-		return (0);
+		return (1);
 	i = 1;
 	while (arg[i])
 	{
 		if (arg[i] != 'n')
-			return (0);
+			return (1);
 		i++;
 	}
-	return (1);
+	return (0);
+}
+
+void	print_args(char **args)
+{
+	int	i;
+
+	i = 0;
+	while (args[i])
+	{
+		ft_putstr_fd(args[i], 1);
+		if (args[i + 1])
+			ft_putchar_fd(' ', 1);
+		i++;
+	}
 }
 
 int	echo(char **cmd)
@@ -73,11 +87,10 @@ int	echo(char **cmd)
 	option = 0;
 	while (cmd[i])
 	{
-		if (!check_option(cmd[i]))
+		if (check_option(cmd[i]))
 		{
-			ft_putstr_fd(cmd[i], 1);
-			if (cmd[i + 1])
-				ft_putchar_fd(' ', 1);
+			print_args(&(cmd[i]));
+			break;
 		}
 		else
 			option = 1;
@@ -98,11 +111,31 @@ int	pwd(void)
 	return (0);
 }
 
-int	cd(char **cmd)
+void	update_pwd(char *oldpwd)
 {
-	int	ret;
 	t_envlist	*temp;
 
+	temp = envlist_search("OLDPWD");
+	if (temp)
+	{
+		temp->value = oldpwd;
+		envlist_to_tab();
+	}
+	temp = envlist_search("PWD");
+	if (temp)
+	{
+		temp->value = getcwd(NULL, 0);
+		envlist_to_tab();
+	}
+}
+
+int	cd(char **cmd)
+{
+	t_envlist	*temp;
+	char		*oldpwd;
+	int			ret;
+
+	oldpwd = getcwd(NULL, 0);
 	if (!(cmd[1]))
 	{
 		temp = envlist_search("HOME");
@@ -117,19 +150,33 @@ int	cd(char **cmd)
 		ret = chdir(cmd[1]);
 	if (ret)
 	{
-		ft_error("minishell: cd: ", cmd[1], NULL);
+		ft_error("minishell: cd: ", cmd[1], ": ");
 		perror(NULL);
 		return (256);
 	}
+	update_pwd(oldpwd);
 	return (0);
 }
 
 int	unset(char **cmd)
 {
+	char	*sep;
+	int		ret;
+
+	ret = 0;
 	while (*(++cmd))
+	{
+		sep = keycheck(*cmd);
+		if (!sep)
+		{
+			ft_error("minishell: unset: ", *cmd, "not a valid idetifier\n");
+			ret = 256;
+		}
+		free (sep);
 		envlist_delete(*cmd);
+	}
 	envlist_to_tab();
-	return (0);
+	return (ret);
 }
 
 int	ft_exit(char **cmd)
