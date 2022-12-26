@@ -101,6 +101,8 @@ int main(int ac, char **av, char **env)
 			lexer = ft_lexer(line);
 			token = tokenizer(lexer);
 			cmd = ft_parse(token, cmd);
+			if (!cmd)
+				continue;
 			excute(cmd);
 			//ft_free(cmd->cmd);
 			// close(cmd->out);

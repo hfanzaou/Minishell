@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "lexer.h"
+#include "token.h"
 
 static int	int_len(unsigned int nu)
 {
@@ -214,7 +215,10 @@ char	*remove_quotes(char c, t_lexer *lexer, char *str)
 		lexer_advance(&lexer);
 	}
 	if (!lexer->c)
+	{
+		ft_putstr_fd("MINISHELL : syntax error unclosed quotes\n", 2);
 		return (NULL);
+	}
 	val = malloc(sizeof(char) * (i + 1));
 	i = 1;
 	f = 0;
@@ -280,10 +284,7 @@ char 	*dq_case(t_lexer *lexer, char **env)
 	i = 0;
 	str = remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]);
 	if (!str)
-	{
-		printf("MINISHELL : unclosed quotes\n");
 		return(NULL);
-	}
 	val = ft_strdup("");
 	c = ft_strdup(" ");
 	while (str[i])
@@ -382,11 +383,8 @@ void	token_3(token_t **token, t_lexer *lexer, char **env, int type)
 		val = cond(lexer, val, env);
 		if (!val)
 		{
-			// oneuse = token_init(val, type, 1, 0);
-			// ft_lstadd_back(token, oneuse);
-			lexer->c = '\0';
-			lexer = NULL;
-			token = NULL;
+			oneuse = token_init(val, type, 1, 0);
+			ft_lstadd_back(token, oneuse);
 			return ;
 		}
 	}
