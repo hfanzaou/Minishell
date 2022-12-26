@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 12:12:30 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/26 23:15:38 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,5 +189,6 @@ void	excute(t_cmd *cmd_lst)
 			close(cmd_lst->in);
 		cmd_lst = cmd_lst->next;
 	}
-	while(wait(&(global.exit_status)) != -1);
+	waitpid(pid, &(global.exit_status), 0);
+	while(wait(NULL) != -1);
 }
