@@ -12,7 +12,7 @@
 
 #include "token.h"
 
-token_t *token_init(char *va, int type, int flag)
+token_t *token_init(char *va, int type, int flag, int here)
 {
 	token_t *token;
 	token = (token_t *)malloc(sizeof(token_t));
@@ -22,6 +22,7 @@ token_t *token_init(char *va, int type, int flag)
 	token->value = va;
 	token->next = NULL;
 	token->err = flag;
+	token->here = here;
 	return (token);	
 }
 

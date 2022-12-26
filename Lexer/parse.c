@@ -97,10 +97,11 @@ char **fillcargs(char **cargs, char *val)
 	return (tmp);
 }
 
-int	ft_herdoc(char *eof)
+int	ft_herdoc(char *eof, int here)
 {
 	int i;
 	char *line;
+	char *str;
 	int fd[2];
 
 	pipe(fd);
@@ -109,11 +110,16 @@ int	ft_herdoc(char *eof)
 	{
 		while ((line = readline(">")))
 		{
-			if (memcmp(line, eof, strlen(eof)))
+			str = ft_strdup(line);
+			if (line[0] == '$' && here == 0)
+				str = ft_expand(line, global.envp, NULL, 0);
+			if (ft_strcmp(str, eof))
 			{
-				write(fd[1], line, strlen(line));
+				write(fd[1], str, strlen(str));
 				write(fd[1], "\n", 1);
 			}
+			else if (line[0] == '$' && !ft_strcmp(ft_expand(line, global.envp, NULL, 0), eof))
+				exit(0);
 			else if (!ft_strcmp(line, eof))
 				exit(0);
 		}
@@ -179,7 +185,7 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		}
 		else if (token->next && token->type == RED_IN2)
 		{
-			in = ft_herdoc(token->next->value);
+			in = ft_herdoc(token->next->value, token->here);
 			token = token->next;
 		}
 		else if (token->type == PIPE)
