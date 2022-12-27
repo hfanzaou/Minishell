@@ -6,13 +6,13 @@
 #    By: ajana <ajana@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/15 17:03:01 by ajana             #+#    #+#              #
-#    Updated: 2022/12/25 21:01:38 by ajana            ###   ########.fr        #
+#    Updated: 2022/12/27 19:02:48 by ajana            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -I/goinfre/ajana/.brew/opt/readline/include
 
 
 SRCS = execution/minishell.c execution/export.c execution/builtins.c execution/envlist_tools.c \
@@ -20,7 +20,7 @@ SRCS = execution/minishell.c execution/export.c execution/builtins.c execution/e
 
 LIBFT = libft/libft.a
 
-LIBS = -L/usr/include -lreadline -Llibft -lft
+LIBS = -L/goinfre/ajana/.brew/opt/readline/lib -L/usr/include -lreadline -Llibft -lft
 
 OBJS = $(SRCS:.c=.o)
 

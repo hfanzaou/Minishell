@@ -86,19 +86,20 @@ t_envlist	*envlist_new(char *str)
 	if (!(new->sep))
 	{
 		free(new);
-		free(temp);
+		ft_free(temp, 0);
 		return (NULL);
 	}
 	else if (*new->sep == '+')
 		(*temp)[ft_strlen(*temp) - 1] = '\0';
 	new->key = *temp;
+	ft_free(temp, 1);
+	free(temp);
 	*temp = ft_strchr(str, '=');
 	if (*temp)
 		new->value = *(temp) + 1;
 	else
 		new->value = NULL;
 	new->next = NULL;
-	free(temp);
 	return (new);
 }
 

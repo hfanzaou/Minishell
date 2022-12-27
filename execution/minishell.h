@@ -72,7 +72,7 @@ void		envlist_addback(t_envlist **head, t_envlist *new);
 void		envlist_delete(char *key);
 void		envlist_to_tab(void);
 int			ft_strcmp(char *s1, char *s2);
-void		ft_free(char **str);
+void		ft_free(char **str, int ind);
 void		ft_dup(t_cmd *cmd_lst);
 int			str_search(char **haystack, char *needle);
 void		ft_error(char *cmd, char *arg, char *err);

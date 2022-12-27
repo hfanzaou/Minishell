@@ -12,12 +12,13 @@
 
 #include "minishell.h"
 
-void	ft_free(char **str)
+void	ft_free(char **str, int ind)
 {
-	while (*str)
+	while (str[ind])
 	{
-		free(*str);
+		free(str[ind]);
 		*str = NULL;
+		ind++;
 	}
 	str = NULL;
 }
