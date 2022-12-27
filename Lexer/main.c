@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/27 00:19:56 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/27 19:00:03 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,10 @@ void	handler(int i)
 {
 	if (i == SIGINT)
 	{
-		//rl_on_new_line();
-		printf("\n"); // Move to a new line
-		 // Regenerate the prompt on a newline
-		//readline("MINISHELL>");// Clear the previous text
+		rl_on_new_line();
+		write(1, "\n", 1);
+		// rl_replace_line("", 0);
     	rl_redisplay();
-		
 	}
 }
 
@@ -89,10 +87,10 @@ int main(int ac, char **av, char **env)
 	token_t *token;
 	t_cmd *cmd;
 
-	// signal(SIGINT, handler);
+	signal(SIGINT, handler);
 	put_env(env);
 	envlist_init();
-	while ((line = readline(BGRN "minishell>>" reset)))
+	while ((line = readline("minishell>>")))
 	{
 		if (line[0])
 		{ 

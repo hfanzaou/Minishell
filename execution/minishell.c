@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/27 00:19:26 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/27 18:59:50 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ char	*check_access(char *cmd)
 {
 	DIR	*dir;
 
+	if (!(*cmd))
+		return (NULL);
 	if (ft_strchr(cmd, '/'))
 	{
 		if (!access(cmd, F_OK | X_OK))
@@ -103,6 +105,7 @@ int	child(t_cmd *cmd_lst)
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
 		ft_dup(cmd_lst);
 		ind = is_builtin(*(cmd_lst->cmd));
 		if (ind)
@@ -181,6 +184,7 @@ void	excute(t_cmd *cmd_lst)
 	}
 	while (cmd_lst)
 	{
+		printf("%s\n", *cmd_lst->cmd);
 		if (cmd_lst->next)
 			open_pipe(cmd_lst);
 		pid = child(cmd_lst);
