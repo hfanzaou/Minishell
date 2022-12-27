@@ -97,6 +97,34 @@ char **fillcargs(char **cargs, char *val)
 	return (tmp);
 }
 
+char	*joinex(char *line)
+{
+	int i;
+	char *c;
+	char *val;
+
+	c = ft_strdup(" ");
+	val = ft_strdup("");
+	i = 0;
+	while (line[i])
+	{	
+		c[0] = line[i];
+		c[1] = '\0';
+		if (line[i] == '$')
+		{
+			val = ft_strjoin2(val, ft_expand(&line[i], global.envp, NULL, 0), strlen(val));
+			i += ft_skip(&line[i + 1]);
+		}
+		else
+			val = ft_strjoin2(val, c, strlen(val));
+		if (!line[i])
+			break;
+		i++;		
+	}
+	free(c);
+	return (val);
+}
+
 int	ft_herdoc(char *eof, int here)
 {
 	int i;
@@ -110,16 +138,16 @@ int	ft_herdoc(char *eof, int here)
 	{
 		while ((line = readline(">")))
 		{
-			str = ft_strdup(line);
-			if (line[0] == '$' && here == 0)
-				str = ft_expand(line, global.envp, NULL, 0);
-			if (ft_strcmp(str, eof))
+			str = line;
+			if (!ft_strrchr(line, '$') && here == 0)
+				str = joinex(line);
+			if (!ft_strrchr(line, '$') && !ft_strcmp(joinex(line), eof))
+				exit(0);
+			else if (ft_strcmp(str, eof))
 			{
 				write(fd[1], str, strlen(str));
 				write(fd[1], "\n", 1);
 			}
-			else if (line[0] == '$' && !ft_strcmp(ft_expand(line, global.envp, NULL, 0), eof))
-				exit(0);
 			else if (!ft_strcmp(line, eof))
 				exit(0);
 		}
@@ -129,12 +157,12 @@ int	ft_herdoc(char *eof, int here)
 		wait(&i);
 		close(fd[1]);
 	}
-
 	return (fd[0]);	
 }
+
 int is_error(token_t *token)
 {
-	ft_putstr_fd("MINISHELL: syntax error near unexpected token `", 2);
+	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 	if (token)
 		ft_putstr_fd(token->value, 2);
 	else 
@@ -142,6 +170,7 @@ int is_error(token_t *token)
 	ft_putstr_fd("'\n", 2);
 	return (1);
 }
+
 int	check_if(token_t *next, int pipe)
 {	
 	if (!next)
@@ -181,7 +210,141 @@ int if_error(token_t *token)
 	}
 	return (0);
 }
-t_cmd *ft_parse(token_t *token, t_cmd *cmd)
+
+int		what_type(token_t *token)
+{
+	if (token->type == RED_OUT || token->type == RED_OUT2)
+		return (1);
+	else 
+		return (0);	
+}
+
+int		what_fd(token_t *token)
+{
+	int fd;
+
+	fd = -1;
+	if (token->type == RED_OUT)
+		fd = open(token->next->value, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	else if (token->type == RED_IN)
+		fd = open(token->next->value, O_RDONLY);
+	else if (token->type == RED_OUT2)
+		fd = open(token->next->value, O_WRONLY | O_APPEND | O_CREAT, 0644);
+	return (fd);	
+}
+
+char	*to_dollar(char *str)
+{
+	t_envlist	*temp;
+
+	temp = global.envlist;
+	while (temp)
+	{
+		if (!ft_strcmp(temp->value, str))
+			return (temp->key);
+		temp = temp->next;
+	}
+	return ("\0");
+}
+
+int 	if_ambiguous(token_t *token)
+{
+	int i;
+	token_t *head;
+	char *to_dol;
+
+	head = token;
+	i = 0;
+	if (head->type == DOLLAR)
+	{
+		to_dol = ft_strjoin2("$", to_dollar(token->value), 1);
+		if (!head->value[0])
+		{
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(to_dol, 2);
+			ft_putstr_fd(": ambiguous redirect\n", 2);
+			return (1);
+		}
+		while (head->value[i])
+		{
+			if (head->value[i] == ' ' || head->value[i] == '\t')
+			{
+				ft_putstr_fd("minishell: ", 2);
+				ft_putstr_fd(to_dol, 2);
+				ft_putstr_fd(": ambiguous redirect\n", 2);
+				return (1);
+			}
+			i++;	
+		}	
+	}
+	return (0);
+}
+
+int		if_access(token_t **token, char ***cargs)
+{
+	DIR *dir;
+	int fd;
+	fd = what_type(*token);
+	if (if_ambiguous((*token)->next))
+	{
+		while ((*token)->next && (*token)->next->type != PIPE)
+			*token = (*token)->next;
+		*cargs = NULL;	
+		return (fd);	
+	}
+	dir = opendir((*token)->next->value);
+	if (dir)
+	{
+		ft_error("minishell :", (*token)->next->value, ": is a directory");
+		while ((*token)->next && (*token)->next->type != PIPE)
+			*token = (*token)->next;
+		return (fd);	
+	}	
+	else
+		fd = what_fd(*token);
+	if (access((*token)->next->value, W_OK) != 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		perror((*token)->next->value);
+		while ((*token)->next && (*token)->next->type != PIPE)
+			*token = (*token)->next;
+		*cargs = NULL;	
+		return (fd);
+	}
+	return (fd);
+}
+
+int		ft_access_cond(token_t **token, char ***cargs)
+{
+	int fd;
+
+	fd = what_type(*token);
+	if ((*token)->type == RED_OUT)
+		fd = if_access(token, cargs);
+	else if ((*token)->type == RED_IN)
+		fd = if_access(token, cargs);
+	else if ((*token)->type == RED_OUT2)
+		fd = if_access(token, cargs);
+	else if ((*token)->type == RED_IN2)
+		fd = ft_herdoc((*token)->next->value, (*token)->here);
+	(*token) = (*token)->next;
+	return (fd);
+}
+
+int 	access_tokens(token_t *token)
+{
+	if (token->type == RED_OUT)
+		return (2);
+	else if (token->type == RED_IN)
+		return (1);
+	else if (token->type == RED_OUT2)
+		return (2);
+	else if (token->type == RED_IN2)
+		return (1);
+	return (0);				
+}
+
+t_cmd	*ft_parse(token_t *token, t_cmd *cmd)
 {
 	t_cmd *oneuse;
 	char **cargs;
@@ -200,47 +363,10 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 	{
 		if (token->err)
 			return (NULL);
-		else if (token->type == RED_OUT)
-		{
-			token = token->next;
-			out = open(token->value, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-			if (access(token->value, W_OK) != 0)
-			{
-				ft_putstr_fd("MINISHELL: ", 2);
-				perror(token->value);
-				while (token->next && token->next->type != PIPE)
-					token = token->next;
-			}
-		}
-		else if (token->type == RED_IN)
-		{
-			token = token->next;
-			in = open(token->value, O_RDONLY);
-			if (access(token->value, W_OK) != 0)
-			{
-				ft_putstr_fd("MINISHELL: ", 2);
-				perror(token->value);
-				while (token->next && token->next->type != PIPE)
-					token = token->next;
-			}
-		}
-		else if (token->type == RED_OUT2)
-		{
-			token = token->next;
-			out = open(token->value, O_WRONLY | O_APPEND | O_CREAT, 0644);
-			if (access(token->value, W_OK) != 0)
-			{
-				ft_putstr_fd("MINISHELL: ", 2);
-				perror(token->value);
-				while (token->next && token->next->type != PIPE)
-					token = token->next;
-			}
-		}
-		else if (token->type == RED_IN2)
-		{
-			token = token->next;
-			in = ft_herdoc(token->value, token->here);
-		}
+		else if (access_tokens(token) == 2)
+			out = ft_access_cond(&token, &cargs);
+		else if (access_tokens(token) == 1)
+			in = ft_access_cond(&token, &cargs);	
 		else if (token->type == PIPE)
 		{
 			oneuse = init_cmd(cargs, in, out, flag);
@@ -265,8 +391,6 @@ t_cmd *ft_parse(token_t *token, t_cmd *cmd)
 		token = token->next;
 	}
 	oneuse = init_cmd(cargs, in, out, flag);
-	//free(cargs);
-	//cargs = NULL;
 	ft_lstadd_backc(&cmd, oneuse);
 	//cargs = NULL;
 	//printcmd(cmd);

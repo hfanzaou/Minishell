@@ -14,6 +14,7 @@
 # define TOKEN_H
 # include <stdlib.h>
 # include "lexer.h"
+# include <dirent.h>
 
 typedef struct token_s
 {
@@ -49,4 +50,9 @@ char	*ft_expand(char *val, char **env, t_lexer **lexer, int j);
 char	*ft_strdup(const char *s);
 int		ft_strrchr(char *str, char c);
 void	ft_putstr_fd(char *s, int fd);
+void	ft_error(char *cmd, char *arg, char *err);
+char	*ft_strjoin2(char const *s1, char const *s2, int n);
+int 	ft_skip(char *str);
+int	ft_memcmp(const void *s1, const void *s2, size_t n);
+
 # endif  

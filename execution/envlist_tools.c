@@ -98,6 +98,7 @@ t_envlist	*envlist_new(char *str)
 	else
 		new->value = NULL;
 	new->next = NULL;
+	free(temp);
 	return (new);
 }
 
