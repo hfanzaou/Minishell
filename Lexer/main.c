@@ -78,6 +78,16 @@ void	put_env(char **env)
 	(global.envp)[l] = NULL;
 	return ;
 }
+
+void	ft_free2(token_t **token)
+{
+	while ((*token))
+	{
+		free((*token)->value);
+		*token = (*token)->next;
+	}
+}
+
 int main(int ac, char **av, char **env)
 {
 	(void)ac;
@@ -86,8 +96,12 @@ int main(int ac, char **av, char **env)
 	t_lexer *lexer;
 	token_t *token;
 	t_cmd *cmd;
+<<<<<<< HEAD
 
 	signal(SIGINT, handler);
+=======
+	// signal(SIGINT, handler);
+>>>>>>> e8d988d43665ca8593c4695a4e8e53c478591e4a
 	put_env(env);
 	envlist_init();
 	while ((line = readline("minishell>>")))
@@ -98,7 +112,10 @@ int main(int ac, char **av, char **env)
 			//cmd = init_cmd();
 			lexer = ft_lexer(line);
 			token = tokenizer(lexer);
+			// free(lexer->src);
+			// free(lexer);
 			cmd = ft_parse(token, cmd);
+			// ft_free2(&token);
 			if (!cmd)
 				continue;
 			excute(cmd);
@@ -111,5 +128,6 @@ int main(int ac, char **av, char **env)
 			lexer = NULL;
 			token = NULL;
 		}
+		free(line);
 	}
 }
