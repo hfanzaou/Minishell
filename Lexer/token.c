@@ -15,7 +15,7 @@
 token_t *token_init(char *va, int type, int flag, int here)
 {
 	token_t *token;
-	token = (token_t *)malloc(sizeof(token_t));
+	token = (token_t *)s_malloc(sizeof(token_t));
 	if (!token)
 		return (NULL);
 	token->type = type;
@@ -32,7 +32,7 @@ char	*ft_realloc(char *str, int j)
 	int		i;
 
 	i = 0;
-	t = malloc(sizeof(char) * j);
+	t = s_malloc(sizeof(char) * j);
 	if (!t)
 		return (NULL);
 	while (str[i])
@@ -42,7 +42,7 @@ char	*ft_realloc(char *str, int j)
 	}
 	t[i] = str[i];
 	free(str);
-	str = malloc(sizeof(char) * j + 1);
+	str = s_malloc(sizeof(char) * j + 1);
 	if (!str)
 		return (NULL);
 	i = 0;

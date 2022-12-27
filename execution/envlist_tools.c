@@ -79,9 +79,10 @@ t_envlist	*envlist_new(char *str)
 {
 	char		**temp;
 	t_envlist	*new;
+	char		*search;
 
 	temp = ft_split(str, '=');
-	new = malloc(sizeof(t_envlist));
+	new = s_malloc(sizeof(t_envlist));
 	new->sep = keycheck(*temp);
 	if (!(new->sep))
 	{
@@ -94,9 +95,9 @@ t_envlist	*envlist_new(char *str)
 	new->key = *temp;
 	ft_free(temp, 1);
 	free(temp);
-	*temp = ft_strchr(str, '=');
-	if (*temp)
-		new->value = *(temp) + 1;
+	search = ft_strchr(str, '=');
+	if (search)
+		new->value = search + 1;
 	else
 		new->value = NULL;
 	new->next = NULL;

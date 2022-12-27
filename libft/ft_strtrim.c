@@ -30,7 +30,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 	{
 		end--;
 	}
-	s = (char *)malloc((end - beg + 1) * sizeof(char));
+	s = (char *)s_malloc((end - beg + 1) * sizeof(char));
 	if (!s)
 		return (NULL);
 	ft_strlcpy(s, s1 + beg, end - beg + 1);

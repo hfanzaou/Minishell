@@ -85,7 +85,7 @@ char **fillcargs(char **cargs, char *val)
 	i = 0;
 	while (cargs[i])
 		i++;		
-	tmp = (char **)malloc(sizeof(char *) * (i + 2));
+	tmp = (char **)s_malloc(sizeof(char *) * (i + 2));
 	i = 0;
 	while (cargs[i])
 	{
@@ -295,6 +295,7 @@ int		if_access(token_t **token, char ***cargs)
 	dir = opendir((*token)->next->value);
 	if (dir)
 	{
+		free(dir);
 		ft_error("minishell :", (*token)->next->value, ": is a directory");
 		while ((*token)->next && (*token)->next->type != PIPE)
 			*token = (*token)->next;
@@ -356,7 +357,7 @@ t_cmd	*ft_parse(token_t *token, t_cmd *cmd)
 	out = 1;
 	flag = 0;
 	cargs = NULL;
-	oneuse = malloc(sizeof(t_cmd));
+	oneuse = s_malloc(sizeof(t_cmd));
 	if (if_error(token))
 		return (NULL);
 	while (token)
@@ -379,7 +380,7 @@ t_cmd	*ft_parse(token_t *token, t_cmd *cmd)
 		{
 			if (!cargs)
 			{
-				cargs = (char **)malloc(sizeof(char *) * 2);
+				cargs = (char **)s_malloc(sizeof(char *) * 2);
 				*cargs = token->value;
 				*(cargs + 1) = NULL;
 			}

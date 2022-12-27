@@ -20,7 +20,7 @@ void	envlist_to_tab(void)
 
 	i = 0;
 	temp = global.envlist;
-	global.envp = realloc(global.envp, sizeof(char *) * (global.env_size + 1));
+	global.envp = s_malloc((global.env_size + 1) * sizeof(char *));
 	while (temp)
 	{
 		if (temp->value)

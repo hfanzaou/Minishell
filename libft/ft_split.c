@@ -68,7 +68,7 @@ char	**ft_split(const char *s, char c)
 
 	i = 0;
 	words = words_num(s, c);
-	res = (char **)malloc((words + 1) * sizeof(char *));
+	res = (char **)s_malloc((words + 1) * sizeof(char *));
 	if (!res)
 		return (NULL);
 	while (i < words)
@@ -76,7 +76,7 @@ char	**ft_split(const char *s, char c)
 		while (*s == c)
 			s++;
 		len = word_len(s, c);
-		res[i] = malloc((len + 1) * sizeof(char));
+		res[i] = s_malloc((len + 1) * sizeof(char));
 		if (!res[i])
 			return (ft_free(&res[i], i));
 		ft_strlcpy(res[i], s, len + 1);

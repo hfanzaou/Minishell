@@ -15,7 +15,7 @@
 t_lexer *ft_lexer(char *src)
 {
 	t_lexer *lexer;
-	lexer = (t_lexer *)malloc(sizeof(t_lexer));
+	lexer = (t_lexer *)s_malloc(sizeof(t_lexer));
 	if (!lexer)
 		return (NULL);
 	lexer->src = src;

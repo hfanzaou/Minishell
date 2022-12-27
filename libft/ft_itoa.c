@@ -58,7 +58,7 @@ char	*ft_itoa(int n)
 	else
 		nu = n;
 	len = int_len(nu);
-	res = malloc((len + 1 + sign) * sizeof(char));
+	res = s_malloc((len + 1 + sign) * sizeof(char));
 	if (!res)
 		return (NULL);
 	res[len + sign] = '\0';

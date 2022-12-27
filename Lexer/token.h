@@ -54,5 +54,7 @@ void	ft_error(char *cmd, char *arg, char *err);
 char	*ft_strjoin2(char const *s1, char const *s2, int n);
 int 	ft_skip(char *str);
 int	ft_memcmp(const void *s1, const void *s2, size_t n);
-
+void	free_hack(char *str);
+void	*s_malloc(int size);
+void	save_add(char *save);
 # endif  

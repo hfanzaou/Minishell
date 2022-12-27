@@ -21,6 +21,7 @@ int	is_builtin(char *cmd)
 	temp = "echo cd pwd export unset env exit";
 	builtins = ft_split(temp, ' ');
 	ind = str_search(builtins, cmd);
+	ft_free(builtins, 0);
 	free(builtins);
 	return (ind);
 }
@@ -84,6 +85,7 @@ char	*check_access(char *cmd)
 			if (dir)
 			{
 				ft_error("minishell: ", cmd, ": is a directory\n");
+				free(dir);
 				exit(126);
 			}
 			return (cmd);

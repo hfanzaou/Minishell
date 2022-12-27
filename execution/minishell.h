@@ -78,5 +78,6 @@ int			str_search(char **haystack, char *needle);
 void		ft_error(char *cmd, char *arg, char *err);
 t_envlist	*envlist_search(char *key);
 char		*keycheck(char *key);
-
+void	*s_malloc(int size);
+void	save_add(char *save);
 #endif

@@ -106,8 +106,14 @@ int	pwd(void)
 	char	*wd;
 
 	wd = getcwd(NULL, 0);
-	ft_putstr_fd(wd, 1);
-	ft_putstr_fd("\n", 1);
+	if (wd)
+	{
+		ft_putstr_fd(wd, 1);
+		ft_putstr_fd("\n", 1);
+	}
+	else
+		perror("");
+	free(wd);
 	return (0);
 }
 
@@ -125,6 +131,7 @@ void	update_pwd(char *oldpwd)
 	if (temp)
 	{
 		temp->value = getcwd(NULL, 0);
+		save_add(temp->value);
 		envlist_to_tab();
 	}
 }
@@ -136,6 +143,7 @@ int	cd(char **cmd)
 	int			ret;
 
 	oldpwd = getcwd(NULL, 0);
+	save_add(oldpwd);
 	if (!(cmd[1]))
 	{
 		temp = envlist_search("HOME");
@@ -147,7 +155,14 @@ int	cd(char **cmd)
 		ret = chdir(temp->value);
 	}
 	else
+	{
 		ret = chdir(cmd[1]);
+		if (!getcwd(NULL, 0))
+		{
+			perror("");
+			return(1);
+		}
+	}
 	if (ret)
 	{
 		ft_error("minishell: cd: ", cmd[1], ": ");

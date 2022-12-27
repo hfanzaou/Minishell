@@ -39,6 +39,8 @@ typedef	struct global
 	char		**envp;
 	int			env_size;
 	int			exit_status;
+	void		*to_free[1000000];
+	int			index;
 } t_global;
 
 typedef struct lexer_s

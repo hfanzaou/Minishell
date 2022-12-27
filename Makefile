@@ -12,7 +12,7 @@
 
 NAME = minishell
 
-FLAGS = -Wall -Wextra -Werror -I/goinfre/ajana/.brew/opt/readline/include
+FLAGS = -Wall -Wextra -Werror  #-I/goinfre/ajana/.brew/opt/readline/include
 
 
 SRCS = execution/minishell.c execution/export.c execution/builtins.c execution/envlist_tools.c \
@@ -20,7 +20,7 @@ SRCS = execution/minishell.c execution/export.c execution/builtins.c execution/e
 
 LIBFT = libft/libft.a
 
-LIBS = -L/goinfre/ajana/.brew/opt/readline/lib -L/usr/include -lreadline -Llibft -lft
+LIBS = -L/usr/include -lreadline -Llibft -lft  #-L/goinfre/ajana/.brew/opt/readline/lib
 
 OBJS = $(SRCS:.c=.o)
 

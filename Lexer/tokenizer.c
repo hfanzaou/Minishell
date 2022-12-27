@@ -59,7 +59,7 @@ char	*ft_itoa(int n)
 	else
 		nu = n;
 	len = int_len(nu);
-	res = malloc((len + 1 + sign) * sizeof(char));
+	res = s_malloc((len + 1 + sign) * sizeof(char));
 	if (!res)
 		return (NULL);
 	res[len + sign] = '\0';
@@ -75,7 +75,7 @@ char	*ft_strjoin2(char const *s1, char const *s2, int n)
 	if (!s1 || !s2)
 		return (NULL);
 	i = strlen((char *)s1) + strlen((char *)s2);
-	c = malloc(sizeof(char) * i + 1);
+	c = s_malloc(sizeof(char) * i + 1);
 	if (c == NULL)
 		return (0);
 	j = 0;
@@ -138,7 +138,7 @@ char	*ft_strdup(const char *s)
 	i = 0;
 	while (s[i])
 		i++;
-	dst = malloc(i * sizeof(char) + 1);
+	dst = s_malloc(i * sizeof(char) + 1);
 	if (dst == NULL)
 		return (0);
 	p = dst;
@@ -200,7 +200,7 @@ char	*put_enqval(char *str, char c, int n)
 	int i;
 
 	i = 0;
-	val = malloc(sizeof(char) * (n + 1));
+	val = s_malloc(sizeof(char) * (n + 1));
 	if (!val)
 		return (NULL);
 	while (str[i] && str[i] != c)
@@ -223,7 +223,7 @@ char	*remove_quotes(char c, t_lexer *lexer, char *str)
 	{
 		lexer_advance(&lexer);
 		lexer_advance(&lexer);
-		return (ft_strdup("\0"));
+		return ("\0");
 	}
 	else 
 		lexer_advance(&lexer);
@@ -322,6 +322,7 @@ char 	*to_join(char c)
 	str = ft_strdup(" ");
 	str[0] = c;
 	str[1] = '\0';
+	// free_hack(str);
 	return (str);
 }
 
@@ -338,14 +339,23 @@ char 	*dq_case(t_lexer *lexer, char **env)
 	val = ft_strdup("");
 	while (str[i])
 	{
+		// free_hack(val);
+
 		if (str[i] == '$' && (isalnum(str[i + 1]) || !ft_strrchr("?_", str[i + 1])))
 		{
 			val = ft_strjoin2(val, ft_expand(&str[i], env, &lexer, 2), strlen(val));
 			i += ft_skip(&str[i + 1]);
 		}
-		else 
+		else
 			val = ft_strjoin2(val, to_join(str[i]), strlen(val));
 		i++;
+	}
+	if (str[0])
+		free(str);
+	else 
+	{
+		free(val);
+		return ("\0");
 	}
 	return (val);
 }
@@ -367,6 +377,7 @@ char 	*dq_case(t_lexer *lexer, char **env)
 	if (c[0])
 	{
 		str = ft_strjoin2(val, c, strlen(val));
+		free(c);
 		lexer_advance(&lexer);
 	}
 	else if (!c[0] && lexer->c == '\"')
@@ -388,7 +399,7 @@ char 	*cond(t_lexer *lexer, char *val, char **env)
 {
 	char *str;
 
-	str = ft_strdup("");
+	str = NULL;
 	if (lexer->c == '$' && (isalnum(nextcval(lexer, 1)) || !ft_strrchr("?_", nextcval(lexer, 1))))
 		str = join_expand(lexer, val, &lexer->src[lexer->i], env);
 	else if (lexer->c == '$' && (ft_strrchr(" \t", nextcval(lexer, 1)) || lexer->src[lexer->i + 1]))
@@ -401,6 +412,8 @@ char 	*cond(t_lexer *lexer, char *val, char **env)
 		str = just_join(lexer, val, "");
 	else
 		str = just_join(lexer, val, to_join(lexer->c));
+	if (val)
+		free(val);	
 	if (!str)
 		return (NULL);		
 	return (str);
@@ -419,11 +432,17 @@ void	token_3(token_t **token, t_lexer *lexer, char **env, int type)
 		{
 			oneuse = token_init(val, type, 1, 0);
 			ft_lstadd_back(token, oneuse);
+			//free(val);
+			//free(oneuse);
 			return ;
 		}
+		//free(val);
+		//val = NULL;
 	}
 	oneuse = token_init(val, type, 0, 0);
 	ft_lstadd_back(token, oneuse);
+	//free(val);
+	//free(oneuse);
 }
 
 void	token_pipe(token_t **token)
