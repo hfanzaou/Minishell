@@ -76,7 +76,6 @@ char	**ft_split(const char *s, char c)
 		while (*s == c)
 			s++;
 		len = word_len(s, c);
-		free(res[i]);
 		res[i] = malloc((len + 1) * sizeof(char));
 		if (!res[i])
 			return (ft_free(&res[i], i));

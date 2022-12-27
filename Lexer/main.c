@@ -98,7 +98,7 @@ int main(int ac, char **av, char **env)
 	t_lexer *lexer;
 	token_t *token;
 	t_cmd *cmd;
-	// signal(SIGINT, handler);
+	signal(SIGINT, handler);
 	put_env(env);
 	envlist_init();
 	while ((line = readline("minishell>>")))
