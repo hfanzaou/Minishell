@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/27 18:59:50 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/27 19:47:52 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,12 @@ char	*relative_path(char *cmd)
 		path = ft_strjoin(*temp, cmd);
 		if (!access(path, F_OK | R_OK | X_OK))
 		{
-			ft_free(temp);
+			ft_free(temp, 0);
 			return (path);
 		}
 		temp++;
 	}
-	ft_free(temp);
+	ft_free(temp, 0);
 	free(path);
 	return (NULL);
 }
@@ -188,6 +188,7 @@ void	excute(t_cmd *cmd_lst)
 		if (cmd_lst->next)
 			open_pipe(cmd_lst);
 		pid = child(cmd_lst);
+		signal(SIGINT, SIG_IGN);
 		if (cmd_lst->out != 1)
 			close(cmd_lst->out);
 		if (cmd_lst->in != 0)
