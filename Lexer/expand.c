@@ -9,7 +9,7 @@
 /*   Updated: 2022/12/28 04:54:09 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "lexer.h"
+
 #include "token.h"
 
 char	*remove_spaces(char *str)

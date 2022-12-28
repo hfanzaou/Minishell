@@ -17,7 +17,8 @@ FLAGS = -Wall -Wextra -Werror #-fsanitize=address  #-I/goinfre/ajana/.brew/opt/r
 
 SRCS = execution/execution.c execution/builtins_export.c execution/builtins.c execution/envlist_tools.c \
 	execution/tools.c execution/builtins_2.c  execution/builtins_cd.c Lexer/tokenizer.c Lexer/main.c Lexer/Lexer.c Lexer/token.c Lexer/parse.c \
-	Lexer/utils.c Lexer/expand.c Lexer/ft_itoa2.c Lexer/joining.c Lexer/removequo.c
+	Lexer/utils.c Lexer/expand.c Lexer/ft_itoa2.c Lexer/joining.c Lexer/removequo.c Lexer/dollar.c Lexer/utils2.c Lexer/token_redpipe.c \
+	Lexer/parse_utils.c Lexer/herdoc.c Lexer/if_access.c Lexer/ambiguous.c
 
 LIBFT = libft/libft.a
 

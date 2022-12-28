@@ -12,18 +12,20 @@
 
 #ifndef PARSE_H
 # define PARSE_H
-# include "lexer.h"
 # include "token.h"
 
-typedef struct s_cmd
-{
-	char **cmd;
-	int in;
-	int out;
-	int fd;
-	int err;
-	struct s_cmd *next;
-}	t_cmd;
+void	ft_lstadd_backc(t_cmd **lst, t_cmd *new);
+t_cmd	*ft_lstlastc(t_cmd *lst);
+char	**fillcargs(char **cargs, char *val);
+void	ft_putstr_fd(char *s, int fd);
+void	printcmd(t_cmd *cmd);
+int		ft_herdoc(char *eof, int here);
+int 	access_tokens(token_t *token);
+int		ft_access_cond(token_t **token, char ***cargs);
+int		if_access(token_t **token, char ***cargs);
+int		what_fd(token_t *token);
+int		what_type(token_t *token);
+int 	if_ambiguous(token_t *token);
+char	**to_cargs(char  **cargs, char *val);
 
-t_cmd *ft_parse(token_t *token);
 # endif

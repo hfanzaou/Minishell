@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "token.h"
 
 void	*s_malloc(int size)
 {
@@ -133,7 +133,12 @@ int main(int ac, char **av, char **env)
 		lexer = ft_lexer(line);
 		token = tokenizer(lexer);
 		cmd = ft_parse(token, cmd);
-		if (!cmd->cmd && !cmd->next)
+		if (!cmd)
+		{
+			global.exit_status = 256;
+			continue;
+		}
+		if (cmd && !cmd->cmd && !cmd->next)
 		{
 			enter(lexer);
 			continue ;
