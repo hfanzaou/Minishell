@@ -12,7 +12,7 @@
 
 NAME = minishell
 
-FLAGS = -Wall -Wextra -Werror #-fsanitize=address  #-I/goinfre/ajana/.brew/opt/readline/include
+FLAGS = -Wall -Wextra -Werror -fsanitize=address  #-I/goinfre/ajana/.brew/opt/readline/include
 
 
 SRCS = execution/execution.c execution/builtins_export.c execution/builtins.c execution/envlist_tools.c \

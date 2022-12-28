@@ -12,27 +12,29 @@
 
 #include "execution.h"
 
-void	envlist_to_tab(void)
+char	**envlist_to_tab(void)
 {
 	t_envlist	*temp;
 	char		*join;
 	int			i;
+	char		**env;
 
 	i = 0;
-	temp = global.envlist;
-	global.envp = s_malloc((global.env_size + 1) * sizeof(char *));
+	temp = g_global.envlist;
+	env = s_malloc((g_global.env_size + 1) * sizeof(char *));
 	while (temp)
 	{
 		if (temp->value)
 		{
 			join = ft_strjoin(temp->key, temp->sep);
-			(global.envp)[i] = ft_strjoin(join, temp->value);
+			env[i] = ft_strjoin(join, temp->value);
 			free(join);
 		}
 		temp = temp->next;
 		i++;
 	}
-	(global.envp)[i] = NULL;
+	env[i] = NULL;
+	return (env);
 }
 
 void	ft_error(char *cmd, char *arg, char *err)

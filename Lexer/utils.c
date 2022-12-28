@@ -44,7 +44,7 @@ int	ft_strrchr(char *str, char c)
 {
 	int	i;
 
-	i = 0;	
+	i = 0;
 	while (str[i])
 	{
 		if (str[i] == c)
@@ -93,12 +93,12 @@ char	*ft_strdup2(const char *s)
 	return (p);
 }
 
-int 	ft_skip(char *str)
+int	ft_skip(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] && (isalnum(str[i]) || !ft_strrchr("?_", str[i])))
 		i++;
-	return (i);	
+	return (i);
 }

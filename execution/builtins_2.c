@@ -91,7 +91,7 @@ int	ft_exit(char **cmd)
 	i = 0;
 	ft_putstr_fd("exit\n", 2);
 	if (!(cmd[i + 1]))
-		exit (global.exit_status);
+		exit (g_global.exit_status);
 	check_arg(cmd[1]);
 	if (*(cmd[2]))
 	{

@@ -15,12 +15,13 @@
 # include <stdlib.h>
 # include <dirent.h>
 # include "lexer.h"
+
 typedef struct token_s
 {
-	char *value;
-	int		err;
-	int		here;
-	struct token_s *next;
+	char			*value;
+	int				err;
+	int				here;
+	struct token_s	*next;
 	enum
 	{
 		STRING,
@@ -35,43 +36,43 @@ typedef struct token_s
 		EXIT,
 		EXDOLLAR,
 		END
-	} type;
-}	token_t;
+	}				e_type;
+}					t_token;
 
 t_cmd	*init_cmd(char **cargs, int in, int out, int flag);
-void	printf_token(token_t *token);
-token_t	*tokenizer(t_lexer *lexer);
-token_t	*token_init(char *val, int type, int flag, int here);
-t_cmd	*ft_parse(token_t *token, t_cmd *cmd);
+void	printf_token(t_token *token);
+t_token	*tokenizer(t_lexer *lexer);
+t_token	*token_init(char *val, int type, int flag, int here);
+t_cmd	*ft_parse(t_token *token, t_cmd *cmd);
 char	*ft_realloc(char *str, int j);
 int		ft_strcmp(char *s1, char *s2);
-char	*ft_expand(char *val, char **env, t_lexer **lexer, int j);
+char	*ft_expand(char *val, t_lexer **lexer, int j);
 char	*ft_strdup2(const char *s);
 int		ft_strrchr(char *str, char c);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_error(char *cmd, char *arg, char *err);
 char	*ft_strjoin2(char const *s1, char const *s2, int n);
-int 	ft_skip(char *str);
+int		ft_skip(char *str);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 void	free_hack(char *str);
 void	*s_malloc(int size);
 void	save_add(char *save);
-char	*ft_expand(char *val, char **env, t_lexer **lexer, int j);
 char	*ft_itoa2(int n);
 int		ft_isalnum(int an);
 size_t	ft_strlen(const char *s);
 char	*just_join(t_lexer *lexer, char *val, char *c);
-char	*join_expand(t_lexer *lexer, char *val, char *val2, char **env);
-char 	*to_join(char c);
+char	*join_expand(t_lexer *lexer, char *val, char *val2);
+char	*to_join(char c);
 char	*remove_quotes(char c, t_lexer *lexer, char *str);
-void	expand_exdollar(token_t **token, t_lexer *lexer, char **env);
+void	expand_exdollar(t_token **token, t_lexer *lexer);
 int		executedollar(t_lexer *lexer);
-void	ft_lstadd_back(token_t **lst, token_t *new);
-token_t	*ft_lstlast(token_t *lst);
-void	printf_token(token_t *token);
-void	token_redin(t_lexer *lexer, token_t **token, int i);
-void	token_redout(token_t **token, int i);
-void	token_pipe(token_t **token);
-int 	what_redt(char c, char nc);
-void	specialsymbols(t_lexer *lexer, token_t **token, int type);
-# endif  
+void	ft_lstadd_back(t_token **lst, t_token *new);
+t_token	*ft_lstlast(t_token *lst);
+void	printf_token(t_token *token);
+void	token_redin(t_lexer *lexer, t_token **token, int i);
+void	token_redout(t_token **token, int i);
+void	token_pipe(t_token **token);
+int		what_redt(char c, char nc);
+void	specialsymbols(t_lexer *lexer, t_token **token, int type);
+
+#endif  

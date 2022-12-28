@@ -41,7 +41,7 @@ typedef struct envlist
 	struct envlist	*next;
 }	t_envlist;
 
-typedef struct global
+typedef struct g_global
 {
 	t_envlist	*envlist;
 	char		**envp;
@@ -58,7 +58,7 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-t_global	global;
+t_global	g_global;
 
 /******builtins*****/
 int	echo(char **cmd);
@@ -76,7 +76,7 @@ t_envlist	*envlist_new(char *str);
 t_envlist	*envlist_search(char *key);
 void		envlist_addback(t_envlist **head, t_envlist *new);
 void		envlist_delete(char *key);
-void		envlist_to_tab(void);
+char		**envlist_to_tab(void);
 
 /****general_tools***/
 int			ft_strcmp(char *s1, char *s2);

@@ -71,7 +71,7 @@ int	child(t_cmd *cmd_lst)
 
 	if (!(cmd_lst->cmd))
 	{
-		global.exit_status = 0;
+		g_global.exit_status = 0;
 		return(0);
 	}
 	pid = fork();
@@ -85,7 +85,7 @@ int	child(t_cmd *cmd_lst)
 		path = check_access(*(cmd_lst->cmd));
 		if (path)
 		{
-			execve(path, cmd_lst->cmd, global.envp);
+			execve(path, cmd_lst->cmd, envlist_to_tab());
 			perror("execve");
 			exit(1);
 		}
@@ -107,7 +107,7 @@ void	simple_cmd(t_cmd *cmd_lst)
 
 	if (!(cmd_lst->cmd))
 	{
-		global.exit_status = 0;
+		g_global.exit_status = 0;
 		return ;
 	}
 	ind = is_builtin(*(cmd_lst->cmd));
@@ -116,7 +116,7 @@ void	simple_cmd(t_cmd *cmd_lst)
 		tmpin = dup(0);
 		tmpout = dup(1);
 		ft_dup(cmd_lst);
-		global.exit_status = execute_builtin(cmd_lst, ind);
+		g_global.exit_status = execute_builtin(cmd_lst, ind);
 		dup2(tmpin, 0);
 		dup2(tmpout, 1);
 		close(tmpin);
@@ -125,7 +125,7 @@ void	simple_cmd(t_cmd *cmd_lst)
 	else
 	{
 		pid = child(cmd_lst);
-		waitpid(pid, &(global.exit_status), 0);
+		waitpid(pid, &(g_global.exit_status), 0);
 	}
 }
 
@@ -170,6 +170,6 @@ void	excute(t_cmd *cmd_lst)
 		cmd_lst = cmd_lst->next;
 	}
 	if (pid)
-		waitpid(pid, &(global.exit_status), 0);
+		waitpid(pid, &(g_global.exit_status), 0);
 	while(wait(NULL) != -1);
 }

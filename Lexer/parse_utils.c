@@ -11,31 +11,31 @@
 /* ************************************************************************** */
 #include "parse.h"
 
-int		what_type(token_t *token)
+int	what_type(t_token *token)
 {
-	if (token->type == RED_OUT || token->type == RED_OUT2)
+	if (token->e_type == RED_OUT || token->e_type == RED_OUT2)
 		return (1);
-	else 
-		return (0);	
+	else
+		return (0);
 }
 
-int		what_fd(token_t *token)
+int	what_fd(t_token *token)
 {
-	int fd;
+	int	fd;
 
 	fd = -1;
-	if (token->type == RED_OUT)
+	if (token->e_type == RED_OUT)
 		fd = open(token->next->value, O_CREAT | O_TRUNC | O_WRONLY, 0644);
-	else if (token->type == RED_IN)
+	else if (token->e_type == RED_IN)
 		fd = open(token->next->value, O_RDONLY);
-	else if (token->type == RED_OUT2)
+	else if (token->e_type == RED_OUT2)
 		fd = open(token->next->value, O_WRONLY | O_APPEND | O_CREAT, 0644);
-	return (fd);	
+	return (fd);
 }
 
 void	printcmd(t_cmd *cmd)
 {
-	int i;
+	int	i;
 
 	while (cmd)
 	{
@@ -50,7 +50,7 @@ void	printcmd(t_cmd *cmd)
 	}
 }
 
-char  **to_cargs(char  **cargs, char *val)
+char	**to_cargs(char **cargs, char *val)
 {
 	if (!cargs)
 	{
@@ -60,17 +60,17 @@ char  **to_cargs(char  **cargs, char *val)
 	}
 	else
 		cargs = fillcargs(cargs, val);
-	return (cargs);	
+	return (cargs);
 }
 
-
-char **fillcargs(char **cargs, char *val)
+char	**fillcargs(char **cargs, char *val)
 {
-	char **tmp;
-	int i;
+	char	**tmp;
+	int		i;
+
 	i = 0;
 	while (cargs[i])
-		i++;		
+		i++;
 	tmp = (char **)s_malloc(sizeof(char *) * (i + 2));
 	i = 0;
 	while (cargs[i])

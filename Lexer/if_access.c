@@ -12,33 +12,34 @@
 
 #include "parse.h"
 
-int	access_errors(token_t **token, char	***cargs, int f)
+int	access_errors(t_token **token, char	***cargs, int f)
 {
-	int fd;
+	int	fd;
 
 	fd = what_type(*token);
-	global.exit_status = 256;
-	while ((*token)->next && (*token)->next->type != PIPE)
+	g_global.exit_status = 256;
+	while ((*token)->next && (*token)->next->e_type != PIPE)
 		*token = (*token)->next;
-	if (f)	
+	if (f)
 		*cargs = NULL;
-	return (fd);	
+	return (fd);
 }
 
-int		if_access(token_t **token, char ***cargs)
+int	if_access(t_token **token, char ***cargs)
 {
-	DIR *dir;
-	int fd;
+	DIR	*dir;
+	int	fd;
+
 	fd = what_type(*token);
 	if (if_ambiguous((*token)->next))
-		return (access_errors(token, cargs, 1));	
+		return (access_errors(token, cargs, 1));
 	dir = opendir((*token)->next->value);
 	if (dir)
 	{
 		free(dir);
 		ft_error("minishell :", (*token)->next->value, ": is a directory");
-		return (access_errors(token, cargs, 0));	
-	}	
+		return (access_errors(token, cargs, 0));
+	}
 	else
 		fd = what_fd(*token);
 	if (access((*token)->next->value, W_OK) != 0)
@@ -50,32 +51,32 @@ int		if_access(token_t **token, char ***cargs)
 	return (fd);
 }
 
-int		ft_access_cond(token_t **token, char ***cargs)
+int	ft_access_cond(t_token **token, char ***cargs)
 {
-	int fd;
+	int	fd;
 
 	fd = what_type(*token);
-	if ((*token)->type == RED_OUT)
+	if ((*token)->e_type == RED_OUT)
 		fd = if_access(token, cargs);
-	else if ((*token)->type == RED_IN)
+	else if ((*token)->e_type == RED_IN)
 		fd = if_access(token, cargs);
-	else if ((*token)->type == RED_OUT2)
+	else if ((*token)->e_type == RED_OUT2)
 		fd = if_access(token, cargs);
-	else if ((*token)->type == RED_IN2)
+	else if ((*token)->e_type == RED_IN2)
 		fd = ft_herdoc((*token)->next->value, (*token)->here);
 	(*token) = (*token)->next;
 	return (fd);
 }
 
-int 	access_tokens(token_t *token)
+int	access_tokens(t_token *token)
 {
-	if (token->type == RED_OUT)
+	if (token->e_type == RED_OUT)
 		return (2);
-	else if (token->type == RED_IN)
+	else if (token->e_type == RED_IN)
 		return (1);
-	else if (token->type == RED_OUT2)
+	else if (token->e_type == RED_OUT2)
 		return (2);
-	else if (token->type == RED_IN2)
+	else if (token->e_type == RED_IN2)
 		return (1);
-	return (0);				
+	return (0);
 }

@@ -13,7 +13,7 @@
 #include "token.h"
 #include "lexer.h"
 
-void	specialsymbols(t_lexer *lexer, token_t **token, int type)
+void	specialsymbols(t_lexer *lexer, t_token **token, int type)
 {
 	lexer_advance(&lexer);
 	if (type == PIPE)
@@ -31,10 +31,10 @@ void	specialsymbols(t_lexer *lexer, token_t **token, int type)
 	else if (type == RED_OUT)
 		token_redout(token, 0);
 	else if (type == RED_IN)
-		token_redin(lexer, token, 0);	
+		token_redin(lexer, token, 0);
 }
 
-int 	what_redt(char c, char nc)
+int	what_redt(char c, char nc)
 {
 	if (c == '|')
 		return (PIPE);
@@ -46,28 +46,27 @@ int 	what_redt(char c, char nc)
 		return (RED_OUT);
 	else if (c == '<')
 		return (RED_IN);
-	return (0);				
+	return (0);
 }
 
-void	token_pipe(token_t **token)
+void	token_pipe(t_token **token)
 {
-	token_t *oneuse;
-	char *val;
-	int type;
+	t_token	*oneuse;
+	char	*val;
+	int		type;
 
 	type = PIPE;
 	oneuse = NULL;
 	val = ft_strdup2("|");
 	oneuse = token_init(val, type, 0, 0);
 	ft_lstadd_back(token, oneuse);
-
 }
 
-void	token_redout(token_t **token, int i)
+void	token_redout(t_token **token, int i)
 {
-	token_t *oneuse;
-	char *val;
-	int type;
+	t_token	*oneuse;
+	char	*val;
+	int		type;
 
 	type = RED_OUT;
 	oneuse = NULL;
@@ -77,18 +76,18 @@ void	token_redout(token_t **token, int i)
 		type = RED_OUT2;
 	}
 	else
-		val = ft_strdup2(">");	
+		val = ft_strdup2(">");
 	oneuse = token_init(val, type, 0, 0);
 	ft_lstadd_back(token, oneuse);
 }
 
-void	token_redin(t_lexer *lexer, token_t **token, int i)
+void	token_redin(t_lexer *lexer, t_token **token, int i)
 {
-	token_t *oneuse;
-	char *val;
-	int type;
-	int j;
-	int f;
+	t_token	*oneuse;
+	char	*val;
+	int		type;
+	int		j;
+	int		f;
 
 	f = 0;
 	j = 0;
@@ -97,11 +96,11 @@ void	token_redin(t_lexer *lexer, token_t **token, int i)
 	if (i == 1)
 	{
 		val = ft_strdup2("<<");
-		while (lexer->src[lexer->i + j] && lexer->src[lexer->i + j] != '\'' 
-				&& lexer->src[lexer->i + j] != '\"')
+		while (lexer->src[lexer->i + j] && lexer->src[lexer->i + j] != '\''
+			&& lexer->src[lexer->i + j] != '\"')
 			j++;
-		if ((lexer->src[lexer->i + j] && (lexer->src[lexer->i + j] == '\'' 
-				|| lexer->src[lexer->i + j] == '\"')))
+		if ((lexer->src[lexer->i + j] && (lexer->src[lexer->i + j] == '\''
+					|| lexer->src[lexer->i + j] == '\"')))
 			f = 1;
 		type = RED_IN2;
 	}

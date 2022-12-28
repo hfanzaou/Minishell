@@ -12,9 +12,9 @@
 
 #include "parse.h"
 
-int 	ft_puterror(char *val)
+int	ft_puterror(char *val)
 {
-	global.exit_status = 256;
+	g_global.exit_status = 256;
 	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(val, 2);
 	ft_putstr_fd(": ambiguous redirect\n", 2);
@@ -25,7 +25,7 @@ char	*to_dollar(char *str)
 {
 	t_envlist	*temp;
 
-	temp = global.envlist;
+	temp = g_global.envlist;
 	while (temp)
 	{
 		if (!ft_strcmp(temp->value, str))
@@ -35,15 +35,15 @@ char	*to_dollar(char *str)
 	return ("\0");
 }
 
-int 	if_ambiguous(token_t *token)
+int	if_ambiguous(t_token *token)
 {
-	int i;
-	token_t *head;
-	char *to_dol;
+	int		i;
+	t_token	*head;
+	char	*to_dol;
 
 	head = token;
 	i = 0;
-	if (head->type == DOLLAR)
+	if (head->e_type == DOLLAR)
 	{
 		to_dol = ft_strjoin2("$", to_dollar(token->value), 1);
 		if (!head->value[0])
@@ -52,7 +52,7 @@ int 	if_ambiguous(token_t *token)
 		{
 			if (head->value[i] == ' ' || head->value[i] == '\t')
 				return (ft_puterror(to_dol));
-			i++;	
+			i++;
 		}	
 	}
 	return (0);

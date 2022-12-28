@@ -11,19 +11,19 @@
 /* ************************************************************************** */
 #include  "token.h"
 
-void printf_token(token_t *token)
+void	printf_token(t_token *token)
 {
 	printf("In token\n");
 	while (token)
 	{
-		printf("type  = %d\n", token->type);
+		printf("type  = %d\n", token->e_type);
 		printf("value = %s\n", token->value);
 		printf("flag = %d\n", token->err);
 		token = token->next;
 	}
 }
 
-token_t	*ft_lstlast(token_t *lst)
+t_token	*ft_lstlast(t_token *lst)
 {
 	if (lst)
 	{
@@ -34,7 +34,7 @@ token_t	*ft_lstlast(token_t *lst)
 	return (0);
 }
 
-void	ft_lstadd_back(token_t **lst, token_t *new)
+void	ft_lstadd_back(t_token **lst, t_token *new)
 {
 	if (!*lst)
 		*lst = new;

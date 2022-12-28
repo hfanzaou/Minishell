@@ -10,58 +10,56 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "token.h"
 #include "parse.h"
-#include <string.h>
 
-
-int is_error(token_t *token)
+int	is_error(t_token *token)
 {
 	ft_putstr_fd("minishell: syntax error near unexpected token `", 2);
 	if (token)
 		ft_putstr_fd(token->value, 2);
-	else 
-		ft_putstr_fd("newline", 2);	
+	else
+		ft_putstr_fd("newline", 2);
 	ft_putstr_fd("'\n", 2);
 	return (1);
 }
 
-int	check_if(token_t *next, int pipe)
+int	check_if(t_token *next, int pipe)
 {	
 	if (!next)
 		return (0);
-	if (next->type == PIPE)
+	if (next->e_type == PIPE)
 		return (0);
-	else if (next->type == RED_OUT && pipe == 0)
+	else if (next->e_type == RED_OUT && pipe == 0)
 		return (0);
-	else if (next->type == RED_IN && pipe == 0)
+	else if (next->e_type == RED_IN && pipe == 0)
 		return (0);
-	else if (next->type == RED_OUT2 && pipe == 0)
+	else if (next->e_type == RED_OUT2 && pipe == 0)
 		return (0);
-	else if (next->type == RED_IN2 && pipe == 0)
+	else if (next->e_type == RED_IN2 && pipe == 0)
 		return (0);
-	return (1);					
+	return (1);
 }
 
-int if_error(token_t *token)
+int	if_error(t_token *token)
 {
-	token_t *head;
-	int i;
+	t_token	*head;
+	int		i;
+
 	head = token;
 	i = 0;
 	while (head)
 	{
-		if (head->type == PIPE && !check_if(head->next, 1))
+		if (head->e_type == PIPE && !check_if(head->next, 1))
 			i = 1;
-		else if (head->type == RED_OUT && !check_if(head->next, 0))
+		else if (head->e_type == RED_OUT && !check_if(head->next, 0))
 			i = 1;
-		else if (head->type == RED_IN2 && !check_if(head->next, 0))
+		else if (head->e_type == RED_IN2 && !check_if(head->next, 0))
 			i = 1;
-		else if (head->type == RED_OUT2 && !check_if(head->next, 0))
+		else if (head->e_type == RED_OUT2 && !check_if(head->next, 0))
 			i = 1;
 		if (i == 1)
 			return (is_error(head->next));
-		head = head->next;					
+		head = head->next;
 	}
 	return (0);
 }
@@ -77,15 +75,13 @@ char	**new_cmd(t_cmd **cmd, int *in, int *out, char **cargs)
 	return (NULL);
 }
 
-t_cmd	*ft_parse(token_t *token, t_cmd *cmd)
+t_cmd	*ft_parse(t_token *token, t_cmd *cmd)
 {
-	char **cargs;
-	int in;
-	int out;
+	t_cmd	tmp;
 
-	in = 0;
-	out = 1;
-	cargs = NULL;
+	tmp.cmd = NULL;
+	tmp.in = 0;
+	tmp.out = 1;
 	if (if_error(token))
 		return (NULL);
 	while (token)
@@ -93,16 +89,16 @@ t_cmd	*ft_parse(token_t *token, t_cmd *cmd)
 		if (token->err)
 			return (NULL);
 		else if (access_tokens(token) == 2)
-			out = ft_access_cond(&token, &cargs);
+			tmp.out = ft_access_cond(&token, &tmp.cmd);
 		else if (access_tokens(token) == 1)
-			in = ft_access_cond(&token, &cargs);	
-		else if (token->type == PIPE)
-			cargs = new_cmd(&cmd, &in, &out, cargs);
+			tmp.in = ft_access_cond(&token, &tmp.cmd);
+		else if (token->e_type == PIPE)
+			tmp.cmd = new_cmd(&cmd, &tmp.in, &tmp.out, tmp.cmd);
 		else
-			cargs = to_cargs(cargs, token->value);
-		if (token)	
+			tmp.cmd = to_cargs(tmp.cmd, token->value);
+		if (token)
 			token = token->next;
 	}
-	new_cmd(&cmd, &in, &out, cargs);
+	new_cmd(&cmd, &tmp.in, &tmp.out, tmp.cmd);
 	return (cmd);
 }

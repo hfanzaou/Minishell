@@ -17,7 +17,7 @@ void	envlist_delete(char *key)
 	t_envlist	*curr;
 	t_envlist	*prev;
 
-	curr = global.envlist;
+	curr = g_global.envlist;
 	prev = curr; 
 	while (curr && ft_strcmp(key, curr->key))
 	{
@@ -28,12 +28,12 @@ void	envlist_delete(char *key)
 		return ;
 	if (prev == curr)
 	{
-		global.envlist = global.envlist->next;
+		g_global.envlist = g_global.envlist->next;
 		// curr = curr->next;
 		return ;
 	}
 	prev->next = curr->next;
-	(global.env_size)--;
+	(g_global.env_size)--;
 	free(curr);
 	curr = NULL;
 }
@@ -104,11 +104,11 @@ t_envlist	*envlist_new(char *str)
 	return (new);
 }
 
-void	envlist_init(void)
+void	envlist_init(char **env)
 {
 	int	i;
 
 	i = 0;
-	while ((global.envp)[i])
-		envlist_addback(&global.envlist, envlist_new((global.envp)[i++]));
+	while (env[i])
+		envlist_addback(&g_global.envlist, envlist_new(env[i++]));
 }

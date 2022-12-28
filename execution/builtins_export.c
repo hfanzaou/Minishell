@@ -16,7 +16,7 @@ void	print_envlist(void)
 {
 	t_envlist	*temp;
 
-	temp = global.envlist;
+	temp = g_global.envlist;
 	while (temp)
 	{
 		ft_putstr_fd("declare -x ", 1);
@@ -37,7 +37,7 @@ t_envlist	*envlist_search(char *key)
 {
 	t_envlist	*temp;
 
-	temp = global.envlist;
+	temp = g_global.envlist;
 	while (temp)
 	{
 		if (!ft_strcmp(temp->key, key))
@@ -56,11 +56,11 @@ int	replace_value(t_envlist *needle)
 	{
 		free(needle->key);
 		if (*needle->sep == '+' && (needle->value))
-			temp->value = ft_strjoin2(temp->value, needle->value, ft_strlen(temp->value));
+			temp->value = ft_strjoin(temp->value, needle->value);
 		else if (needle->value)
 			temp->value = needle->value;
 		temp->sep = "=";
-		envlist_to_tab();
+		//envlist_to_tab();
 		return (0);
 	}
 	return (1);
@@ -87,9 +87,9 @@ int	add_to_env(char **args)
 		if (replace_value(temp))
 		{
 			temp->sep = "=";
-			(global.env_size)++;
-			envlist_addback(&(global.envlist), temp);
-			envlist_to_tab();
+			(g_global.env_size)++;
+			envlist_addback(&(g_global.envlist), temp);
+			//envlist_to_tab();
 		}
 		else
 			free(temp);
