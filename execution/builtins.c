@@ -6,24 +6,48 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 23:37:30 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 04:04:09 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "execution.h"
 
-void	ft_error(char *cmd, char *arg, char *err)
+int	is_builtin(char *cmd)
 {
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(arg ,2);
-	// if (arg)
-	// 	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(err, 2);
+	char	**builtins;
+	char	*temp;
+	int		ind;
+
+	temp = "echo cd pwd export unset env exit";
+	builtins = ft_split(temp, ' ');
+	ind = str_search(builtins, cmd);
+	ft_free(builtins, 0);
+	free(builtins);
+	return (ind);
+}
+
+int	execute_builtin(t_cmd *cmd_lst, int ind)
+{
+	if (ind == e_echo)
+		return (echo(cmd_lst->cmd));
+	else if (ind == e_cd)
+		return (cd(cmd_lst->cmd));
+	else if (ind == e_pwd)
+		return (pwd());
+	else if (ind == e_export)
+		return (export(cmd_lst->cmd));
+	else if (ind == e_unset)
+		return (unset(cmd_lst->cmd));
+	else if (ind == e_env)
+		return (env(cmd_lst->cmd));
+	else if (ind == e_exit)
+		return (ft_exit(cmd_lst->cmd));
+	return (1);
 }
 
 int	env(char **cmd)
 {
-	int	i;
+	int			i;
 	t_envlist	*temp;
 
 	temp = global.envlist;
@@ -48,59 +72,6 @@ int	env(char **cmd)
 	return (0);
 }
 
-int	check_option(char *arg)
-{
-	int	i;
-
-	if (*arg != '-')
-		return (1);
-	i = 1;
-	while (arg[i])
-	{
-		if (arg[i] != 'n')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-void	print_args(char **args)
-{
-	int	i;
-
-	i = 0;
-	while (args[i])
-	{
-		ft_putstr_fd(args[i], 1);
-		if (args[i + 1])
-			ft_putchar_fd(' ', 1);
-		i++;
-	}
-}
-
-int	echo(char **cmd)
-{
-	int	i;
-	int	option;
-
-	i = 1;
-	option = 0;
-	while (cmd[i])
-	{
-		if (check_option(cmd[i]))
-		{
-			print_args(&(cmd[i]));
-			break;
-		}
-		else
-			option = 1;
-		i++;
-	}
-	if (!option)
-		ft_putchar_fd('\n', 1);
-	return (0);
-}
-
 int	pwd(void)
 {
 	char	*wd;
@@ -112,64 +83,12 @@ int	pwd(void)
 		ft_putstr_fd("\n", 1);
 	}
 	else
-		perror("");
-	free(wd);
-	return (0);
-}
-
-void	update_pwd(char *oldpwd)
-{
-	t_envlist	*temp;
-
-	temp = envlist_search("OLDPWD");
-	if (temp)
 	{
-		temp->value = oldpwd;
-		envlist_to_tab();
-	}
-	temp = envlist_search("PWD");
-	if (temp)
-	{
-		temp->value = getcwd(NULL, 0);
-		save_add(temp->value);
-		envlist_to_tab();
-	}
-}
-
-int	cd(char **cmd)
-{
-	t_envlist	*temp;
-	char		*oldpwd;
-	int			ret;
-
-	oldpwd = getcwd(NULL, 0);
-	save_add(oldpwd);
-	if (!(cmd[1]))
-	{
-		temp = envlist_search("HOME");
-		if (!temp)
-		{
-			ft_error("minishell: cd: ", NULL, "HOME not set\n");
-			return (1);
-		}
-		ret = chdir(temp->value);
-	}
-	else
-	{
-		ret = chdir(cmd[1]);
-		if (!getcwd(NULL, 0))
-		{
-			perror("");
-			return(1);
-		}
-	}
-	if (ret)
-	{
-		ft_error("minishell: cd: ", cmd[1], ": ");
-		perror(NULL);
+		free (wd);
+		perror("minishell: pwd: error retreiving current working directory: ");
 		return (256);
 	}
-	update_pwd(oldpwd);
+	free(wd);
 	return (0);
 }
 
@@ -177,50 +96,22 @@ int	unset(char **cmd)
 {
 	char	*sep;
 	int		ret;
+	int		i;
 
 	ret = 0;
-	while (*(++cmd))
+	i = 1;
+	while (cmd[i])
 	{
-		sep = keycheck(*cmd);
+		sep = keycheck(cmd[i]);
 		if (!sep)
 		{
-			ft_error("minishell: unset: ", *cmd, "not a valid idetifier\n");
+			ft_error("minishell: unset: ", cmd[i], "not a valid idetifier\n");
 			ret = 256;
 		}
 		free (sep);
-		envlist_delete(*cmd);
+		envlist_delete(cmd[i]);
+		i++;
 	}
 	envlist_to_tab();
 	return (ret);
-}
-
-int	ft_exit(char **cmd)
-{
-	int	i;
-	int	ex_status;
-
-	i = 0;
-	ft_putstr_fd("exit\n", 2);
-	if (!(cmd[i + 1]))
-		exit (global.exit_status);
-	cmd++;
-	while ((*cmd)[i])
-	{
-		if (((*cmd)[i] == '+' || (*cmd)[i] == '-' ) && (!i));
-		else if (!ft_isdigit((*cmd)[i]))
-		{
-			ft_error("minishell: exit: ", *cmd,  "numeric argument required\n");
-			exit(255);
-		}
-		i++;
-	}
-	if (*(cmd + 1))
-	{
-		ft_error("minishell: exit: ", NULL, "too many arguments\n");
-		return (256);
-	}
-	ex_status = ft_atoi(*cmd);
-	if (ex_status > 255 || ex_status < 0)
-		exit (ex_status % 256);
-	exit(ex_status);
 }

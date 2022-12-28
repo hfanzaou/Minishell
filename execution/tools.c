@@ -6,11 +6,41 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:43:06 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 06:57:04 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 04:01:55 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "execution.h"
+
+void	envlist_to_tab(void)
+{
+	t_envlist	*temp;
+	char		*join;
+	int			i;
+
+	i = 0;
+	temp = global.envlist;
+	global.envp = s_malloc((global.env_size + 1) * sizeof(char *));
+	while (temp)
+	{
+		if (temp->value)
+		{
+			join = ft_strjoin(temp->key, temp->sep);
+			(global.envp)[i] = ft_strjoin(join, temp->value);
+			free(join);
+		}
+		temp = temp->next;
+		i++;
+	}
+	(global.envp)[i] = NULL;
+}
+
+void	ft_error(char *cmd, char *arg, char *err)
+{
+	ft_putstr_fd(cmd, 2);
+	ft_putstr_fd(arg ,2);
+	ft_putstr_fd(err, 2);
+}
 
 void	ft_free(char **str, int ind)
 {

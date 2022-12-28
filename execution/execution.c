@@ -1,49 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/27 19:47:52 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 03:27:18 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int	is_builtin(char *cmd)
-{
-	char	**builtins;
-	char	*temp;
-	int		ind;
-
-	temp = "echo cd pwd export unset env exit";
-	builtins = ft_split(temp, ' ');
-	ind = str_search(builtins, cmd);
-	ft_free(builtins, 0);
-	free(builtins);
-	return (ind);
-}
-
-int	execute_builtin(t_cmd *cmd_lst, int ind)
-{
-	if (ind == e_echo)
-		return (echo(cmd_lst->cmd));
-	else if (ind == e_cd)
-		return (cd(cmd_lst->cmd));
-	else if (ind == e_pwd)
-		return (pwd());
-	else if (ind == e_export)
-		return (export(cmd_lst->cmd));
-	else if (ind == e_unset)
-		return (unset(cmd_lst->cmd));
-	else if (ind == e_env)
-		return (env(cmd_lst->cmd));
-	else if (ind == e_exit)
-		return (ft_exit(cmd_lst->cmd));
-	return (1);
-}
+#include "execution.h"
 
 char	*relative_path(char *cmd)
 {
