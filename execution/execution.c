@@ -85,7 +85,7 @@ int	child(t_cmd *cmd_lst)
 		path = check_access(*(cmd_lst->cmd));
 		if (path)
 		{
-			execve(path, cmd_lst->cmd, envlist_to_tab());
+			execve(path, cmd_lst->cmd, NULL);
 			perror("execve");
 			exit(1);
 		}

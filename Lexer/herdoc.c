@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   herdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 06:38:07 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 14:26:25 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 15:58:59 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,13 +62,17 @@ int	ft_herdoc(char *eof, int here)
 	if (i == 0)
 	{
 		signal(SIGINT, herdoc_handler);
-		while ((line = readline(">")))
+		while (1)
 		{
+			line = readline(">");
 			str = line;
 			if (!ft_strrchr(line, '$') && here == 0)
 				str = joinex(line);
 			if (!ft_strrchr(line, '$') && !ft_strcmp(joinex(line), eof))
+			{
+				free(line);
 				exit(0);
+			}
 			else if (ft_strcmp(str, eof))
 			{
 				write(fd, str, strlen(str));
@@ -76,6 +80,7 @@ int	ft_herdoc(char *eof, int here)
 			}
 			else if (!ft_strcmp(line, eof))
 				exit(0);
+			free(line);	
 		}
 	}
 	else

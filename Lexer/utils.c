@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 02:21:04 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 02:21:13 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/28 15:50:56 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "token.h"
 
 char	*ft_strjoin2(char const *s1, char const *s2, int n)

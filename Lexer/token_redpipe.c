@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   token_redpipe.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 05:35:39 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 05:35:41 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/28 15:52:52 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token.h"
-#include "lexer.h"
 
 void	specialsymbols(t_lexer *lexer, t_token **token, int type)
 {

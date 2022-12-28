@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 05:33:25 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 05:33:28 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/28 15:53:09 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include  "token.h"
 
 void	printf_token(t_token *token)

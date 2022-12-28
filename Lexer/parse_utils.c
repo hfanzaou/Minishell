@@ -3,13 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 06:33:11 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 06:33:19 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/28 15:54:07 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "parse.h"
+
+#include "token.h"
 
 int	what_type(t_token *token)
 {
@@ -50,19 +51,6 @@ void	printcmd(t_cmd *cmd)
 	}
 }
 
-char	**to_cargs(char **cargs, char *val)
-{
-	if (!cargs)
-	{
-		cargs = (char **)s_malloc(sizeof(char *) * 2);
-		*cargs = val;
-		*(cargs + 1) = NULL;
-	}
-	else
-		cargs = fillcargs(cargs, val);
-	return (cargs);
-}
-
 char	**fillcargs(char **cargs, char *val)
 {
 	char	**tmp;
@@ -81,4 +69,17 @@ char	**fillcargs(char **cargs, char *val)
 	tmp[i] = val;
 	tmp[i + 1] = NULL;
 	return (tmp);
+}
+
+char	**to_cargs(char **cargs, char *val)
+{
+	if (!cargs)
+	{
+		cargs = (char **)s_malloc(sizeof(char *) * 2);
+		*cargs = val;
+		*(cargs + 1) = NULL;
+	}
+	else
+		cargs = fillcargs(cargs, val);
+	return (cargs);
 }

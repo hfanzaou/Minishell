@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 01:00:02 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/25 05:33:36 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 15:49:52 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ void	ft_error(char *cmd, char *arg, char *err);
 char	*ft_strjoin2(char const *s1, char const *s2, int n);
 int		ft_skip(char *str);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
-void	free_hack(char *str);
 void	*s_malloc(int size);
 void	save_add(char *save);
 char	*ft_itoa2(int n);
@@ -74,5 +73,8 @@ void	token_redout(t_token **token, int i);
 void	token_pipe(t_token **token);
 int		what_redt(char c, char nc);
 void	specialsymbols(t_lexer *lexer, t_token **token, int type);
+void	handler(int i);
+void	ft_free2(void **str);
+void	exit_bash(char *line);
 
 #endif  

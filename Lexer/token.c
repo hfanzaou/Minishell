@@ -26,3 +26,17 @@ t_token	*token_init(char *va, int type, int flag, int here)
 	token->here = here;
 	return (token);
 }
+
+t_cmd	*init_cmd(char **cargs, int in, int out, int flag)
+{
+	t_cmd	*cmd;
+
+	cmd = (t_cmd *)s_malloc(sizeof(t_cmd));
+	cmd->cmd = cargs;
+	cmd->fd = 0;
+	cmd->in = in;
+	cmd->out = out;
+	cmd->err = flag;
+	cmd->next = NULL;
+	return (cmd);
+}

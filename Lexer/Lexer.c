@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   Lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 21:02:26 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/09/08 21:02:56 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/28 15:52:37 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "token.h"
 
 t_lexer	*ft_lexer(char *src)

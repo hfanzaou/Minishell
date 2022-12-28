@@ -12,21 +12,17 @@
 
 NAME = minishell
 
-<<<<<<< HEAD
-FLAGS = -Wall -Wextra -Werror -I/goinfre/ajana/.brew/opt/readline/include
-=======
-FLAGS = -Wall -Wextra -Werror -fsanitize=address  #-I/goinfre/ajana/.brew/opt/readline/include
->>>>>>> 7e682d6e85cb393d9b01e4f3ea0fc3e39f99e12f
+FLAGS = -Wall -Wextra -Werror -I/goinfre/hfanzaou/.brew/opt/readline/include  #-fsanitize=address
 
 
 SRCS = execution/execution.c execution/builtins_export.c execution/builtins.c execution/envlist_tools.c \
 	execution/tools.c execution/builtins_2.c  execution/builtins_cd.c Lexer/tokenizer.c Lexer/main.c Lexer/Lexer.c Lexer/token.c Lexer/parse.c \
 	Lexer/utils.c Lexer/expand.c Lexer/ft_itoa2.c Lexer/joining.c Lexer/removequo.c Lexer/dollar.c Lexer/utils2.c Lexer/token_redpipe.c \
-	Lexer/parse_utils.c Lexer/herdoc.c Lexer/if_access.c Lexer/ambiguous.c
+	Lexer/parse_utils.c Lexer/herdoc.c Lexer/if_access.c Lexer/ambiguous.c Lexer/utils3.c
 
 LIBFT = libft/libft.a
 
-LIBS = -L/usr/include -lreadline -Llibft -lft  -L/goinfre/ajana/.brew/opt/readline/lib
+LIBS = -L/usr/include -lreadline -Llibft -lft  -L/goinfre/hfanzaou/.brew/opt/readline/lib
 
 OBJS = $(SRCS:.c=.o)
 
