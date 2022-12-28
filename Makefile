@@ -12,11 +12,12 @@
 
 NAME = minishell
 
-FLAGS = -Wall -Wextra -Werror  #-I/goinfre/ajana/.brew/opt/readline/include
+FLAGS = -Wall -Wextra -Werror #-fsanitize=address  #-I/goinfre/ajana/.brew/opt/readline/include
 
 
 SRCS = execution/minishell.c execution/export.c execution/builtins.c execution/envlist_tools.c \
-	execution/tools.c Lexer/tokenizer.c Lexer/main.c Lexer/Lexer.c Lexer/token.c Lexer/parse.c
+	execution/tools.c Lexer/tokenizer.c Lexer/main.c Lexer/Lexer.c Lexer/token.c Lexer/parse.c \
+	Lexer/utils.c Lexer/expand.c Lexer/ft_itoa2.c
 
 LIBFT = libft/libft.a
 

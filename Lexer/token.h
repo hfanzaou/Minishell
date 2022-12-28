@@ -39,22 +39,24 @@ typedef struct token_s
 	} type;
 }	token_t;
 
-t_cmd *init_cmd(char **cargs, int in, int out, int flag);
-void printf_token(token_t *token);
-token_t *tokenizer(t_lexer *lexer);
-token_t *token_init(char *val, int type, int flag, int here);
-t_cmd *ft_parse(token_t *token, t_cmd *cmd);
+t_cmd	*init_cmd(char **cargs, int in, int out, int flag);
+void	printf_token(token_t *token);
+token_t	*tokenizer(t_lexer *lexer);
+token_t	*token_init(char *val, int type, int flag, int here);
+t_cmd	*ft_parse(token_t *token, t_cmd *cmd);
 char	*ft_realloc(char *str, int j);
-int	ft_strcmp(char *s1, char *s2);
+int		ft_strcmp(char *s1, char *s2);
 char	*ft_expand(char *val, char **env, t_lexer **lexer, int j);
-char	*ft_strdup(const char *s);
+char	*ft_strdup2(const char *s);
 int		ft_strrchr(char *str, char c);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_error(char *cmd, char *arg, char *err);
 char	*ft_strjoin2(char const *s1, char const *s2, int n);
 int 	ft_skip(char *str);
-int	ft_memcmp(const void *s1, const void *s2, size_t n);
+int		ft_memcmp(const void *s1, const void *s2, size_t n);
 void	free_hack(char *str);
 void	*s_malloc(int size);
 void	save_add(char *save);
+char	*ft_expand(char *val, char **env, t_lexer **lexer, int j);
+char	*ft_itoa2(int n);
 # endif  

@@ -20,6 +20,7 @@ t_lexer *ft_lexer(char *src)
 		return (NULL);
 	lexer->src = src;
 	lexer->i = 0;
+	lexer->f = 0;
 	lexer->c = src[lexer->i];
 	lexer->size = strlen(src);
 	return (lexer);

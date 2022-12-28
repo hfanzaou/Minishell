@@ -79,7 +79,7 @@ int	replace_value(t_envlist *needle)
 	{
 		free(needle->key);
 		if (*needle->sep == '+' && (needle->value))
-			temp->value = ft_strjoin(temp->value, needle->value);
+			temp->value = ft_strjoin2(temp->value, needle->value, ft_strlen(temp->value));
 		else if (needle->value)
 			temp->value = needle->value;
 		temp->sep = "=";

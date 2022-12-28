@@ -186,7 +186,6 @@ void	excute(t_cmd *cmd_lst)
 	}
 	while (cmd_lst)
 	{
-		printf("%s\n", *cmd_lst->cmd);
 		if (cmd_lst->next)
 			open_pipe(cmd_lst);
 		pid = child(cmd_lst);

@@ -80,4 +80,7 @@ t_envlist	*envlist_search(char *key);
 char		*keycheck(char *key);
 void	*s_malloc(int size);
 void	save_add(char *save);
+char	*ft_strdup2(const char *s);
+char	*ft_strjoin2(char const *s1, char const *s2, int n);
+
 #endif

@@ -3,5 +3,5 @@
 while [ 1 ]
 do
     leaks minishell
-    sleep 3
+    sleep 1
 done
