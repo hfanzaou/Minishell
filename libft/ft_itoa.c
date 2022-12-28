@@ -3,71 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/05 11:09:19 by ajana             #+#    #+#             */
-/*   Updated: 2021/11/17 23:31:03 by ajana            ###   ########.fr       */
+/*   Created: 2021/11/07 13:22:07 by hfanzaou          #+#    #+#             */
+/*   Updated: 2021/11/17 14:10:12 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "libft.h"
 
-static int	int_len(unsigned int nu)
+static int	ft_count(int n)
 {
-	int	i;
+	unsigned int	i;
+	int				j;
 
-	i = 1;
-	while (nu > 9)
+	i = n;
+	if (n < 0)
+		i = -n;
+	j = 0;
+	while (i != 0)
 	{
-		nu = nu / 10;
-		i++;
+		i /= 10;
+		j++;
 	}
-	return (i);
+	return (j);
 }
 
-char	*assign(char *str, unsigned int n, int sign)
+static void	put_digit(char *c, unsigned int i, int j)
 {
-	int	i;
-
-	i = int_len(n) + sign - 1;
-	if (sign)
-		*str = '-';
-	while (n > 9)
+	while (i != 0)
 	{
-		str[i] = (n % 10) + 48;
-		n = n / 10;
-		i--;
+		j--;
+		c[j] = (i % 10 + 48);
+		i = i / 10;
 	}
-	str[i] = n + 48;
-	return (str);
 }
 
 char	*ft_itoa(int n)
 {
-	unsigned int	nu;
-	char			*res;
-	int				sign;
-	int				len;
+	unsigned int	i;
+	int				j;
+	char			*c;
 
-	sign = 0;
-	if (n < 0)
+	j = ft_count(n);
+	i = n;
+	if (n <= 0)
 	{
-		nu = n * -1;
-		sign = 1;
-	}
-	else
-		nu = n;
-	len = int_len(nu);
-	res = s_malloc((len + 1 + sign) * sizeof(char));
-	if (!res)
-		return (NULL);
-	res[len + sign] = '\0';
-	return (assign(res, nu, sign));
+		i = -n;
+		j += 1;
+	}	
+	c = malloc(sizeof(char) * j + 1);
+	if (c == NULL)
+		return (0);
+	if (n < 0)
+		*c = '-';
+	if (!n)
+		*c = '0';
+	c[j] = '\0';
+	put_digit(c, i, j);
+	return (c);
 }
-
-/*
-int	main(int ac, char **av)
-{
-	(void)ac;
-	printf("%s\n", ft_itoa(ft_atoi(av[1])));
-}*/

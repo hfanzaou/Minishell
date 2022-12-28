@@ -121,7 +121,7 @@ char	*joinex(char *line)
 			break;
 		i++;		
 	}
-	free(c);
+	// free(c);
 	return (val);
 }
 
@@ -393,7 +393,6 @@ t_cmd	*ft_parse(token_t *token, t_cmd *cmd)
 	}
 	oneuse = init_cmd(cargs, in, out, flag);
 	ft_lstadd_backc(&cmd, oneuse);
-	//cargs = NULL;
 	//printcmd(cmd);
 	return (cmd);
 }

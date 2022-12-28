@@ -94,16 +94,16 @@ void	put_env(char **env)
 	return ;
 }
 
-void	ft_free2(token_t *token)
+void	ft_free2(char **str)
 {
-	token_t *head;
-	head = token;
-	while (head)
+	int i;
+
+	i = 0;
+	while (i < global.index)
 	{
-		free(head->value);
-		head = head->next;
+		free(str[i]);
+		i++;
 	}
-	free(token);
 }
 
 int main(int ac, char **av, char **env)
@@ -137,12 +137,13 @@ int main(int ac, char **av, char **env)
 			// ft_free(cmd->cmd);
 			// close(cmd->out);
 			// free(cmd);
-			// ft_free2(token);
+
+			// ft_free2((char **)global.to_free);
 			// ft_free(global.to_free);
 			free(line);
-			free(lexer);
+			// free(lexer);
 			//free(token);
-			//system("leaks minishell");
+			system("leaks minishell");
 			cmd = NULL;
 			lexer = NULL;
 			token = NULL;

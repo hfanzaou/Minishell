@@ -3,99 +3,97 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/09 17:06:53 by ajana             #+#    #+#             */
-/*   Updated: 2021/11/16 17:17:12 by ajana            ###   ########.fr       */
+/*   Created: 2021/11/12 05:42:26 by hfanzaou          #+#    #+#             */
+/*   Updated: 2021/11/21 20:19:51 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	word_len(char const *s, char c)
+static int	ft_wcount(const char *s, char c)
 {
 	int	i;
 
 	i = 0;
-	while (s[i] && s[i] != c)
-		i++;
+	while (*s == c && *s)
+		s++;
+	while (*s)
+	{
+		if (*s != c && *s)
+			i++;
+		while (*s != c && *s)
+			s++;
+		if (!*s)
+			break ;
+		s++;
+	}	
 	return (i);
 }
 
-static int	words_num(char const *s, char c)
+static char	*ft_strndup(const char *s, int n, char **b)
 {
-	int	count;
+	char	*a;
 
-	count = 0;
-	if (!s)
+	a = malloc(sizeof(char) * n + 1);
+	if (a == NULL)
+	{
+		free(b);
 		return (0);
-	while (*s)
-	{
-		if (*s != c)
-		{
-			count++;
-			while (*s != c && *s)
-				s++;
-			while (*s == c && *s)
-				s++;
-		}
-		else
-			s++;
 	}
-	return (count);
+	ft_memcpy(a, s, n);
+	a[n] = '\0';
+	return (a);
 }
 
-static char	**ft_free(char **str, int i)
+static char	**ft_strmalldup(char **b, const char *s, char c)
 {
-	if (!str)
-		return (NULL);
-	i--;
-	while (i >= 0)
-	{
-		free(str[i]);
-		i--;
-	}
-	free(str);
-	return (NULL);
-}
-
-char	**ft_split(const char *s, char c)
-{
-	char	**res;
-	int		words;
-	int		len;
-	int		i;
+	int	i;
+	int	j;
 
 	i = 0;
-	words = words_num(s, c);
-	res = (char **)s_malloc((words + 1) * sizeof(char *));
-	if (!res)
-		return (NULL);
-	while (i < words)
+	j = 0;
+	while (*s)
 	{
-		while (*s == c)
+		while (*s != c && *s)
+		{
+			i++;
 			s++;
-		len = word_len(s, c);
-		res[i] = s_malloc((len + 1) * sizeof(char));
-		if (!res[i])
-			return (ft_free(&res[i], i));
-		ft_strlcpy(res[i], s, len + 1);
-		s += len;
-		i++;
+		}
+		if ((*s == c && *s && *(s - 1) != c) || (!*s && *(s - 1) != c))
+		{
+			b[j] = ft_strndup(s - i, i, b);
+			j++;
+			i = 0;
+		}
+		if (!*s)
+			break ;
+		s++;
 	}
-	res[i] = NULL;
-	return (res);
+	return (b);
 }
-/*
-int    main()
-{
-    char const s[] = "//zack///is/here////";
-    char *string = "      split       this for   me  !       ";
-    char c = ' ';
-    int i = 0;
-    char str;
-    str = ft_split(string, c);
-    for (; i < 6; i++)
-        printf("%s\n", str[i]);
 
-}*/
+char	**ft_split(char const *s, char c)
+{
+	char	**b;
+	int		w_count;
+
+	if (!s)
+	{
+		b = malloc(sizeof(char *));
+		if (b == NULL)
+			return (0);
+		*b = 0;
+		return (b);
+	}
+	while (*s == c && *s)
+		s++;
+	w_count = ft_wcount(s, c);
+	b = malloc(sizeof(char *) * (w_count + 1));
+	if (b == NULL)
+		return (0);
+	ft_strmalldup(b, s, c);
+	b[w_count] = NULL;
+	return (b);
+}

@@ -3,41 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 12:06:42 by ajana             #+#    #+#             */
-/*   Updated: 2021/11/12 22:01:07 by ajana            ###   ########.fr       */
+/*   Created: 2021/11/03 16:17:00 by hfanzaou          #+#    #+#             */
+/*   Updated: 2021/11/21 20:38:47 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+char	*ft_strnstr(const char *s1, const char *s2, size_t n)
 {
 	size_t	i;
 	size_t	j;
 
 	i = 0;
-	j = 0;
-	if (!*needle)
-		return ((char *)haystack);
-	while (haystack[i] && i < len)
+	if (*s2 == '\0')
+		return ((char *)s1);
+	while (*s1 && i < n)
 	{
-		while (haystack[i + j] == needle[j] && (i + j) < len)
-		{
-			j++;
-			if (needle[j] == '\0')
-				return (&((char *)haystack)[i]);
-		}
 		j = 0;
+		while (*(s1 + j) == *(s2 + j) && i + j < n)
+		{	
+			j++;
+			if (!s2[j])
+				return ((char *)s1);
+		}
+		s1++;
 		i++;
-	}
-	return (NULL);
+	}	
+	return (0);
 }
-/*
-int main (int ac, char **av)
-{
-	(void)ac;
-	printf("miine >> %s\n",ft_strnstr(av[1],av[2],ft_atoi(av[3])));
-	printf("origin >> %s\n",strnstr(av[1],av[2],ft_atoi(av[3])));
-}*/

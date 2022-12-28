@@ -3,45 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 19:00:25 by ajana             #+#    #+#             */
-/*   Updated: 2021/11/17 21:09:47 by ajana            ###   ########.fr       */
+/*   Created: 2021/11/05 17:30:28 by hfanzaou          #+#    #+#             */
+/*   Updated: 2021/11/21 20:41:14 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "libft.h"
 
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
+	size_t	ld;
+	size_t	ls;
 	size_t	i;
-	size_t	j;
-	size_t	dstlen;
 
-	if (!dst && !dstsize)
-		return (ft_strlen(src));
-	dstlen = ft_strlen(dst);
-	i = dstlen;
-	j = 0;
-	if (dstsize > dstlen)
-	{
-		while (src[j] && i < dstsize - 1)
+	ld = ft_strlen(dst);
+	ls = ft_strlen((char *)src);
+	i = 0;
+	if (size && ld < size - 1)
+	{	
+		dst += ld;
+		while (*src && ld + i < size - 1)
 		{
-			dst[i] = src[j];
+			*dst++ = *src++;
 			i++;
-			j++;
 		}
-		dst[i] = '\0';
-		return (dstlen + ft_strlen(src));
-	}
-	return (dstsize + ft_strlen(src));
+		*dst = '\0';
+	}	
+	if (ld >= size)
+		ld = size;
+	return (ls + ld);
 }
-/*
-int main (int ac, char **av)
-{
-	(void)ac;
-	char dst[10] = "hell";
-	//printf("%lu \n", ft_strlcat(dst, "maza", 0));
-	printf("%lu \n", ft_strlcat(dst, 0, 10));
-	printf("%s\n", dst);
-}*/

@@ -82,7 +82,7 @@ t_envlist	*envlist_new(char *str)
 	char		*search;
 
 	temp = ft_split(str, '=');
-	new = s_malloc(sizeof(t_envlist));
+	new = malloc(sizeof(t_envlist));
 	new->sep = keycheck(*temp);
 	if (!(new->sep))
 	{

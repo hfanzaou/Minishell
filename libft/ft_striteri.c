@@ -1,39 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strteri.c                                       :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/06 12:12:32 by ajana             #+#    #+#             */
-/*   Updated: 2021/11/11 21:09:05 by ajana            ###   ########.fr       */
+/*   Created: 2021/11/07 18:56:05 by hfanzaou          #+#    #+#             */
+/*   Updated: 2021/11/17 17:23:09 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-/*
-void f(unsigned int i, char *c)
-{
-	*c = 'c';
-}*/
-void	ft_striteri(char *s, void (*f)(unsigned int, char *))
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 {
 	unsigned int	i;
 
+	i = 0;
 	if (!s)
 		return ;
-	i = 0;
 	while (s[i])
 	{
 		f(i, &s[i]);
 		i++;
 	}
 }
-/*
-int main()
-{
-	char str1[] = "abc";
-	ft_striteri(str1, &f);
-	printf("%s\n", str1);
-}*/

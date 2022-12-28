@@ -3,47 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/05 15:53:01 by ajana             #+#    #+#             */
-/*   Updated: 2021/11/17 05:20:14 by ajana            ###   ########.fr       */
+/*   Created: 2021/11/07 16:43:35 by hfanzaou          #+#    #+#             */
+/*   Updated: 2021/11/21 01:35:19 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "libft.h"
 
-/*
-char f(unsigned int i, char c)
-{
-	char str;
-	str = c - 32;
-	return(str);
-}
-*/
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char			*str;
 	unsigned int	i;
+	char			*l;
 
 	if (!s)
-		return (NULL);
+		return (0);
+	i = ft_strlen((char *)s);
+	l = malloc(sizeof(char) * (i + 1));
+	if (l == NULL)
+		return (0);
 	i = 0;
-	str = s_malloc((ft_strlen((char *)s) + 1) * sizeof(char));
-	if (!str)
-		return (NULL);
-	while (s[i])
+	if (*s && *f)
 	{
-		str[i] = f(i, s[i]);
-		i++;
+		while (s[i])
+		{
+			l[i] = f(i, s[i]);
+			i++;
+		}
 	}
-	str[i] = '\0';
-	return (str);
+	l[i] = '\0';
+	return (l);
 }
-/*
-int main()
-{
-	char str1[] = "abc";
-	char* str2;
-	str2 = ft_strmapi(str1, &f);
-	printf("%s\n", str2);
-}*/

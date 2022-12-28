@@ -350,13 +350,13 @@ char 	*dq_case(t_lexer *lexer, char **env)
 			val = ft_strjoin2(val, to_join(str[i]), strlen(val));
 		i++;
 	}
-	if (str[0])
-		free(str);
-	else 
-	{
-		free(val);
-		return ("\0");
-	}
+	// if (str[0])
+	// 	free(str);
+	// else 
+	// {
+	// 	// free(val);
+	// 	return ("\0");
+	// }
 	return (val);
 }
 
@@ -377,7 +377,7 @@ char 	*dq_case(t_lexer *lexer, char **env)
 	if (c[0])
 	{
 		str = ft_strjoin2(val, c, strlen(val));
-		free(c);
+		// free(c);
 		lexer_advance(&lexer);
 	}
 	else if (!c[0] && lexer->c == '\"')
@@ -412,8 +412,8 @@ char 	*cond(t_lexer *lexer, char *val, char **env)
 		str = just_join(lexer, val, "");
 	else
 		str = just_join(lexer, val, to_join(lexer->c));
-	if (val)
-		free(val);	
+	// if (val)
+	// 	free(val);	
 	if (!str)
 		return (NULL);		
 	return (str);

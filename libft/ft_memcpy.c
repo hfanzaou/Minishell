@@ -3,38 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/02 12:29:18 by ajana             #+#    #+#             */
-/*   Updated: 2021/11/17 22:52:22 by ajana            ###   ########.fr       */
+/*   Created: 2021/11/02 19:51:50 by hfanzaou          #+#    #+#             */
+/*   Updated: 2021/11/21 20:42:22 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "libft.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	size_t	i;
+	size_t			i;
+	unsigned char	*c;
+	unsigned char	*l;
 
+	if (!dst && !src)
+		return (0);
+	c = (unsigned char *)dst;
+	l = (unsigned char *)src;
 	i = 0;
-	if (!dest && !src)
-		return (NULL);
-	while (i < n)
+	while (i < n && c != l)
 	{
-		((char *)dest)[i] = ((char *)src)[i];
+		c[i] = l[i];
 		i++;
 	}
-	return (dest);
+	return (dst);
 }
-/*
-int main ()
-{
-	int src[] = {27845, 454346, 543543698};
-	int dest[] = {1, 2, 2};
-	//printf("%s\n", memcpy(dest, src, 2 * sizeof(char)));
-	//printf("%s %s \n",dest, src);	
-	ft_memcpy(dest, src, 3 * sizeof(int));
-	for (int i = 0; i < 3; i++) 
-		printf("%d %d \n", dest[i], src[i]);
-
-}*/

@@ -3,46 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/04 13:49:50 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/25 20:46:08 by ajana            ###   ########.fr       */
+/*   Created: 2021/11/07 11:08:53 by hfanzaou          #+#    #+#             */
+/*   Updated: 2021/11/20 16:32:50 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "libft.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int		len;
-	char	*s;
 	int		i;
+	int		j;
+	char	*c;
 
-	i = 0;
 	if (!s1 || !s2)
-		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	s = (char *)s_malloc((len + 1) * sizeof(char));
-	if (!s)
-		return (NULL);
+		return (0);
+	i = ft_strlen((char *)s1) + ft_strlen((char *)s2);
+	c = malloc(sizeof(char) * i + 1);
+	if (c == NULL)
+		return (0);
+	j = 0;
 	while (*s1)
 	{
-		s[i] = *s1;
-		s1++;
-		i++;
+		c[j] = *s1++;
+		j++;
 	}
 	while (*s2)
 	{
-		s[i] = *s2;
-		s2++;
-		i++;
+		c[j] = *s2++;
+		j++;
 	}
-	s[i] = '\0';
-	return (s);
+	c[j] = '\0';
+	return (c);
 }
-/*
-int main(int ac, char **av)
-{
-	(void)ac;
-	printf("%s\n", ft_strjoin(av[1], av[2]));
-}*/

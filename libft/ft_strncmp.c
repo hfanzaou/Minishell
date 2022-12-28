@@ -3,29 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 11:00:44 by ajana             #+#    #+#             */
-/*   Updated: 2021/11/11 19:16:47 by ajana            ###   ########.fr       */
+/*   Created: 2021/11/03 17:58:27 by hfanzaou          #+#    #+#             */
+/*   Updated: 2021/11/21 20:21:45 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "libft.h"
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	size_t	i;
+	unsigned char	*a;
+	unsigned char	*b;
+	size_t			i;
 
+	a = (unsigned char *)s1;
+	b = (unsigned char *)s2;
 	i = 0;
-	if (n == 0)
-		return (0);
-	while ((s1[i] == s2[i]) && (i < n - 1) && (s1[i] && s2[i]))
+	while (i < n)
+	{
+		if (a[i] != b[i] || !a[i] || !b[i])
+			return (a[i] - b[i]);
 		i++;
-	return (((unsigned char *)s1)[i] - ((unsigned char *)s2)[i]);
+	}
+	return (0);
 }
-/*
-int main(int ac, char **av)
-{
-	(void)ac;
-	printf("%d\n", ft_strncmp((const char *)av[1], (const char *)av[2], 2));
-}*/

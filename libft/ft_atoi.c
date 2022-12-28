@@ -1,52 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   Makefile                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 12:50:26 by ajana             #+#    #+#             */
-/*   Updated: 2021/11/17 23:38:44 by ajana            ###   ########.fr       */
+/*   Created: 2021/11/03 17:29:14 by hfanzaou          #+#    #+#             */
+/*   Updated: 2021/11/21 22:21:31 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-static int	is_space(char c)
+int	ft_atoi(const char *str)
 {
-	if (c == ' ' || c == '\t' || c == '\r'
-		|| c == '\v' || c == '\f' || c == '\n')
-		return (1);
-	return (0);
-}
+	long long int	r;
+	int				s;
 
-int	ft_atoi(const char *s)
-{
-	int	a;
-	int	sign;
-	int	i;
-
-	a = 0;
-	i = 0;
-	sign = 1;
-	while (is_space(s[i]) && s[i])
-		i++;
-	if (s[i] == '-' || s[i] == '+')
+	r = 0;
+	s = 1;
+	while ((*str >= 9 && *str <= 13) || *str == 32)
+		str++;
+	if (*str == '-' || *str == '+')
+		if (*str++ == '-')
+			s *= -1;
+	while (*str >= '0' && *str <= '9' && *str)
 	{
-		if (s[i] == '-')
-			sign = -1;
-		i++;
+		if (r > 2147483647 && s > 0)
+			return (-1);
+		if (-r < -2147483648 && s < 0)
+			return (0);
+		r = r * 10 + (*str++ - 48);
 	}
-	while (s[i] >= '0' && s[i] <= '9')
-	{
-		a = a * 10 + (s[i] - 48);
-		i++;
-	}
-	return (sign * a);
+	return (r * s);
 }
-/*
-int main(int ac, char **av)
-{
-	(void)ac;
-	printf("%d\n", ft_atoi(av[1]));
-}*/
