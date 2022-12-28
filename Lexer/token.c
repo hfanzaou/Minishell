@@ -41,7 +41,6 @@ char	*ft_realloc(char *str, int j)
 		i++;
 	}
 	t[i] = str[i];
-	// free(str);
 	str = s_malloc(sizeof(char) * j + 1);
 	if (!str)
 		return (NULL);
@@ -51,6 +50,5 @@ char	*ft_realloc(char *str, int j)
 		str[i] = t[i];
 		i++;
 	}
-	// free(t);
 	return (str);
 }

@@ -45,150 +45,12 @@ void	ft_lstadd_back(token_t **lst, token_t *new)
 		ft_lstlast(*lst)->next = new;
 }
 
-/*int ft_size(t_lexer *lexer)
-{
-	int i;
-
-	i = 0;
-	while (lexer->src[lexer->i + i] && (lexer->src[lexer->i + i] != '\'' 
-		|| lexer->src[lexer->i + i] != '\"'))
-		i++;	
-	if (!lexer->src[i])
-		return (-1);
-	return (i);	
-}*/
-
-char	*put_enqval(char *str, char c, int n)
-{
-	char *val;
-	int i;
-
-	i = 0;
-	val = s_malloc(sizeof(char) * (n + 1));
-	if (!val)
-		return (NULL);
-	while (str[i] && str[i] != c)
-	{
-		val[i] = str[i];
-		i++;
-	}
-	val[i] = '\0';
-	return (val);
-}
-
-char	*remove_quotes(char c, t_lexer *lexer, char *str)
-{
-	int i;
-	int f;
-
-	i = 0;
-	f = 0;
-	if (lexer->c == c && lexer->src[lexer->i + 1] == c)
-	{
-		lexer_advance(&lexer);
-		lexer_advance(&lexer);
-		return ("\0");
-	}
-	else 
-		lexer_advance(&lexer);
-	while (lexer->c && lexer->c != c)
-	{
-		i++;
-		lexer_advance(&lexer);
-	}
-	if (!lexer->c)
-	{
-		ft_putstr_fd("minishell : syntax error unclosed quotes\n", 2);
-		return (NULL);
-	}
-	lexer_advance(&lexer);
-	return (put_enqval(&str[1], c, i));	
-}
-
-
-char 	*to_join(char c)
-{
-	char *str;
-
-	str = ft_strdup2(" ");
-	str[0] = c;
-	str[1] = '\0';
-	return (str);
-}
-
-char 	*dq_case(t_lexer *lexer, char **env)
-{
-	char *str;
-	char *val;
-	int i;
-
-	i = 0;
-	str = remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]);
-	if (!str)
-		return(NULL);
-	val = ft_strdup2("");
-	while (str[i])
-	{
-		if (str[i] == '$' && (isalnum(str[i + 1]) || !ft_strrchr("?_", str[i + 1])))
-		{
-			val = ft_strjoin2(val, ft_expand(&str[i], env, &lexer, 2), strlen(val));
-			i += ft_skip(&str[i + 1]);
-		}
-		else
-			val = ft_strjoin2(val, to_join(str[i]), strlen(val));
-		i++;
-	}
-	// if (str[0])
-	// 	free(str);
-	// else 
-	// {
-	// 	// free(val);
-	// 	return ("\0");
-	// }
-	return (val);
-}
-
- char	*join_expand(t_lexer *lexer, char *val, char *val2, char **env)
- {
-	char *str;
-
-	str = ft_expand(val2, env, &lexer, 1);
-	lexer_advance(&lexer);
-	str = ft_strjoin2(val, str, strlen(val));
-	return (str);
- }
-
- char	*just_join(t_lexer *lexer, char *val, char *c)
- {
-	char *str;
-
-	if (c[0])
-	{
-		str = ft_strjoin2(val, c, strlen(val));
-		// free(c);
-		lexer_advance(&lexer);
-	}
-	else if (!c[0] && lexer->c == '\"')
-	{
-		str = dq_case(lexer, global.envp);
-		str = ft_strjoin2(val, str, strlen(val));
-	}
-	else 
-	{
-		str = remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]);
-		str = ft_strjoin2(val, str, strlen(val));
-	}
-	if (!str)
-		return (NULL);
-	return (str);
- }
-
 char 	*cond(t_lexer *lexer, char *val, char **env)
 {
 	char *str;
 
 	str = NULL;
-	if (lexer->c == '$' && (isalnum(nextcval(lexer, 1)) || !ft_strrchr("?_", nextcval(lexer, 1))))
+	if (lexer->c == '$' && (ft_isalnum(nextcval(lexer, 1)) || !ft_strrchr("?_", nextcval(lexer, 1))))
 		str = join_expand(lexer, val, &lexer->src[lexer->i], env);
 	else if (lexer->c == '$' && (ft_strrchr(" \t", nextcval(lexer, 1)) || lexer->src[lexer->i + 1]))
 		str = just_join(lexer, val, "$");
@@ -199,9 +61,7 @@ char 	*cond(t_lexer *lexer, char *val, char **env)
 	else if (lexer->c == '\'')
 		str = just_join(lexer, val, "");
 	else
-		str = just_join(lexer, val, to_join(lexer->c));
-	// if (val)
-	// 	free(val);	
+		str = just_join(lexer, val, to_join(lexer->c));	
 	if (!str)
 		return (NULL);		
 	return (str);
@@ -309,7 +169,7 @@ int		executedollar(t_lexer *lexer)
 		return (0);
 	i = 1;
 	if (lexer->src[lexer->i + i] == '_' 
-		&& isalnum(lexer->src[lexer->i + 2]))
+		&& ft_isalnum(lexer->src[lexer->i + 2]))
 		i++;
 	while (lexer->src[lexer->i + i] 
 		&& ft_strrchr(" \t|><", lexer->src[lexer->i + i]))
@@ -331,7 +191,7 @@ char	*expand_exdollarp2(token_t **token, char *str)
 	while (str[i])
 	{	
 		if (ft_strrchr(" \t", str[i]))
-			val = ft_strjoin2(val, to_join(str[i]), strlen(val));
+			val = ft_strjoin2(val, to_join(str[i]), ft_strlen(val));
 		else if (val[0] && !ft_strrchr(" \t", str[i]) 
 			&& str[i + 1] && ft_strrchr(" \t", str[i + 1]))
 		{

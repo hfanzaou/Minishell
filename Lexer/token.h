@@ -59,4 +59,10 @@ void	*s_malloc(int size);
 void	save_add(char *save);
 char	*ft_expand(char *val, char **env, t_lexer **lexer, int j);
 char	*ft_itoa2(int n);
+int		ft_isalnum(int an);
+size_t	ft_strlen(const char *s);
+char	*just_join(t_lexer *lexer, char *val, char *c);
+char	*join_expand(t_lexer *lexer, char *val, char *val2, char **env);
+char 	*to_join(char c);
+char	*remove_quotes(char c, t_lexer *lexer, char *str);
 # endif  
