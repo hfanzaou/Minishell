@@ -9,8 +9,7 @@
 /*   Updated: 2022/09/08 21:02:56 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "lexer.h"
-
+#include "token.h"
 
 t_lexer *ft_lexer(char *src)
 {

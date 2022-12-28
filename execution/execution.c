@@ -70,7 +70,14 @@ int	child(t_cmd *cmd_lst)
 	int		ind;
 
 	if (!(cmd_lst->cmd))
+<<<<<<< HEAD
 		return (0);
+=======
+	{
+		global.exit_status = 0;
+		return(0);
+	}
+>>>>>>> c180433a76ddacdb99c962525baa7c9152ea335e
 	pid = fork();
 	if (pid == 0)
 	{
@@ -104,7 +111,10 @@ void	simple_cmd(t_cmd *cmd_lst)
 	int		tmpout;
 
 	if (!(cmd_lst->cmd))
+	{
+		global.exit_status = 0;
 		return ;
+	}
 	ind = is_builtin(*(cmd_lst->cmd));
 	if (ind)
 	{
@@ -163,6 +173,7 @@ void	excute(t_cmd *cmd_lst)
 			close(cmd_lst->in);
 		cmd_lst = cmd_lst->next;
 	}
-	waitpid(pid, &(global.exit_status), 0);
+	if (pid)
+		waitpid(pid, &(global.exit_status), 0);
 	while(wait(NULL) != -1);
 }
