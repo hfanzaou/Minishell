@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/28 05:37:54 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 11:23:36 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,14 +70,10 @@ int	child(t_cmd *cmd_lst)
 	int		ind;
 
 	if (!(cmd_lst->cmd))
-<<<<<<< HEAD
-		return (0);
-=======
 	{
 		global.exit_status = 0;
-		return(0);
+		return (0);
 	}
->>>>>>> c180433a76ddacdb99c962525baa7c9152ea335e
 	pid = fork();
 	if (pid == 0)
 	{

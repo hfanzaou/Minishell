@@ -3,13 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   herdoc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 06:38:07 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 06:38:10 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/28 14:26:25 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "parse.h"
+
+void	herdoc_handler(int signum)
+{
+	if (signum == SIGINT)
+	{
+		unlink("/tmp/herdoc_file");
+		exit(1);
+	}
+}
 
 char	*joinex(char *line)
 {
@@ -33,7 +43,7 @@ char	*joinex(char *line)
 			val = ft_strjoin2(val, c, ft_strlen(val));
 		if (!line[i])
 			break;
-		i++;		
+		i++;
 	}
 	return (val);
 }
@@ -43,12 +53,14 @@ int	ft_herdoc(char *eof, int here)
 	int i;
 	char *line;
 	char *str;
-	int fd[2];
+	int	fd;
 
-	pipe(fd);
 	i = fork();
+	fd = 0;
+	fd = open("/tmp/herdoc_file", O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (i == 0)
 	{
+		signal(SIGINT, herdoc_handler);
 		while ((line = readline(">")))
 		{
 			str = line;
@@ -58,8 +70,8 @@ int	ft_herdoc(char *eof, int here)
 				exit(0);
 			else if (ft_strcmp(str, eof))
 			{
-				write(fd[1], str, strlen(str));
-				write(fd[1], "\n", 1);
+				write(fd, str, strlen(str));
+				write(fd, "\n", 1);
 			}
 			else if (!ft_strcmp(line, eof))
 				exit(0);
@@ -67,8 +79,8 @@ int	ft_herdoc(char *eof, int here)
 	}
 	else
 	{
+		signal(SIGINT, SIG_IGN);
 		wait(&i);
-		close(fd[1]);
 	}
-	return (fd[0]);	
+	return (fd);
 }
