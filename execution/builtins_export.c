@@ -1,39 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   builtins_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:24:39 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 10:40:16 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 03:59:21 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-void	envlist_to_tab(void)
-{
-	t_envlist	*temp;
-	char		*join;
-	int			i;
-
-	i = 0;
-	temp = global.envlist;
-	global.envp = s_malloc((global.env_size + 1) * sizeof(char *));
-	while (temp)
-	{
-		if (temp->value)
-		{
-			join = ft_strjoin(temp->key, temp->sep);
-			(global.envp)[i] = ft_strjoin(join, temp->value);
-			free(join);
-		}
-		temp = temp->next;
-		i++;
-	}
-	(global.envp)[i] = NULL;
-}
+#include "execution.h"
 
 void	print_envlist(void)
 {

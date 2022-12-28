@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/26 23:35:42 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 05:13:21 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef EXECUTION_H
+# define EXECUTION_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -60,27 +60,34 @@ typedef struct s_cmd
 
 t_global	global;
 
-int			echo(char **cmd);
-int			cd(char **cmd);
-int			pwd(void);
-int			export(char **cmd);
-int			unset(char **cmd);
-int			env(char **cmd);
-int			ft_exit(char **cmd);
+/******builtins*****/
+int	echo(char **cmd);
+int	cd(char **cmd);
+int	pwd(void);
+int	export(char **cmd);
+int	unset(char **cmd);
+int	env(char **cmd);
+int	ft_exit(char **cmd);
+int	is_builtin(char *cmd);
+int	execute_builtin(t_cmd *cmd_lst, int ind);
+
+/****envlist_tools****/
 t_envlist	*envlist_new(char *str);
+t_envlist	*envlist_search(char *key);
 void		envlist_addback(t_envlist **head, t_envlist *new);
 void		envlist_delete(char *key);
 void		envlist_to_tab(void);
+
+/****general_tools***/
 int			ft_strcmp(char *s1, char *s2);
 void		ft_free(char **str, int ind);
 void		ft_dup(t_cmd *cmd_lst);
 int			str_search(char **haystack, char *needle);
 void		ft_error(char *cmd, char *arg, char *err);
-t_envlist	*envlist_search(char *key);
 char		*keycheck(char *key);
-void	*s_malloc(int size);
-void	save_add(char *save);
-char	*ft_strdup2(const char *s);
-char	*ft_strjoin2(char const *s1, char const *s2, int n);
+void		*s_malloc(int size);
+void		save_add(char *save);
+char		*ft_strdup2(const char *s);
+char		*ft_strjoin2(char const *s1, char const *s2, int n);
 
 #endif

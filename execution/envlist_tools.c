@@ -6,11 +6,11 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:37:10 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/23 02:25:13 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 03:17:24 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "execution.h"
 
 void	envlist_delete(char *key)
 {

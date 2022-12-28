@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/27 19:00:03 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 05:09:34 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	exit_bash(char *line)
 	exit(WEXITSTATUS(global.exit_status));
 	free(line);
 }
+
 void	enter(t_lexer *lex)
 {
 	if (lex->f == 1)
