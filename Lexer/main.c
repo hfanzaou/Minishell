@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/27 19:00:03 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 02:18:23 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ int main(int ac, char **av, char **env)
 			free(line);
 			// free(lexer);
 			//free(token);
-			system("leaks minishell");
+			// system("leaks minishell");
 			cmd = NULL;
 			lexer = NULL;
 			token = NULL;
