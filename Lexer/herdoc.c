@@ -36,7 +36,8 @@ char	*joinex(char *line)
 		c[1] = '\0';
 		if (line[i] == '$')
 		{
-			val = ft_strjoin2(val, ft_expand(&line[i], global.envp, NULL, 0), strlen(val));
+			val = ft_strjoin2(val, 
+				ft_expand(&line[i], NULL, 0), strlen(val));
 			i += ft_skip(&line[i + 1]);
 		}
 		else

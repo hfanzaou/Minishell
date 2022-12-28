@@ -20,12 +20,12 @@ char	**fillcargs(char **cargs, char *val);
 void	ft_putstr_fd(char *s, int fd);
 void	printcmd(t_cmd *cmd);
 int		ft_herdoc(char *eof, int here);
-int 	access_tokens(token_t *token);
-int		ft_access_cond(token_t **token, char ***cargs);
-int		if_access(token_t **token, char ***cargs);
-int		what_fd(token_t *token);
-int		what_type(token_t *token);
-int 	if_ambiguous(token_t *token);
-char	**to_cargs(char  **cargs, char *val);
+int		access_tokens(t_token *token);
+int		ft_access_cond(t_token **token, char ***cargs);
+int		if_access(t_token **token, char ***cargs);
+int		what_fd(t_token *token);
+int		what_type(t_token *token);
+int		if_ambiguous(t_token *token);
+char	**to_cargs(char **cargs, char *val);
 
-# endif
+#endif

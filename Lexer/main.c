@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 05:41:40 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 14:28:57 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ void	*s_malloc(int size)
 {
 	void	*tmp;
 	tmp = malloc(size);
-	global.to_free[global.index] = tmp;
-	global.index++;
+	g_global.to_free[g_global.index] = tmp;
+	g_global.index++;
 	return (tmp);
 }
 
 void	save_add(char *save)
 {
-	global.to_free[global.index] = save;
-	global.index++;
+	g_global.to_free[g_global.index] = save;
+	g_global.index++;
 }
 
 void	handler(int i)
@@ -60,36 +60,12 @@ int envlen(char **env)
 	return (i);	
 }
 
-void	put_env(char **env)
-{
-	int l;
-	int i;
-
-	l = 0;
-	global.env_size = envlen(env);
-	(global.envp) = (char **)s_malloc(sizeof(char *) * (global.env_size + 1));
-	while (env[l])
-	{
-		i = 0;
-		(global.envp)[l] = (char *)s_malloc(sizeof(char) * ft_strlen(env[l]) + 1);
-		while (env[l][i])
-		{
-			(global.envp)[l][i] = env[l][i];
-			i++;
-		}
-		(global.envp)[l][i] = '\0';
-		l++;
-	}
-	(global.envp)[l] = NULL;
-	return ;
-}
-
 void	ft_free2(void **str)
 {
 	int i;
 
 	i = 0;
-	while (i < global.index)
+	while (i < g_global.index)
 	{
 		free(str[i]);
 		i++;
@@ -99,7 +75,7 @@ void	ft_free2(void **str)
 void	exit_bash(char *line)
 {
 	printf("exit\n");
-	exit(WEXITSTATUS(global.exit_status));
+	exit(WEXITSTATUS(g_global.exit_status));
 	free(line);
 }
 
@@ -107,7 +83,7 @@ void	enter(t_lexer *lex)
 {
 	if (lex->f == 1)
 	{
-		global.exit_status = 0;
+		g_global.exit_status = 0;
 	}
 }
 
@@ -117,10 +93,9 @@ int main(int ac, char **av, char **env)
 	(void)av;
 	char *line;
 	t_lexer *lexer;
-	token_t *token;
+	t_token *token;
 	t_cmd *cmd;
 	(void)env;
-	global.index = 0;
 	cmd = NULL;
 	put_env(env);
 	envlist_init();
@@ -128,6 +103,12 @@ int main(int ac, char **av, char **env)
 	{
 		signal(SIGINT, handler);
 		signal(SIGQUIT, handler);
+	signal(SIGINT, handler);
+	//put_env(env);
+	envlist_init(env);
+	while (1)
+	{
+		g_global.index = 0;
 		line = readline("minishell>>");
 		if (!line)
 			exit_bash(line);
@@ -140,15 +121,16 @@ int main(int ac, char **av, char **env)
 		if (!cmd)
 		{
 			free(line);
-			global.exit_status = 256;
+			g_global.exit_status = 256;
 			continue ;
 		}
 		excute(cmd);
 		free(line);
+		ft_free2(g_global.to_free);
+		//system("leaks minishell");
 		cmd = NULL;
 		lexer = NULL;
 		token = NULL;
 	}
-	ft_free2(global.to_free);
 }
 	

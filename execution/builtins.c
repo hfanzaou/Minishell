@@ -50,7 +50,7 @@ int	env(char **cmd)
 	int			i;
 	t_envlist	*temp;
 
-	temp = global.envlist;
+	temp = g_global.envlist;
 	i = 0;
 	if (cmd[1])
 	{

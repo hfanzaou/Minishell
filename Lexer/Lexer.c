@@ -11,9 +11,10 @@
 /* ************************************************************************** */
 #include "token.h"
 
-t_lexer *ft_lexer(char *src)
+t_lexer	*ft_lexer(char *src)
 {
-	t_lexer *lexer;
+	t_lexer	*lexer;
+
 	lexer = (t_lexer *)s_malloc(sizeof(t_lexer));
 	if (!lexer)
 		return (NULL);
@@ -34,9 +35,9 @@ void	lexer_advance(t_lexer **lexer)
 	}
 }
 
-void 	lexer_advance_i(t_lexer **lexer, int n)
+void	lexer_advance_i(t_lexer **lexer, int n)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while ((*lexer)->src[(*lexer)->i + i] && i < n)
@@ -46,7 +47,7 @@ void 	lexer_advance_i(t_lexer **lexer, int n)
 	}
 }
 
-char 	nextcval(t_lexer *lexer, int i)
+char	nextcval(t_lexer *lexer, int i)
 {
-		return(lexer->src[lexer->i + i]);	
+	return (lexer->src[lexer->i + i]);
 }

@@ -11,12 +11,11 @@
 /* ************************************************************************** */
 
 #include "token.h"
-#include "lexer.h"
 
 char	*put_enqval(char *str, char c, int n)
 {
-	char *val;
-	int i;
+	char	*val;
+	int		i;
 
 	i = 0;
 	val = s_malloc(sizeof(char) * (n + 1));
@@ -33,8 +32,8 @@ char	*put_enqval(char *str, char c, int n)
 
 char	*remove_quotes(char c, t_lexer *lexer, char *str)
 {
-	int i;
-	int f;
+	int	i;
+	int	f;
 
 	i = 0;
 	f = 0;
@@ -44,7 +43,7 @@ char	*remove_quotes(char c, t_lexer *lexer, char *str)
 		lexer_advance(&lexer);
 		return ("\0");
 	}
-	else 
+	else
 		lexer_advance(&lexer);
 	while (lexer->c && lexer->c != c)
 	{
@@ -57,5 +56,5 @@ char	*remove_quotes(char c, t_lexer *lexer, char *str)
 		return (NULL);
 	}
 	lexer_advance(&lexer);
-	return (put_enqval(&str[1], c, i));	
+	return (put_enqval(&str[1], c, i));
 }
