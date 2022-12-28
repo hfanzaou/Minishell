@@ -27,20 +27,23 @@ int 	if_pipe(t_lexer *lexer)
 int		executedollar(t_lexer *lexer)
 {
 	int i;
-
+	
 	if (lexer->i && !if_pipe(lexer))
 		return (0);
 	i = 1;
 	if (lexer->src[lexer->i + i] == '_' 
 		&& ft_isalnum(lexer->src[lexer->i + 2]))
 		i++;
+	while (lexer->src[lexer->i + i] == '_' 
+		&& ft_isalnum(lexer->src[lexer->i + i]))
+		i++;	
 	while (lexer->src[lexer->i + i] 
-		&& ft_strrchr(" \t|><", lexer->src[lexer->i + i]))
+		&& ft_isalnum(lexer->src[lexer->i + i]))
 		i++;
 	if (!lexer->src[lexer->i + i] 
-		|| !ft_strrchr(" \t", lexer->src[lexer->i + i]))
+		|| ft_strrchr("|><\"\'$", lexer->src[lexer->i + i]))
 		return (1);
-	return (0);		
+	return (0);
 }
 
 char	*expand_exdollarp2(token_t **token, char *str)
@@ -72,7 +75,6 @@ void	expand_exdollar(token_t **token, t_lexer *lexer, char **env)
 	char *str;
 	char *val;
 	token_t *oneuse;
-
 	str = ft_expand(&lexer->src[lexer->i], env, &lexer, 1);
 	lexer_advance(&lexer);
 	val = expand_exdollarp2(token, str);

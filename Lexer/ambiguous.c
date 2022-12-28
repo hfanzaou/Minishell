@@ -47,23 +47,11 @@ int 	if_ambiguous(token_t *token)
 	{
 		to_dol = ft_strjoin2("$", to_dollar(token->value), 1);
 		if (!head->value[0])
-		{
 			return (ft_puterror(to_dol));
-			// ft_putstr_fd("minishell: ", 2);
-			// ft_putstr_fd(to_dol, 2);
-			// ft_putstr_fd(": ambiguous redirect\n", 2);
-			// return (1);
-		}
 		while (head->value[i])
 		{
 			if (head->value[i] == ' ' || head->value[i] == '\t')
-			{
 				return (ft_puterror(to_dol));
-				// ft_putstr_fd("minishell: ", 2);
-				// ft_putstr_fd(to_dol, 2);
-				// ft_putstr_fd(": ambiguous redirect\n", 2);
-				// return (1);
-			}
 			i++;	
 		}	
 	}

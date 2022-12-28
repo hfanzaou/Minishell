@@ -70,7 +70,10 @@ int	child(t_cmd *cmd_lst)
 	int		ind;
 
 	if (!(cmd_lst->cmd))
+	{
+		global.exit_status = 0;
 		return(0);
+	}
 	pid = fork();
 	if (pid == 0)
 	{
@@ -103,7 +106,10 @@ void	simple_cmd(t_cmd *cmd_lst)
 	int		tmpout;
 
 	if (!(cmd_lst->cmd))
+	{
+		global.exit_status = 0;
 		return ;
+	}
 	ind = is_builtin(*(cmd_lst->cmd));
 	if (ind)
 	{
@@ -163,6 +169,7 @@ void	excute(t_cmd *cmd_lst)
 			close(cmd_lst->in);
 		cmd_lst = cmd_lst->next;
 	}
-	waitpid(pid, &(global.exit_status), 0);
+	if (pid)
+		waitpid(pid, &(global.exit_status), 0);
 	while(wait(NULL) != -1);
 }

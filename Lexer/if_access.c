@@ -12,6 +12,18 @@
 
 #include "parse.h"
 
+int	access_errors(token_t **token, char	***cargs, int f)
+{
+	int fd;
+
+	fd = what_type(*token);
+	global.exit_status = 256;
+	while ((*token)->next && (*token)->next->type != PIPE)
+		*token = (*token)->next;
+	if (f)	
+		*cargs = NULL;
+	return (fd);	
+}
 
 int		if_access(token_t **token, char ***cargs)
 {
@@ -19,22 +31,13 @@ int		if_access(token_t **token, char ***cargs)
 	int fd;
 	fd = what_type(*token);
 	if (if_ambiguous((*token)->next))
-	{
-		global.exit_status = 256;
-		while ((*token)->next && (*token)->next->type != PIPE)
-			*token = (*token)->next;
-		*cargs = NULL;
-		return (fd);	
-	}
+		return (access_errors(token, cargs, 1));	
 	dir = opendir((*token)->next->value);
 	if (dir)
 	{
 		free(dir);
 		ft_error("minishell :", (*token)->next->value, ": is a directory");
-		global.exit_status = 256;
-		while ((*token)->next && (*token)->next->type != PIPE)
-			*token = (*token)->next;
-		return (fd);	
+		return (access_errors(token, cargs, 0));	
 	}	
 	else
 		fd = what_fd(*token);
@@ -42,11 +45,7 @@ int		if_access(token_t **token, char ***cargs)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		perror((*token)->next->value);
-		global.exit_status = 256;
-		while ((*token)->next && (*token)->next->type != PIPE)
-			*token = (*token)->next;
-		*cargs = NULL;	
-		return (fd);
+		return (access_errors(token, cargs, 1));
 	}
 	return (fd);
 }

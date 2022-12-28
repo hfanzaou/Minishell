@@ -110,6 +110,7 @@ void	enter(t_lexer *lex)
 		global.exit_status = 0;
 	}
 }
+
 int main(int ac, char **av, char **env)
 {
 	(void)ac;
@@ -129,18 +130,16 @@ int main(int ac, char **av, char **env)
 		line = readline("minishell>>");
 		if (!line)
 			exit_bash(line);
+		else if (!(*line))
+			continue ;
 		add_history(line);
 		lexer = ft_lexer(line);
 		token = tokenizer(lexer);
 		cmd = ft_parse(token, cmd);
 		if (!cmd)
 		{
+			free(line);
 			global.exit_status = 256;
-			continue ;
-		}
-		if (cmd && !cmd->cmd && !cmd->next)
-		{
-			enter(lexer);
 			continue ;
 		}
 		excute(cmd);
