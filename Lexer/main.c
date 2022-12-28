@@ -136,7 +136,7 @@ int main(int ac, char **av, char **env)
 		if (!cmd)
 		{
 			global.exit_status = 256;
-			continue;
+			continue ;
 		}
 		if (cmd && !cmd->cmd && !cmd->next)
 		{
