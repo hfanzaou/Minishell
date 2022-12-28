@@ -34,7 +34,7 @@ void	printcmd(t_cmd *cmd)
 	while (cmd)
 	{
 		i = 0;
-		while (cmd->cmd[i])
+		while (cmd->cmd && cmd->cmd[i])
 		{
 			printf("%s\n", cmd->cmd[i]);
 			i++;
@@ -103,8 +103,8 @@ char	*joinex(char *line)
 	char *c;
 	char *val;
 
-	c = ft_strdup(" ");
-	val = ft_strdup("");
+	c = ft_strdup2(" ");
+	val = ft_strdup2("");
 	i = 0;
 	while (line[i])
 	{	
@@ -393,6 +393,6 @@ t_cmd	*ft_parse(token_t *token, t_cmd *cmd)
 	}
 	oneuse = init_cmd(cargs, in, out, flag);
 	ft_lstadd_backc(&cmd, oneuse);
-	//printcmd(cmd);
+	// printcmd(cmd);
 	return (cmd);
 }

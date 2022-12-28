@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtins_2.c                                       :+:      :+:    :+:   */
+/*   builtins_cd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 03:15:53 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/28 03:19:04 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 05:14:27 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	chdir_check(char *path)
 	int		check;
 	char	*dir;
 
-	check = chdir(dir);
+	check = chdir(path);
 	dir = getcwd(NULL, 0);
 	if (!dir)
 	{
@@ -65,7 +65,6 @@ int	chdir_check(char *path)
 int	cd(char **cmd)
 {
 	char		*oldpwd;
-	char		dir;
 	int			ret;
 
 	oldpwd = getcwd(NULL, 0);

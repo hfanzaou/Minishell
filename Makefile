@@ -6,17 +6,18 @@
 #    By: ajana <ajana@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/15 17:03:01 by ajana             #+#    #+#              #
-#    Updated: 2022/12/27 19:02:48 by ajana            ###   ########.fr        #
+#    Updated: 2022/12/28 05:12:14 by ajana            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-FLAGS = -Wall -Wextra -Werror  #-I/goinfre/ajana/.brew/opt/readline/include
+FLAGS = -Wall -Wextra -Werror #-fsanitize=address  #-I/goinfre/ajana/.brew/opt/readline/include
 
 
-SRCS = execution/minishell.c execution/export.c execution/builtins.c execution/envlist_tools.c \
-	execution/tools.c Lexer/tokenizer.c Lexer/main.c Lexer/Lexer.c Lexer/token.c Lexer/parse.c
+SRCS = execution/execution.c execution/builtins_export.c execution/builtins.c execution/envlist_tools.c \
+	execution/tools.c execution/builtins_2.c  execution/builtins_cd.c Lexer/tokenizer.c Lexer/main.c Lexer/Lexer.c Lexer/token.c Lexer/parse.c \
+	Lexer/utils.c Lexer/expand.c Lexer/ft_itoa2.c
 
 LIBFT = libft/libft.a
 

@@ -65,14 +65,14 @@ char	*keycheck(char *key)
 		if (!ft_isalnum(key[i]) && (key[i] != '_'))
 		{
 			if ((key[i] == '+') && (!key[i + 1]))
-				return (ft_strdup("+="));
+				return (ft_strdup2("+="));
 			return (NULL);
 		}
 		else if (ft_isdigit(key[i]) && i == 0)
 			return (NULL);
 		i++;
 	}
-	return (ft_strdup("="));
+	return (ft_strdup2("="));
 }
 
 t_envlist	*envlist_new(char *str)

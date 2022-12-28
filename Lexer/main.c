@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 02:18:23 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 05:09:34 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	put_env(char **env)
 	return ;
 }
 
-void	ft_free2(char **str)
+void	ft_free2(void **str)
 {
 	int i;
 
@@ -106,6 +106,19 @@ void	ft_free2(char **str)
 	}
 }
 
+void	exit_bash(char *line)
+{
+	printf("exit\n");
+	exit(WEXITSTATUS(global.exit_status));
+	free(line);
+}
+void	enter(t_lexer *lex)
+{
+	if (lex->f == 1)
+	{
+		global.exit_status = 0;
+	}
+}
 int main(int ac, char **av, char **env)
 {
 	(void)ac;
@@ -116,37 +129,30 @@ int main(int ac, char **av, char **env)
 	t_cmd *cmd;
 	(void)env;
 	global.index = 0;
+	cmd = NULL;
 	signal(SIGINT, handler);
 	put_env(env);
 	envlist_init();
-	while ((line = readline("minishell>>")))
+	while (1)
 	{
-		if (line[0] != '\0')
-		{ 
-			add_history(line);
-			//cmd = init_cmd();
-			lexer = ft_lexer(line);
-			token = tokenizer(lexer);
-			// free(lexer->src);
-			// free(lexer);
-			cmd = ft_parse(token, cmd);
-			// ft_free2(&token);
-			if (!cmd)
-				continue;
-			excute(cmd);
-			// ft_free(cmd->cmd);
-			// close(cmd->out);
-			// free(cmd);
-
-			// ft_free2((char **)global.to_free);
-			// ft_free(global.to_free);
-			free(line);
-			// free(lexer);
-			//free(token);
-			// system("leaks minishell");
-			cmd = NULL;
-			lexer = NULL;
-			token = NULL;
+		line = readline("minishell>>");
+		if (!line)
+			exit_bash(line);
+		add_history(line);
+		lexer = ft_lexer(line);
+		token = tokenizer(lexer);
+		cmd = ft_parse(token, cmd);
+		if (!cmd->cmd && !cmd->next)
+		{
+			enter(lexer);
+			continue ;
 		}
+		excute(cmd);
+		free(line);
+		cmd = NULL;
+		lexer = NULL;
+		token = NULL;
 	}
+	ft_free2(global.to_free);
 }
+	

@@ -48,6 +48,7 @@ typedef struct lexer_s
 	char *src;
 	char c;
 	int size;
+	int	f;
 	int i;
 } t_lexer;
 

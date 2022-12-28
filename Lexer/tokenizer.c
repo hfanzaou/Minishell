@@ -13,142 +13,6 @@
 #include "lexer.h"
 #include "token.h"
 
-static int	int_len(unsigned int nu)
-{
-	int	i;
-
-	i = 1;
-	while (nu > 9)
-	{
-		nu = nu / 10;
-		i++;
-	}
-	return (i);
-}
-
-char	*assign(char *str, unsigned int n, int sign)
-{
-	int	i;
-
-	i = int_len(n) + sign - 1;
-	if (sign)
-		*str = '-';
-	while (n > 9)
-	{
-		str[i] = (n % 10) + 48;
-		n = n / 10;
-		i--;
-	}
-	str[i] = n + 48;
-	return (str);
-}
-
-char	*ft_itoa(int n)
-{
-	unsigned int	nu;
-	char			*res;
-	int				sign;
-	int				len;
-
-	sign = 0;
-	if (n < 0)
-	{
-		nu = n * -1;
-		sign = 1;
-	}
-	else
-		nu = n;
-	len = int_len(nu);
-	res = s_malloc((len + 1 + sign) * sizeof(char));
-	if (!res)
-		return (NULL);
-	res[len + sign] = '\0';
-	return (assign(res, nu, sign));
-}
-
-char	*ft_strjoin2(char const *s1, char const *s2, int n)
-{
-	int		i;
-	int		j;
-	char	*c;
-
-	if (!s1 || !s2)
-		return (NULL);
-	i = strlen((char *)s1) + strlen((char *)s2);
-	c = s_malloc(sizeof(char) * i + 1);
-	if (c == NULL)
-		return (0);
-	j = 0;
-	while (s1[j] && n)
-	{
-		c[j] = s1[j];
-		n--;
-		j++;
-	}
-	n = 0;
-	while (s2[n])
-	{
-		c[j] = s2[n];
-		n++;
-		j++;
-	}
-	c[j] = '\0';
-	return (c);
-}
-
-
-int	ft_strrchr(char *str, char c)
-{
-	int	i;
-
-	i = 0;	
-	while (str[i])
-	{
-		if (str[i] == c)
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-int	ft_memcmp(const void *s1, const void *s2, size_t n)
-{
-	size_t			i;
-	unsigned char	*c;
-	unsigned char	*b;
-
-	c = (unsigned char *)s1;
-	b = (unsigned char *)s2;
-	i = 0;
-	while (i < n)
-	{
-		if (c[i] != b[i])
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-char	*ft_strdup(const char *s)
-{
-	char	*dst;
-	char	*p;
-	int		i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	dst = s_malloc(i * sizeof(char) + 1);
-	if (dst == NULL)
-		return (0);
-	p = dst;
-	while (*s)
-	{
-		*dst++ = *s++;
-	}
-	*dst = '\0';
-	return (p);
-}
 
 void printf_token(token_t *token)
 {
@@ -181,7 +45,7 @@ void	ft_lstadd_back(token_t **lst, token_t *new)
 		ft_lstlast(*lst)->next = new;
 }
 
-int ft_size(t_lexer *lexer)
+/*int ft_size(t_lexer *lexer)
 {
 	int i;
 
@@ -192,7 +56,7 @@ int ft_size(t_lexer *lexer)
 	if (!lexer->src[i])
 		return (-1);
 	return (i);	
-}
+}*/
 
 char	*put_enqval(char *str, char c, int n)
 {
@@ -241,88 +105,14 @@ char	*remove_quotes(char c, t_lexer *lexer, char *str)
 	return (put_enqval(&str[1], c, i));	
 }
 
-char	*remove_spaces(char *str)
-{
-	int i;
-	char *ret;
-	char *c;
-	i = 0;
-	c = ft_strdup(" ");
-	ret = ft_strdup("");
-	while (str[i])
-	{
-		c[0] = str[i];
-		c[1] = '\0';
-		if (ft_strrchr(" \t", str[i]))
-			ret = ft_strjoin2(ret, c, strlen(ret));
-		else if (ret[0] && !ft_strrchr(" \t", str[i]) 
-			&& str[i + 1] && ft_strrchr(" \t", str[i + 1]))
-			ret = ft_strjoin2(ret, " ", strlen(ret));
-		i++;
-	} 
-	return (ret);
-}
-
-char 	*compare_exp(int l, char **env, char *s, int j)
-{
-	int i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (!ft_memcmp(env[i], s, l - 1) && env[i][l - 1] && env[i][l - 1] == '=')
-		{
-			if (j == 2)		
-				return (&env[i][l]);	
-			else if (j <= 2)
-				return (remove_spaces(&env[i][l]));
-		}
-		i++;
-	}
-	return ("\0");
-}
-
-char	*ft_expand(char *val, char **env, t_lexer **lexer, int j)
-{
-	char *s;
-	int l;
-
-	l = 1;
-	s = val;
-	if (!s)
-		return NULL;
-	if (s[1] == '?')
-	{
-		lexer_advance(lexer);	
-		return (ft_strdup(ft_itoa(WEXITSTATUS(global.exit_status))));
-	}
-	while (s[l] && (isalnum(s[l]) || s[l] == '_'))
-	{
-		if (j == 1)
-			lexer_advance(lexer);
-		l++;
-	}
-	return (compare_exp(l, env, &s[1], j));
-}
-
-int 	ft_skip(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str[i] && (isalnum(str[i]) || !ft_strrchr("?_", str[i])))
-		i++;
-	return (i);	
-}
 
 char 	*to_join(char c)
 {
 	char *str;
 
-	str = ft_strdup(" ");
+	str = ft_strdup2(" ");
 	str[0] = c;
 	str[1] = '\0';
-	// free_hack(str);
 	return (str);
 }
 
@@ -336,11 +126,9 @@ char 	*dq_case(t_lexer *lexer, char **env)
 	str = remove_quotes(lexer->c, lexer, &lexer->src[lexer->i]);
 	if (!str)
 		return(NULL);
-	val = ft_strdup("");
+	val = ft_strdup2("");
 	while (str[i])
 	{
-		// free_hack(val);
-
 		if (str[i] == '$' && (isalnum(str[i + 1]) || !ft_strrchr("?_", str[i + 1])))
 		{
 			val = ft_strjoin2(val, ft_expand(&str[i], env, &lexer, 2), strlen(val));
@@ -424,7 +212,7 @@ void	token_3(token_t **token, t_lexer *lexer, char **env, int type)
 	token_t *oneuse;
 	char *val;
 
-	val = ft_strdup("");
+	val = ft_strdup2("");
 	while (lexer->c && ft_strrchr(" \t|><", lexer->c))
 	{
 		val = cond(lexer, val, env);
@@ -432,17 +220,11 @@ void	token_3(token_t **token, t_lexer *lexer, char **env, int type)
 		{
 			oneuse = token_init(val, type, 1, 0);
 			ft_lstadd_back(token, oneuse);
-			//free(val);
-			//free(oneuse);
 			return ;
 		}
-		//free(val);
-		//val = NULL;
 	}
 	oneuse = token_init(val, type, 0, 0);
 	ft_lstadd_back(token, oneuse);
-	//free(val);
-	//free(oneuse);
 }
 
 void	token_pipe(token_t **token)
@@ -453,7 +235,7 @@ void	token_pipe(token_t **token)
 
 	type = PIPE;
 	oneuse = NULL;
-	val = ft_strdup("|");
+	val = ft_strdup2("|");
 	oneuse = token_init(val, type, 0, 0);
 	ft_lstadd_back(token, oneuse);
 
@@ -469,11 +251,11 @@ void	token_redout(token_t **token, int i)
 	oneuse = NULL;
 	if (i == 1)
 	{
-		val = ft_strdup(">>");
+		val = ft_strdup2(">>");
 		type = RED_OUT2;
 	}
 	else
-		val = ft_strdup(">");	
+		val = ft_strdup2(">");	
 	oneuse = token_init(val, type, 0, 0);
 	ft_lstadd_back(token, oneuse);
 }
@@ -492,7 +274,7 @@ void	token_redin(t_lexer *lexer, token_t **token, int i)
 	oneuse = NULL;
 	if (i == 1)
 	{
-		val = ft_strdup("<<");
+		val = ft_strdup2("<<");
 		while (lexer->src[lexer->i + j] && lexer->src[lexer->i + j] != '\'' 
 				&& lexer->src[lexer->i + j] != '\"')
 			j++;
@@ -502,7 +284,7 @@ void	token_redin(t_lexer *lexer, token_t **token, int i)
 		type = RED_IN2;
 	}
 	else
-		val = ft_strdup("<");
+		val = ft_strdup2("<");
 	oneuse = token_init(val, type, 0, f);
 	ft_lstadd_back(token, oneuse);
 }
@@ -545,7 +327,7 @@ char	*expand_exdollarp2(token_t **token, char *str)
 	token_t *oneuse;
 
 	i = 0;
-	val = ft_strdup("");
+	val = ft_strdup2("");
 	while (str[i])
 	{	
 		if (ft_strrchr(" \t", str[i]))
@@ -555,7 +337,7 @@ char	*expand_exdollarp2(token_t **token, char *str)
 		{
 			oneuse = token_init(val, EXDOLLAR, 0, 0);
 			ft_lstadd_back(token, oneuse);
-			val = ft_strdup("");
+			val = ft_strdup2("");
 		}
 		i++;
 	}
