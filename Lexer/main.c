@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 05:09:34 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 05:41:40 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,9 @@ void	handler(int i)
 {
 	if (i == SIGINT)
 	{
-		rl_on_new_line();
 		write(1, "\n", 1);
-		// rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_replace_line("", 0);
     	rl_redisplay();
 	}
 }
@@ -121,11 +121,12 @@ int main(int ac, char **av, char **env)
 	(void)env;
 	global.index = 0;
 	cmd = NULL;
-	signal(SIGINT, handler);
 	put_env(env);
 	envlist_init();
 	while (1)
 	{
+		signal(SIGINT, handler);
+		signal(SIGQUIT, handler);
 		line = readline("minishell>>");
 		if (!line)
 			exit_bash(line);

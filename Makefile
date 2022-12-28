@@ -6,13 +6,13 @@
 #    By: ajana <ajana@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/15 17:03:01 by ajana             #+#    #+#              #
-#    Updated: 2022/12/28 05:12:14 by ajana            ###   ########.fr        #
+#    Updated: 2022/12/28 05:26:13 by ajana            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-FLAGS = -Wall -Wextra -Werror #-fsanitize=address  #-I/goinfre/ajana/.brew/opt/readline/include
+FLAGS = -Wall -Wextra -Werror -I/goinfre/ajana/.brew/opt/readline/include
 
 
 SRCS = execution/execution.c execution/builtins_export.c execution/builtins.c execution/envlist_tools.c \
@@ -21,7 +21,7 @@ SRCS = execution/execution.c execution/builtins_export.c execution/builtins.c ex
 
 LIBFT = libft/libft.a
 
-LIBS = -L/usr/include -lreadline -Llibft -lft  #-L/goinfre/ajana/.brew/opt/readline/lib
+LIBS = -L/usr/include -lreadline -Llibft -lft  -L/goinfre/ajana/.brew/opt/readline/lib
 
 OBJS = $(SRCS:.c=.o)
 

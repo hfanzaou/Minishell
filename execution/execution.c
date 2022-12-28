@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/28 03:27:18 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/28 05:37:54 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	child(t_cmd *cmd_lst)
 	int		ind;
 
 	if (!(cmd_lst->cmd))
-		return(0);
+		return (0);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -92,6 +92,7 @@ int	child(t_cmd *cmd_lst)
 			exit(127);
 		}
 	}
+	signal(SIGINT, SIG_IGN);
 	return (pid);
 }
 
@@ -156,7 +157,6 @@ void	excute(t_cmd *cmd_lst)
 		if (cmd_lst->next)
 			open_pipe(cmd_lst);
 		pid = child(cmd_lst);
-		signal(SIGINT, SIG_IGN);
 		if (cmd_lst->out != 1)
 			close(cmd_lst->out);
 		if (cmd_lst->in != 0)
