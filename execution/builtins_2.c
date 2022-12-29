@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 03:21:51 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/28 05:13:49 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 03:10:17 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	check_arg(char *arg)
 	while (arg[i])
 	{
 		if ((arg[i] == '+' || arg[i] == '-' ) && (!i))
-				;
+			;
 		else if (!ft_isdigit(arg[i]))
 		{
 			ft_error("minishell: exit: ", arg, "numeric argument required\n");

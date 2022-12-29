@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/28 05:13:21 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 03:37:32 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <dirent.h>
 # include "../libft/libft.h"
 
-typedef enum builtins
+enum e_builtins
 {
 	e_echo = 1,
 	e_cd,
@@ -31,7 +31,7 @@ typedef enum builtins
 	e_unset,
 	e_env,
 	e_exit
-}	t_builtins;
+};
 
 typedef struct envlist
 {
@@ -61,15 +61,15 @@ typedef struct s_cmd
 t_global	g_global;
 
 /******builtins*****/
-int	echo(char **cmd);
-int	cd(char **cmd);
-int	pwd(void);
-int	export(char **cmd);
-int	unset(char **cmd);
-int	env(char **cmd);
-int	ft_exit(char **cmd);
-int	is_builtin(char *cmd);
-int	execute_builtin(t_cmd *cmd_lst, int ind);
+int			echo(char **cmd);
+int			cd(char **cmd);
+int			pwd(void);
+int			export(char **cmd);
+int			unset(char **cmd);
+int			env(char **cmd);
+int			ft_exit(char **cmd);
+int			is_builtin(char *cmd);
+int			execute_builtin(t_cmd *cmd_lst, int ind);
 
 /****envlist_tools****/
 t_envlist	*envlist_new(char *str);
@@ -89,5 +89,8 @@ void		*s_malloc(int size);
 void		save_add(char *save);
 char		*ft_strdup2(const char *s);
 char		*ft_strjoin2(char const *s1, char const *s2, int n);
+char		*relative_path(char *cmd);
+char		*check_access(char *cmd);
+void		child_handler(int signum);
 
 #endif
