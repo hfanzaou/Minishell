@@ -6,13 +6,13 @@
 #    By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/15 17:03:01 by ajana             #+#    #+#              #
-#    Updated: 2022/12/29 02:03:08 by hfanzaou         ###   ########.fr        #
+#    Updated: 2022/12/29 03:48:14 by hfanzaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-FLAGS = -Wall -Wextra -Werror -I/goinfre/hfanzaou/.brew/opt/readline/include  -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -I/goinfre/hfanzaou/.brew/opt/readline/include  #-fsanitize=address
 
 
 SRCS = execution/execution.c execution/builtins_export.c execution/builtins.c execution/envlist_tools.c \
