@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 15:00:25 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 02:47:48 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:20:35 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	ft_free2(void **str)
 void	exit_bash(char *line, int f)
 {
 	if (f)
-		printf("exit\n");	
+		printf("exit\n");
 	exit(WEXITSTATUS(g_global.exit_status));
 	ft_free2(g_global.to_free);
 	free(line);

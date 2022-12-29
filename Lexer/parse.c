@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 03:04:14 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:24:26 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,8 @@ t_cmd	*ft_parse(t_token *token, t_cmd *cmd)
 {
 	t_cmd	tmp;
 
-	tmp.cmd = NULL;
-	tmp.in = 0;
-	tmp.out = 1;
+	tmp = *init_cmd(NULL, 0, 1, 0);
+	printcmd(&tmp);
 	if (if_error(token))
 		return (NULL);
 	while (token)

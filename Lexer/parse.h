@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:30 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 03:05:05 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:20:18 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_cmd	*ft_lstlastc(t_cmd *lst);
 char	**fillcargs(char **cargs, char *val);
 void	ft_putstr_fd(char *s, int fd);
 void	printcmd(t_cmd *cmd);
-int     ft_herdoc(char *eof, int here);
+int		ft_herdoc(char *eof, int here);
 int		access_tokens(t_token *token);
 int		ft_access_cond(t_token **token, char ***cargs);
 int		if_access(t_token **token, char ***cargs);

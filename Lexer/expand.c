@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 04:54:04 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 01:13:09 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:19:21 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,11 @@ char	*ft_expand(char *val, t_lexer **lexer, int j)
 {
 	char	*s;
 	int		l;
-	char	*s1;
 
 	l = 1;
-	s = val;
-	if (!s)
+	if (!val)
 		return (NULL);
-	if (s[1] == '?')
+	if (val[1] == '?')
 	{
 		lexer_advance(lexer);
 		if (WIFEXITED(g_global.exit_status))
@@ -72,14 +70,14 @@ char	*ft_expand(char *val, t_lexer **lexer, int j)
 		else
 			return ((ft_itoa2(WTERMSIG(g_global.exit_status) + 128)));
 	}
-	while (s[l] && (isalnum(s[l]) || s[l] == '_'))
+	while (val[l] && (isalnum(val[l]) || val[l] == '_'))
 	{
 		if (j == 1)
 			lexer_advance(lexer);
 		l++;
 	}
-	s1 = compare_exp(&s[1], j);
-	if (!s1[0])
+	s = compare_exp(&val[1], j);
+	if (!s[0])
 		(*lexer)->f = 1;
-	return (s1);
+	return (s);
 }
