@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/28 04:04:09 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 00:12:30 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,9 @@ int	unset(char **cmd)
 			ft_error("minishell: unset: ", cmd[i], "not a valid idetifier\n");
 			ret = 256;
 		}
-		free (sep);
+		// free (sep);
 		envlist_delete(cmd[i]);
 		i++;
 	}
-	envlist_to_tab();
 	return (ret);
 }

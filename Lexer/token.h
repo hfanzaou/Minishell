@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 01:00:02 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 15:49:52 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 02:48:38 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,6 @@ int		what_redt(char c, char nc);
 void	specialsymbols(t_lexer *lexer, t_token **token, int type);
 void	handler(int i);
 void	ft_free2(void **str);
-void	exit_bash(char *line);
+void	exit_bash(char *line, int f);
 
 #endif  

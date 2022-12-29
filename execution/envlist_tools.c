@@ -3,14 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   envlist_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:37:10 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/28 03:17:24 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 00:18:57 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+void	free_node(t_envlist *node)
+{
+	free(node->key);
+	free(node->value);
+	free(node);
+}
 
 void	envlist_delete(char *key)
 {
@@ -34,7 +41,7 @@ void	envlist_delete(char *key)
 	}
 	prev->next = curr->next;
 	(g_global.env_size)--;
-	free(curr);
+	free_node(curr);
 	curr = NULL;
 }
 
@@ -97,7 +104,7 @@ t_envlist	*envlist_new(char *str)
 	free(temp);
 	search = ft_strchr(str, '=');
 	if (search)
-		new->value = search + 1;
+		new->value = ft_strdup(search + 1);
 	else
 		new->value = NULL;
 	new->next = NULL;

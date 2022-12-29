@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 15:49:33 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:01:31 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	start(char *line, t_lexer *lexer)
 	token = NULL;
 	line = readline("minishell>>");
 	if (!line)
-		exit_bash(line);
+		exit_bash(line, 1);
 	else if (!(*line))
 		return (ret(line, 1));
 	add_history(line);
@@ -69,7 +69,7 @@ int	main(int ac, char **av, char **env)
 	{
 		g_global.index = 0;
 		signal(SIGINT, handler);
-		signal(SIGQUIT, handler);
+		signal(SIGQUIT, SIG_IGN);
 		if (start(line, lexer))
 			continue ;
 	}

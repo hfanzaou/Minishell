@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 07:07:44 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 15:53:49 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:05:26 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,8 @@ int	ft_access_cond(t_token **token, char ***cargs)
 		fd = if_access(token, cargs);
 	else if ((*token)->e_type == RED_IN2)
 		fd = ft_herdoc((*token)->next->value, (*token)->here);
-	(*token) = (*token)->next;
+	if ((*token))	
+		(*token) = (*token)->next;
 	return (fd);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 15:49:38 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:04:14 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ t_cmd	*ft_parse(t_token *token, t_cmd *cmd)
 			tmp.cmd = to_cargs(tmp.cmd, token->value);
 		if (token)
 			token = token->next;
+		if (tmp.in == -2)
+			return (NULL);
 	}
 	new_cmd(&cmd, &tmp.in, &tmp.out, tmp.cmd);
 	return (cmd);

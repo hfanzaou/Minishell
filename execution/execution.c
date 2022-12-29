@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/28 14:28:40 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 01:28:17 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,14 @@ char	*check_access(char *cmd)
 	return (relative_path(cmd));
 }
 
+void	child_handler(int signum)
+{
+	if (signum == SIGINT)
+		write(2, "\n", 1);
+	if (signum == SIGQUIT)
+		write(2, "Quit: 3\n", 8);
+}
+
 int	child(t_cmd *cmd_lst)
 {
 	char	*path;
@@ -78,6 +86,7 @@ int	child(t_cmd *cmd_lst)
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		ft_dup(cmd_lst);
 		ind = is_builtin(*(cmd_lst->cmd));
 		if (ind)
@@ -85,7 +94,7 @@ int	child(t_cmd *cmd_lst)
 		path = check_access(*(cmd_lst->cmd));
 		if (path)
 		{
-			execve(path, cmd_lst->cmd, NULL);
+			execve(path, cmd_lst->cmd, envlist_to_tab());
 			perror("execve");
 			exit(1);
 		}
@@ -95,7 +104,8 @@ int	child(t_cmd *cmd_lst)
 			exit(127);
 		}
 	}
-	signal(SIGINT, SIG_IGN);
+	signal(SIGINT, child_handler);
+	signal(SIGQUIT, child_handler);
 	return (pid);
 }
 
@@ -151,6 +161,7 @@ void	excute(t_cmd *cmd_lst)
 {
 	int	pid;
 
+	pid = 0;
 	if (!cmd_lst)
 		return ;
 	if (!(cmd_lst->next))

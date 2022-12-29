@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 04:54:04 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 15:48:31 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 01:13:09 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,10 @@ char	*ft_expand(char *val, t_lexer **lexer, int j)
 	if (s[1] == '?')
 	{
 		lexer_advance(lexer);
-		return ((ft_itoa2(WEXITSTATUS(g_global.exit_status))));
+		if (WIFEXITED(g_global.exit_status))
+			return ((ft_itoa2(WEXITSTATUS(g_global.exit_status))));
+		else
+			return ((ft_itoa2(WTERMSIG(g_global.exit_status) + 128)));
 	}
 	while (s[l] && (isalnum(s[l]) || s[l] == '_'))
 	{

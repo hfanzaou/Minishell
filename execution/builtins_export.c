@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:24:39 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/28 03:59:21 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 00:08:23 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,26 @@ t_envlist	*envlist_search(char *key)
 int	replace_value(t_envlist *needle)
 {
 	t_envlist	*temp;
+	char 		*c;
 
 	temp = envlist_search(needle->key);
 	if (temp)
-	{
+	{	
+		c = temp->value;
 		free(needle->key);
 		if (*needle->sep == '+' && (needle->value))
+		{
 			temp->value = ft_strjoin(temp->value, needle->value);
+			
+			free(needle->value);
+			free(c);
+		}
 		else if (needle->value)
+		{
 			temp->value = needle->value;
+			free(c);
+		}
 		temp->sep = "=";
-		//envlist_to_tab();
 		return (0);
 	}
 	return (1);
@@ -70,7 +79,7 @@ int	add_to_env(char **args)
 {
 	t_envlist	*temp;
 	int			ret;
-
+	
 	ret = 0;
 	while (*args)
 	{
@@ -89,7 +98,6 @@ int	add_to_env(char **args)
 			temp->sep = "=";
 			(g_global.env_size)++;
 			envlist_addback(&(g_global.envlist), temp);
-			//envlist_to_tab();
 		}
 		else
 			free(temp);

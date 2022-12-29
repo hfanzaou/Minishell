@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 15:00:25 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 15:53:12 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 02:47:48 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	handler(int i)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
+		g_global.exit_status = 256;
 	}
 }
 
@@ -51,9 +52,11 @@ void	ft_free2(void **str)
 	}
 }
 
-void	exit_bash(char *line)
+void	exit_bash(char *line, int f)
 {
-	printf("exit\n");
+	if (f)
+		printf("exit\n");	
 	exit(WEXITSTATUS(g_global.exit_status));
+	ft_free2(g_global.to_free);
 	free(line);
 }

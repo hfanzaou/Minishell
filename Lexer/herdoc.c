@@ -6,20 +6,11 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 06:38:07 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 15:58:59 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:04:53 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parse.h"
-
-void	herdoc_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		unlink("/tmp/herdoc_file");
-		exit(1);
-	}
-}
 
 char	*joinex(char *line)
 {
@@ -49,6 +40,12 @@ char	*joinex(char *line)
 	return (val);
 }
 
+void	parent_handler(int signum)
+{
+	if (signum == SIGINT)
+		unlink("/tmp/herdoc_file");
+}
+
 int	ft_herdoc(char *eof, int here)
 {
 	int i;
@@ -61,11 +58,13 @@ int	ft_herdoc(char *eof, int here)
 	fd = open("/tmp/herdoc_file", O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (i == 0)
 	{
-		signal(SIGINT, herdoc_handler);
+		signal(SIGINT, SIG_DFL);
 		while (1)
 		{
 			line = readline(">");
 			str = line;
+			if (!line)
+				exit_bash(line, 0);
 			if (!ft_strrchr(line, '$') && here == 0)
 				str = joinex(line);
 			if (!ft_strrchr(line, '$') && !ft_strcmp(joinex(line), eof))
@@ -83,10 +82,15 @@ int	ft_herdoc(char *eof, int here)
 			free(line);	
 		}
 	}
-	else
+	signal(SIGINT, parent_handler);
+	wait(NULL);
+	if (access("/tmp/herdoc_file", F_OK | R_OK))
 	{
-		signal(SIGINT, SIG_IGN);
-		wait(&i);
+		close(fd);
+		fd = -2;
+		/*while (*token)
+			*token = (*token)->next;
+		*cargs = NULL;*/
 	}
 	return (fd);
 }
