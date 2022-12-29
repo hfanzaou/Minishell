@@ -6,7 +6,7 @@
 /*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 03:15:53 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/28 05:14:27 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 04:09:33 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,25 @@
 void	update_pwd(char *oldpwd)
 {
 	t_envlist	*temp;
+	char		*to_free;
 
 	temp = envlist_search("OLDPWD");
+	to_free = temp->value;
 	if (temp)
 	{
 		temp->value = oldpwd;
-		envlist_to_tab();
+		free(to_free);
 	}
 	temp = envlist_search("PWD");
+	to_free = temp->value;
 	if (temp)
 	{
 		temp->value = getcwd(NULL, 0);
-		save_add(temp->value);
-		envlist_to_tab();
+		free(to_free);
 	}
 }
 
-int	chdir_home()
+int	chdir_home(void)
 {
 	t_envlist	*temp;
 
@@ -53,9 +55,9 @@ int	chdir_check(char *path)
 	dir = getcwd(NULL, 0);
 	if (!dir)
 	{
-		ft_error("cd: error retreiving current working directory: ", NULL, NULL);
+		ft_error("cd: error retreiving current working directory: ",
+			NULL, NULL);
 		perror("getcwd: ");
-		free(dir);
 		return (1);
 	}
 	free(dir);
@@ -68,7 +70,6 @@ int	cd(char **cmd)
 	int			ret;
 
 	oldpwd = getcwd(NULL, 0);
-	save_add(oldpwd);
 	if (!(cmd[1]))
 		ret = chdir_home();
 	else

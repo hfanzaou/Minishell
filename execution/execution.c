@@ -3,79 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 01:28:17 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:58:33 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
 
-char	*relative_path(char *cmd)
-{
-	t_envlist	*node;
-	char		**temp;
-	char		*path;
-
-	node = envlist_search("PATH");
-	if (!node)
-		return (NULL);
-	temp = ft_split(node->value, ':');
-	cmd = ft_strjoin("/", cmd);
-	while (*temp)
-	{
-		path = ft_strjoin(*temp, cmd);
-		if (!access(path, F_OK | R_OK | X_OK))
-		{
-			ft_free(temp, 0);
-			return (path);
-		}
-		temp++;
-	}
-	ft_free(temp, 0);
-	free(path);
-	return (NULL);
-}
-
-char	*check_access(char *cmd)
-{
-	DIR	*dir;
-
-	if (!(*cmd))
-		return (NULL);
-	if (ft_strchr(cmd, '/'))
-	{
-		if (!access(cmd, F_OK | X_OK))
-		{
-			dir = opendir(cmd);
-			if (dir)
-			{
-				ft_error("minishell: ", cmd, ": is a directory\n");
-				free(dir);
-				exit(126);
-			}
-			return (cmd);
-		}
-		ft_error("minishell: ", cmd, ": No such file or directory\n");
-		exit (127);
-	}
-	return (relative_path(cmd));
-}
-
-void	child_handler(int signum)
-{
-	if (signum == SIGINT)
-		write(2, "\n", 1);
-	if (signum == SIGQUIT)
-		write(2, "Quit: 3\n", 8);
-}
-
 int	child(t_cmd *cmd_lst)
 {
-	char	*path;
-	int		pid;
 	int		ind;
+	char	*path;
+
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	ft_dup(cmd_lst);
+	ind = is_builtin(*(cmd_lst->cmd));
+	if (ind)
+		exit(execute_builtin(cmd_lst, ind));
+	path = check_access(*(cmd_lst->cmd));
+	if (path)
+	{
+		execve(path, cmd_lst->cmd, envlist_to_tab());
+		perror("execve");
+		exit(1);
+	}
+	else
+	{
+		ft_error("minishell: ", *(cmd_lst->cmd), ": command not found\n");
+		exit(127);
+	}
+}
+
+int	ft_fork(t_cmd *cmd_lst)
+{
+	int	pid;
 
 	if (!(cmd_lst->cmd))
 	{
@@ -84,42 +48,22 @@ int	child(t_cmd *cmd_lst)
 	}
 	pid = fork();
 	if (pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		ft_dup(cmd_lst);
-		ind = is_builtin(*(cmd_lst->cmd));
-		if (ind)
-			exit(execute_builtin(cmd_lst, ind));
-		path = check_access(*(cmd_lst->cmd));
-		if (path)
-		{
-			execve(path, cmd_lst->cmd, envlist_to_tab());
-			perror("execve");
-			exit(1);
-		}
-		else
-		{
-			ft_error("minishell: ", *(cmd_lst->cmd), ": command not found\n");
-			exit(127);
-		}
-	}
+		child(cmd_lst);
 	signal(SIGINT, child_handler);
 	signal(SIGQUIT, child_handler);
 	return (pid);
 }
 
-void	simple_cmd(t_cmd *cmd_lst)
+int	simple_cmd(t_cmd *cmd_lst)
 {
 	int		ind;
-	int		pid;
 	int		tmpin;
 	int		tmpout;
 
 	if (!(cmd_lst->cmd))
 	{
 		g_global.exit_status = 0;
-		return ;
+		return (0);
 	}
 	ind = is_builtin(*(cmd_lst->cmd));
 	if (ind)
@@ -134,10 +78,8 @@ void	simple_cmd(t_cmd *cmd_lst)
 		close(tmpout);
 	}
 	else
-	{
-		pid = child(cmd_lst);
-		waitpid(pid, &(g_global.exit_status), 0);
-	}
+		return (ft_fork(cmd_lst));
+	return (0);
 }
 
 void	open_pipe(t_cmd *cmd_lst)
@@ -166,14 +108,14 @@ void	excute(t_cmd *cmd_lst)
 		return ;
 	if (!(cmd_lst->next))
 	{
-		simple_cmd(cmd_lst);
-		return ;
+		pid = simple_cmd(cmd_lst);
+		cmd_lst = NULL;
 	}
 	while (cmd_lst)
 	{
 		if (cmd_lst->next)
 			open_pipe(cmd_lst);
-		pid = child(cmd_lst);
+		pid = ft_fork(cmd_lst);
 		if (cmd_lst->out != 1)
 			close(cmd_lst->out);
 		if (cmd_lst->in != 0)
@@ -182,5 +124,6 @@ void	excute(t_cmd *cmd_lst)
 	}
 	if (pid)
 		waitpid(pid, &(g_global.exit_status), 0);
-	while(wait(NULL) != -1);
+	while (wait(NULL) != -1)
+		;
 }

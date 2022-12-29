@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envlist_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:37:10 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 00:18:57 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:40:17 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	envlist_delete(char *key)
 	t_envlist	*prev;
 
 	curr = g_global.envlist;
-	prev = curr; 
+	prev = curr;
 	while (curr && ft_strcmp(key, curr->key))
 	{
 		prev = curr;
@@ -36,7 +36,6 @@ void	envlist_delete(char *key)
 	if (prev == curr)
 	{
 		g_global.envlist = g_global.envlist->next;
-		// curr = curr->next;
 		return ;
 	}
 	prev->next = curr->next;
@@ -109,13 +108,4 @@ t_envlist	*envlist_new(char *str)
 		new->value = NULL;
 	new->next = NULL;
 	return (new);
-}
-
-void	envlist_init(char **env)
-{
-	int	i;
-
-	i = 0;
-	while (env[i])
-		envlist_addback(&g_global.envlist, envlist_new(env[i++]));
 }

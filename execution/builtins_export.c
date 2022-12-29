@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:24:39 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 00:08:23 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 03:48:43 by ajana            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ t_envlist	*envlist_search(char *key)
 	while (temp)
 	{
 		if (!ft_strcmp(temp->key, key))
-			return(temp);
+			return (temp);
 		temp = temp->next;
 	}
 	return (NULL);
@@ -50,24 +50,23 @@ t_envlist	*envlist_search(char *key)
 int	replace_value(t_envlist *needle)
 {
 	t_envlist	*temp;
-	char 		*c;
+	char		*to_free;
 
 	temp = envlist_search(needle->key);
 	if (temp)
 	{	
-		c = temp->value;
+		to_free = temp->value;
 		free(needle->key);
 		if (*needle->sep == '+' && (needle->value))
 		{
 			temp->value = ft_strjoin(temp->value, needle->value);
-			
 			free(needle->value);
-			free(c);
+			free(to_free);
 		}
 		else if (needle->value)
 		{
 			temp->value = needle->value;
-			free(c);
+			free(to_free);
 		}
 		temp->sep = "=";
 		return (0);
@@ -79,16 +78,14 @@ int	add_to_env(char **args)
 {
 	t_envlist	*temp;
 	int			ret;
-	
+
 	ret = 0;
 	while (*args)
 	{
 		temp = envlist_new(*args);
 		if (!(temp))
 		{
-			ft_putstr_fd("MINISHELL: export: ", 2);
-			ft_putstr_fd(*args, 2);
-			ft_putstr_fd(": not a valid identifier\n", 2);
+			ft_error("minishell: export: ", *args, ": not a valid identifier\n");
 			ret = 256;
 			args++;
 			continue ;
