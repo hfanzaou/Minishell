@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 03:37:32 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 10:19:12 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,17 @@ typedef struct envlist
 typedef struct g_global
 {
 	t_envlist	*envlist;
-	char		**envp;
 	int			env_size;
 	int			exit_status;
-}	t_global;
+	void		*to_free[1000000];
+	int			index;
+}				t_global;
 
 typedef struct s_cmd
 {
 	char			**cmd;
 	int				in;
 	int				out;
-	int				err;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -67,9 +67,9 @@ int			pwd(void);
 int			export(char **cmd);
 int			unset(char **cmd);
 int			env(char **cmd);
-int			ft_exit(char **cmd);
+int			ft_exit(char **cmd, int print);
 int			is_builtin(char *cmd);
-int			execute_builtin(t_cmd *cmd_lst, int ind);
+int			execute_builtin(t_cmd *cmd_lst, int ind, int f);
 
 /****envlist_tools****/
 t_envlist	*envlist_new(char *str);
@@ -77,10 +77,11 @@ t_envlist	*envlist_search(char *key);
 void		envlist_addback(t_envlist **head, t_envlist *new);
 void		envlist_delete(char *key);
 char		**envlist_to_tab(void);
+void		free_node(t_envlist *node);
 
 /****general_tools***/
 int			ft_strcmp(char *s1, char *s2);
-void		ft_free(char **str, int ind);
+void		*ft_free(char **str, int ind);
 void		ft_dup(t_cmd *cmd_lst);
 int			str_search(char **haystack, char *needle);
 void		ft_error(char *cmd, char *arg, char *err);
@@ -92,5 +93,7 @@ char		*ft_strjoin2(char const *s1, char const *s2, int n);
 char		*relative_path(char *cmd);
 char		*check_access(char *cmd);
 void		child_handler(int signum);
+void		exit_path(char *cmd);
+int			ft_ret(char *args);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 03:09:19 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 05:10:59 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	is_builtin(char *cmd)
 	return (ind);
 }
 
-int	execute_builtin(t_cmd *cmd_lst, int ind)
+int	execute_builtin(t_cmd *cmd_lst, int ind, int f)
 {
 	if (ind == e_echo)
 		return (echo(cmd_lst->cmd));
@@ -41,7 +41,7 @@ int	execute_builtin(t_cmd *cmd_lst, int ind)
 	else if (ind == e_env)
 		return (env(cmd_lst->cmd));
 	else if (ind == e_exit)
-		return (ft_exit(cmd_lst->cmd));
+		return (ft_exit(cmd_lst->cmd, f));
 	return (1);
 }
 

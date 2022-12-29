@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:43:06 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 03:45:23 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 10:19:00 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@ char	**envlist_to_tab(void)
 {
 	t_envlist	*temp;
 	char		*join;
-	int			i;
 	char		**env;
+	int			i;
 
 	i = 0;
 	temp = g_global.envlist;
-	env = s_malloc((g_global.env_size + 1) * sizeof(char *));
+	env = malloc((g_global.env_size + 1) * sizeof(char *));
+	if (!env)
+		perror("malloc");
 	while (temp)
 	{
 		if (temp->value)
@@ -44,7 +46,7 @@ void	ft_error(char *cmd, char *arg, char *err)
 	ft_putstr_fd(err, 2);
 }
 
-void	ft_free(char **str, int ind)
+void	*ft_free(char **str, int ind)
 {
 	while (str[ind])
 	{
@@ -53,6 +55,7 @@ void	ft_free(char **str, int ind)
 		ind++;
 	}
 	str = NULL;
+	return (NULL);
 }
 
 int	ft_strcmp(char *s1, char *s2)

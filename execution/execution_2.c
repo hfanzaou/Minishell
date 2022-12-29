@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/29 03:33:37 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 03:53:41 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 08:44:25 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ char	*relative_path(char *cmd)
 	char		*path;
 
 	node = envlist_search("PATH");
-	if (!node)
-		return (NULL);
+	if (!node || (node && !(*node->value)))
+		exit_path(cmd);
 	temp = ft_split(node->value, ':');
 	cmd = ft_strjoin("/", cmd);
 	while (*temp)
@@ -65,8 +65,7 @@ char	*check_access(char *cmd)
 			}
 			return (cmd);
 		}
-		ft_error("minishell: ", cmd, ": No such file or directory\n");
-		exit (127);
+		exit_path(cmd);
 	}
 	return (relative_path(cmd));
 }

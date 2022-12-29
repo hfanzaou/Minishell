@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 03:21:51 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 03:10:17 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 09:03:09 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,29 +76,30 @@ void	check_arg(char *arg)
 			;
 		else if (!ft_isdigit(arg[i]))
 		{
-			ft_error("minishell: exit: ", arg, "numeric argument required\n");
+			ft_error("minishell: exit: ", arg, ": numeric argument required\n");
 			exit(255);
 		}
 		i++;
 	}
 }
 
-int	ft_exit(char **cmd)
+int	ft_exit(char **cmd, int print)
 {
 	int	i;
 	int	ex_status;
 
 	i = 0;
-	ft_putstr_fd("exit\n", 2);
-	if (!(cmd[i + 1]))
-		exit (g_global.exit_status);
+	if (print)
+		ft_putstr_fd("exit\n", 1);
+	if (!(cmd[1]))
+		exit (WEXITSTATUS(g_global.exit_status));
 	check_arg(cmd[1]);
-	if (*(cmd[2]))
+	if ((cmd[2]))
 	{
 		ft_error("minishell: exit: ", NULL, "too many arguments\n");
 		return (256);
 	}
-	ex_status = ft_atoi(*cmd);
+	ex_status = ft_atoi(*(cmd + 1));
 	if (ex_status > 255 || ex_status < 0)
 		exit (ex_status % 256);
 	exit(ex_status);

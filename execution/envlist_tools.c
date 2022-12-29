@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envlist_tools.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:37:10 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 03:40:17 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 10:18:32 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	envlist_delete(char *key)
 	if (prev == curr)
 	{
 		g_global.envlist = g_global.envlist->next;
+		free_node(curr);
 		return ;
 	}
 	prev->next = curr->next;
@@ -71,14 +72,14 @@ char	*keycheck(char *key)
 		if (!ft_isalnum(key[i]) && (key[i] != '_'))
 		{
 			if ((key[i] == '+') && (!key[i + 1]))
-				return (ft_strdup2("+="));
+				return ("+=");
 			return (NULL);
 		}
 		else if (ft_isdigit(key[i]) && i == 0)
 			return (NULL);
 		i++;
 	}
-	return (ft_strdup2("="));
+	return ("=");
 }
 
 t_envlist	*envlist_new(char *str)
@@ -93,8 +94,8 @@ t_envlist	*envlist_new(char *str)
 	if (!(new->sep))
 	{
 		free(new);
-		ft_free(temp, 0);
-		return (NULL);
+		free(temp);
+		return (ft_free(temp, 0));
 	}
 	else if (*new->sep == '+')
 		(*temp)[ft_strlen(*temp) - 1] = '\0';

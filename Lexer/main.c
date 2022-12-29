@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:51:34 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 03:01:31 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 10:20:16 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,10 @@ int	start(char *line, t_lexer *lexer)
 		return (ret(line, 1));
 	add_history(line);
 	lexer = ft_lexer(line);
-	token = tokenizer(lexer);
-	cmd = ft_parse(token, cmd);
+	if (lexer)
+		token = tokenizer(lexer);
+	if (token)
+		cmd = ft_parse(token, cmd);
 	if (!cmd)
 		return (ret(line, 2));
 	excute(cmd);

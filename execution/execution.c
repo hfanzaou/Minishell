@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/25 03:49:46 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 03:58:33 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 08:12:20 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	child(t_cmd *cmd_lst)
 	ft_dup(cmd_lst);
 	ind = is_builtin(*(cmd_lst->cmd));
 	if (ind)
-		exit(execute_builtin(cmd_lst, ind));
+		exit(execute_builtin(cmd_lst, ind, 0));
 	path = check_access(*(cmd_lst->cmd));
 	if (path)
 	{
@@ -47,6 +47,8 @@ int	ft_fork(t_cmd *cmd_lst)
 		return (0);
 	}
 	pid = fork();
+	if (pid == -1)
+		perror("fork");
 	if (pid == 0)
 		child(cmd_lst);
 	signal(SIGINT, child_handler);
@@ -71,7 +73,7 @@ int	simple_cmd(t_cmd *cmd_lst)
 		tmpin = dup(0);
 		tmpout = dup(1);
 		ft_dup(cmd_lst);
-		g_global.exit_status = execute_builtin(cmd_lst, ind);
+		g_global.exit_status = execute_builtin(cmd_lst, ind, 1);
 		dup2(tmpin, 0);
 		dup2(tmpout, 1);
 		close(tmpin);

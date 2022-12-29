@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 01:00:02 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 02:48:38 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 08:51:13 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct token_s
 	}				e_type;
 }					t_token;
 
-t_cmd	*init_cmd(char **cargs, int in, int out, int flag);
+t_cmd	*init_cmd(char **cargs, int in, int out);
 void	printf_token(t_token *token);
 t_token	*tokenizer(t_lexer *lexer);
 t_token	*token_init(char *val, int type, int flag, int here);

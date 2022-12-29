@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/26 17:06:05 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 03:47:43 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 10:20:39 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ int	if_error(t_token *token)
 			i = 1;
 		else if (head->e_type == RED_OUT2 && !check_if(head->next, 0))
 			i = 1;
+		else if (head->e_type == RED_IN && !check_if(head->next, 0))
+			i = 1;
 		if (i == 1)
 			return (is_error(head->next));
 		head = head->next;
@@ -68,7 +70,7 @@ char	**new_cmd(t_cmd **cmd, int *in, int *out, char **cargs)
 {
 	t_cmd	*oneuse;
 
-	oneuse = init_cmd(cargs, *in, *out, 0);
+	oneuse = init_cmd(cargs, *in, *out);
 	ft_lstadd_backc(cmd, oneuse);
 	*in = 0;
 	*out = 1;
@@ -79,7 +81,7 @@ t_cmd	*ft_parse(t_token *token, t_cmd *cmd)
 {
 	t_cmd	tmp;
 
-	tmp = *init_cmd(NULL, 0, 1, 0);
+	tmp = *init_cmd(NULL, 0, 1);
 	if (if_error(token))
 		return (NULL);
 	while (token)
@@ -90,10 +92,10 @@ t_cmd	*ft_parse(t_token *token, t_cmd *cmd)
 			tmp.out = ft_access_cond(&token, &tmp.cmd);
 		else if (access_tokens(token) == 1)
 			tmp.in = ft_access_cond(&token, &tmp.cmd);
-		else if (token->e_type == PIPE)
-			tmp.cmd = new_cmd(&cmd, &tmp.in, &tmp.out, tmp.cmd);
-		else
+		else if (token->e_type != PIPE)
 			tmp.cmd = to_cargs(tmp.cmd, token->value);
+		if (token && token->e_type == PIPE)
+			tmp.cmd = new_cmd(&cmd, &tmp.in, &tmp.out, tmp.cmd);
 		if (token)
 			token = token->next;
 		if (tmp.in == -2)

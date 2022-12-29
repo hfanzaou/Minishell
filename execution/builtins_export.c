@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_export.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/13 17:24:39 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 03:48:43 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 10:15:46 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,7 @@ int	add_to_env(char **args)
 		temp = envlist_new(*args);
 		if (!(temp))
 		{
-			ft_error("minishell: export: ", *args, ": not a valid identifier\n");
-			ret = 256;
+			ret = ft_ret(*args);
 			args++;
 			continue ;
 		}

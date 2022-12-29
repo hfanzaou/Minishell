@@ -6,11 +6,17 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 04:59:12 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 15:49:04 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 10:19:49 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token.h"
+
+int	ft_ret(char *args)
+{
+	ft_error("minishell: export: `", args, "': not a valid identifier\n");
+	return (256);
+}
 
 static int	int_len(unsigned int nu)
 {

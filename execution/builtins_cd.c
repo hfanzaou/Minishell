@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins_cd.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 03:15:53 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 04:09:33 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 04:40:31 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	cd(char **cmd)
 		update_pwd(oldpwd);
 	else if (ret == -1)
 	{
+		free(oldpwd);
 		ft_error("minishell: cd: ", cmd[1], ": ");
 		perror(NULL);
 		return (256);

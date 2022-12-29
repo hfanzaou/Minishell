@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ajana <ajana@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 15:00:25 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 04:12:34 by ajana            ###   ########.fr       */
+/*   Updated: 2022/12/29 08:42:51 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@ void	*s_malloc(int size)
 	return (tmp);
 }
 
-void	save_add(char *save)
+void	exit_path(char *cmd)
 {
-	g_global.to_free[g_global.index] = save;
-	g_global.index++;
+	ft_error("minishell: ", cmd, ": No such file or directory\n");
+	exit(127);
 }
 
 void	handler(int i)

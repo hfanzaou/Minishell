@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:55:56 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 16:31:24 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 08:54:58 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@
 # include <ctype.h>
 # include <string.h>
 # include <fcntl.h>
-# define BGRN "\e[1;32m"
-# define RESET "\e[0m"
 
 typedef struct envlist
 {
@@ -35,7 +33,6 @@ typedef struct envlist
 typedef struct g_global
 {
 	t_envlist	*envlist;
-	char		**envp;
 	int			env_size;
 	int			exit_status;
 	void		*to_free[1000000];
@@ -56,8 +53,6 @@ typedef struct s_cmd
 	char			**cmd;
 	int				in;
 	int				out;
-	int				fd;
-	int				err;
 	struct s_cmd	*next;
 }					t_cmd;
 t_global			g_global;

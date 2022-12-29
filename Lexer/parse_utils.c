@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 06:33:11 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/28 15:54:07 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 08:52:00 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	printcmd(t_cmd *cmd)
 			printf("%s\n", cmd->cmd[i]);
 			i++;
 		}
-		printf("in = %d\nout = %d\nflag = %d\n", cmd->in, cmd->out, cmd->err);
+		printf("in = %d\nout = %d\n", cmd->in, cmd->out);
 		cmd = cmd->next;
 	}
 }
