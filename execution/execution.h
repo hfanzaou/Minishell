@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 16:19:44 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 10:19:12 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 14:30:46 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void		envlist_addback(t_envlist **head, t_envlist *new);
 void		envlist_delete(char *key);
 char		**envlist_to_tab(void);
 void		free_node(t_envlist *node);
+char		*retreive_key(char *str);
 
 /****general_tools***/
 int			ft_strcmp(char *s1, char *s2);

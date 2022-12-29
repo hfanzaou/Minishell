@@ -6,11 +6,22 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 04:59:12 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 10:19:49 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 14:31:23 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token.h"
+
+char	*retreive_key(char *str)
+{
+	char	*search;
+
+	search = ft_strchr(str, '=');
+	if (search)
+		return (ft_strdup(search + 1));
+	else
+		return (NULL);
+}
 
 int	ft_ret(char *args)
 {

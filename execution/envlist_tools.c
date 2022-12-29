@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:37:10 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 10:18:32 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 14:31:02 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,6 @@ t_envlist	*envlist_new(char *str)
 {
 	char		**temp;
 	t_envlist	*new;
-	char		*search;
 
 	temp = ft_split(str, '=');
 	new = malloc(sizeof(t_envlist));
@@ -94,19 +93,16 @@ t_envlist	*envlist_new(char *str)
 	if (!(new->sep))
 	{
 		free(new);
+		ft_free(temp, 0);
 		free(temp);
-		return (ft_free(temp, 0));
+		return (NULL);
 	}
 	else if (*new->sep == '+')
 		(*temp)[ft_strlen(*temp) - 1] = '\0';
 	new->key = *temp;
 	ft_free(temp, 1);
 	free(temp);
-	search = ft_strchr(str, '=');
-	if (search)
-		new->value = ft_strdup(search + 1);
-	else
-		new->value = NULL;
+	new->value = retreive_key(str);
 	new->next = NULL;
 	return (new);
 }

@@ -6,7 +6,7 @@
 #    By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/15 17:03:01 by ajana             #+#    #+#              #
-#    Updated: 2022/12/29 10:00:11 by hfanzaou         ###   ########.fr        #
+#    Updated: 2022/12/29 13:57:31 by hfanzaou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ LIBS = -L/usr/include -lreadline -Llibft -lft  -L/goinfre/hfanzaou/.brew/opt/rea
 
 OBJS = $(SRCS:.c=.o)
 
+
 all : $(LIBFT) $(NAME)
 
 $(LIBFT) :
@@ -46,3 +47,4 @@ fclean : clean
 	$(RM) $(NAME)
 
 re : fclean all
+

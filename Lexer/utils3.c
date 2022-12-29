@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/28 15:00:25 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 08:42:51 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 14:36:12 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	handler(int i)
 	{
 		write(1, "\n", 1);
 		rl_on_new_line();
-		rl_replace_line("", 0);
+		rl_replace_line("", 1);
 		rl_redisplay();
 		g_global.exit_status = 256;
 	}

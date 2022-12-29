@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 22:43:06 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 10:19:00 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 14:26:42 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	*ft_free(char **str, int ind)
 	while (str[ind])
 	{
 		free(str[ind]);
-		*str = NULL;
+		str[ind] = NULL;
 		ind++;
 	}
 	str = NULL;

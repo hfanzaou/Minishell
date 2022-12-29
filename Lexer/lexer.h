@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/09 15:55:56 by hfanzaou          #+#    #+#             */
-/*   Updated: 2022/12/29 08:54:58 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 14:33:50 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct g_global
 	t_envlist	*envlist;
 	int			env_size;
 	int			exit_status;
-	void		*to_free[1000000];
+	void		*to_free[10000];
 	int			index;
 }				t_global;
 
@@ -65,5 +65,7 @@ char	nextcval(t_lexer *lexer, int i);
 void	excute(t_cmd *cmd_lst);
 void	envlist_init(char **env);
 void	ft_free(char **str);
+char	*ft_strchr(const char *s, int c);
+char	*ft_strdup(const char *s1);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: hfanzaou <hfanzaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:26:17 by ajana             #+#    #+#             */
-/*   Updated: 2022/12/29 05:10:59 by hfanzaou         ###   ########.fr       */
+/*   Updated: 2022/12/29 14:37:29 by hfanzaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,7 @@ int	unset(char **cmd)
 	{
 		sep = keycheck(cmd[i]);
 		if (!sep)
-		{
-			ft_error("minishell: unset: ", cmd[i], "not a valid idetifier\n");
-			ret = 256;
-		}
+			ft_ret(cmd[i]);
 		envlist_delete(cmd[i]);
 		i++;
 	}
